@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.spdb.nrpt.mapper.backstageMapper.BackstageMapper" >
+
+    <select id="selectAllReportCustomEcharts" resultType="com.spdb.nrpt.entity.custom.Echarts.BackstageEchartsEntity">
+        select echartsID,echartsName  from Report_CustomEchartsTable
+    </select>
+
+    <select id="selectDivEchartsData" resultType="com.spdb.nrpt.entity.custom.Echarts.CustomEchartsEntity">
+        select a.echartsID,a.echartsName,a.echartsJson,a.echartsClass from Report_CustomEchartsTable a join Report_Div_EchartsTable b on a.echartsID = b.EchartsID
+        where b.divID = #{param1}
+        and b.orgID = #{param2}
+    </select>
+
+    <update id="updateEchartsID">
+        update Report_Div_EchartsTable set echartsid = #{param1} where divid = #{param2} and orgID = #{param3}
+    </update>
+	
+	<!-- 通过传入的divID和orgID得到该div所对应的数据指标 -->
+	<select id="selectDivKeys">
+		SELECT KEYID FROM Report_Keys_EchartsTable
+		<where>
+			DIVID = #{divID} AND ORGID = #{orgID}
+		</where>
+	</select>
+	
+</mapper>

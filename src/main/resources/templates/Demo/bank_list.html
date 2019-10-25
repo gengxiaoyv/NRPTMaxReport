@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>bank列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}" media="all"/>
+</head>
+<body>
+
+    <form class="layui-form"  id="myform" method="post" lay-filter="myform">
+		
+		<div class="layui-form-item">
+			<div class="layui-inline">
+	            <label class="layui-form-label">申报时间</label>
+	            <div class="layui-input-inline" >
+	                <input type="text" name="sear_apply_time" class="layui-input" id="sear_apply_time" placeholder="请选择申报时间">
+	            </div>
+	        </div>
+	        <div class="layui-inline">
+	            <label class="layui-form-label">投产交付时间</label>
+	            <div class="layui-input-inline" >
+	                <input type="text" name="sear_deliver_time" class="layui-input" id="sear_deliver_time" placeholder="请选择投产时间">
+	            </div>
+	        </div>
+			<div class="layui-inline">
+	            <label class="layui-form-label">处理状态</label>
+	            <div class="layui-input-inline">
+	                <select name="sear_handler_status" id="sear_handler_status" lay-filter="handler_status">
+	                    <option value="" selected>请选择处理状态</option>
+	                    <option value="评估中">评估中</option>
+	                    <option value="探查中">探查中</option>
+	                    <option value="探查数据测试中">探查数据测试中</option>
+	                    <option value="开发中">开发中</option>
+	                    <option value="测试中">测试中</option>
+	                    <option value="待投产">待投产</option>
+	                    <option value="已上线">已上线</option>
+	                    <option value="撤销">撤销</option>
+	                    <option value="暂缓">暂缓</option>
+	                </select>
+	            </div>
+            </div>
+             <div class="layui-inline">
+	            <label class="layui-form-label">需求部门</label>
+	            <div class="layui-input-inline">
+	                <select name="sear_apply_deptid" id="sear_apply_deptid" lay-filter="sear_apply_deptid">
+	                    <option value="" selected>请选择需求部门</option>
+	                </select>
+	            </div>
+            </div>
+            <div class="layui-inline">
+	            <label class="layui-form-label">所属板块</label>
+	            <div class="layui-input-inline">
+	                <select name="sear_apply_plate" id="sear_apply_plate" lay-filter="sear_apply_plate">
+	                    <option value="" selected>请选择板块</option>
+	                </select>
+	            </div>
+            </div>
+            <div class="layui-inline">
+	            <label class="layui-form-label">模块负责人</label>
+	            <div class="layui-input-inline">
+	                <select name="sear_plate_manage_name" id="sear_plate_manage_name" lay-filter="plate_manage_name">
+	                    <option value="" selected>请选择模块负责人</option>
+	                </select>
+	            </div>
+            </div>
+            <div class="layui-inline">
+	            <label class="layui-form-label">处理人</label>
+	            <div class="layui-input-inline">
+	                <select name="sear_handler_name" id="sear_handler_name" lay-filter="handler_name">
+	                    <option value="" selected>请选择处理人</option>
+	                </select>
+	            </div>
+            </div>
+            
+        </div>
+		
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-sm" type="button" id="btn_addBankInfo" lay-filter="btn_addBankInfo">添加</button>
+                <button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-sm" type="button" id="btn-query" lay-filter="btn-query">查询</button>
+                <!-- <button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-sm" type="button" id="btn-export" lay-filter="btn-export">导出</button> -->
+            </div>
+        </div>
+    </form>
+
+    <table id="showBankList" lay-filter="showBankList"></table>
+
+    <script  type="text/html" id="bank_toolbar">
+        <a class="layui-btn layui-btn-success layui-btn-xs layui-btn-radius" id="editBank"  lay-event="edit">修改</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs layui-btn-radius" lay-event="del">删除</a>
+    </script>
+
+
+    <script th:src="@{/js/layui/layui.js}"></script>
+    <script th:src="@{/js/layui/jquery-1.10.2.js}"></script> 
+    <script type="text/javascript" th:inline="javascript">
+
+        var contextPath = [[${#request.getContextPath()}]];
+        console.log(contextPath);
+
+        $(function(){
+        	showHandler_name();
+            showPlate_manage_name();
+            showApplyPlate();
+            showApplyDeptid();
+        })
+        
+        allMethod();
+        
+        /* 得到需求部门 */
+        function showApplyDeptid(){
+        	$.ajax({
+        		url:contextPath+'/demo/showApplyDeptid',
+        		type:'post',
+        		data:'',
+        		dataType:'json',
+        		success:function(data){
+        			var opts = '<option value="" selected>请选择需求部门</option>';
+        			$.each(data,function(index,handler){
+        				opts += '<option value="'+handler.data_value+'">'+handler.data_value+'</option>';
+        			})
+        			$('#sear_apply_deptid').html(opts);
+        		}
+        	})
+        }
+        
+        
+        /* 得到板块 */
+        function showApplyPlate(){
+        	$.ajax({
+        		url:contextPath+'/demo/showApplyPlate',
+        		type:'post',
+        		data:'',
+        		dataType:'json',
+        		success:function(data){
+        			var opts = '<option value="" selected>请选择板块</option>';
+        			$.each(data,function(index,handler){
+        				opts += '<option value="'+handler.data_value+'">'+handler.data_value+'</option>';
+        			})
+        			$('#sear_apply_plate').html(opts);
+        		}
+        	})
+        }
+        
+        /* 得到处理人 */
+        function showHandler_name(){
+        	$.ajax({
+        		url:contextPath+'/demo/showHandler_name',
+        		type:'post',
+        		data:'',
+        		dataType:'json',
+        		success:function(data){
+        			var opts = '<option value="" selected>请选择处理人</option>';
+        			$.each(data,function(index,handler){
+        				opts += '<option value="'+handler.data_value+'">'+handler.data_value+'</option>';
+        			})
+        			$('#sear_handler_name').html(opts);
+        		}
+        	})
+        }
+        
+        /* 得到板块负责人 */
+        function showPlate_manage_name(){
+        	$.ajax({
+        		url:contextPath+'/demo/showPlate_manage_name',
+        		type:'post',
+        		data:'',
+        		dataType:'json',
+        		success:function(data){
+        			var opts = '<option value="" selected>请选择模块负责人</option>';
+        			$.each(data,function(index,plate){
+        				opts += '<option value="'+plate.data_value+'">'+plate.data_value+'</option>';
+        			})
+        			$('#sear_plate_manage_name').html(opts);
+        		}
+        	})
+        }
+        
+        function allMethod() {
+            layui.use(['form','jquery','table','element','layer','laydate'],function () {
+                var form = layui.form;
+                var $ = layui.jquery;
+                var table = layui.table;
+                var element = layui.element;
+                var layer = layui.layer;
+                var laydate = layui.laydate;
+
+                laydate.render({
+               		elem: '#sear_apply_time',
+               		type: 'date',
+               		trigger: 'click',
+               		format: 'yyyy/MM/dd',
+               		btns: ['clear','confirm'],
+               		done:function(value,date,endDate){
+               			sear_apply_time = value;
+               		}
+               	});
+                
+                laydate.render({
+               		elem: '#sear_deliver_time',
+               		type: 'date',
+               		trigger: 'click',
+               		format: 'yyyy/MM/dd',
+               		btns: ['clear','confirm'],
+               		done:function(value,date,endDate){
+               			sear_deliver_time = value;
+               		}
+               	});
+                
+                
+                var sear_handler_status = '';
+                var sear_plate_manage_name = '';
+                var sear_handler_name = '';
+                var sear_apply_deptid = '';
+                var sear_apply_plate = '';
+                var sear_apply_time = '';
+                var sear_deliver_time = '';
+                
+                var btn_query = $('#btn-query');
+                btn_query.unbind();
+                btn_query.click(function () {
+                	sear_handler_status = $('#sear_handler_status').val();
+                	sear_plate_manage_name = $('#sear_plate_manage_name').val();
+                	sear_handler_name = $('#sear_handler_name').val();
+                	sear_apply_deptid = $('#sear_apply_deptid').val();
+                	sear_apply_plate = $('#sear_apply_plate').val();
+                	
+                	showBank();
+                })
+
+				form.render('select','myform');
+                
+                showBank();
+
+                function showBank() {
+                    table.render({
+                        elem:'#showBankList',
+                        url: contextPath+'/demo/showBankInfo',
+                        text: {
+                            none: '数据库中无数据'
+                        },
+                        skin: 'line',
+                        even: true,
+                        size: 'sm',
+                        method: 'POST',
+                        limit: 10,
+                        limits:[10,20,50,100,10000],
+                        page: true,
+                        toolbar: true,
+                        defaultToolbar: ['exports'],
+                        where:{
+                        	handler_status:$('#sear_handler_status').val(),
+                        	plate_manage_name:$('#sear_plate_manage_name').val(),
+                        	handler_name:$('#sear_handler_name').val(),
+                        	apply_deptid:$('#sear_apply_deptid').val(),
+                        	apply_plate:$('#sear_apply_plate').val(),
+                        	apply_time:sear_apply_time,
+                        	deliver_time:sear_deliver_time
+                        },
+                        cols:[
+                            [
+                               {
+                                    type:'numbers'
+                                },
+                                {
+                                    field:'apply_time',title:'申报时间',width:150
+                                },
+                                {
+                                    field:'apply_deptid',title:'申请部门',width:150
+                                },
+                                {
+                                    field:'apply_plate',title:'所属板块',width:150
+                                },
+                                {
+                                    field:'plate_manage_name',title:'板块负责人',width:150
+                                },
+                                {
+                                    field:'business_name',title:'业务',width:150
+                                },
+                                {
+                                    field:'apply_channel',title:'申请渠道',width:150
+                                },
+                                {
+                                    field:'contact_list_id',title:'联系单编号',width:150
+                                },
+                                {
+                                    field:'contact_list_name',title:'联系单名称',width:150
+                                },
+                                {
+                                    field:'report_name',title:'报表/模型名称',width:150
+                                },
+                                {
+                                    field:'requirement_type',title:'需求类型',width:150
+                                },
+                                {
+                                    field:'realization',title:'实现形式',width:150
+                                },
+                                {
+                                    field:'handler_name',title:'处理人',width:150
+                                },
+                                {
+                                    field:'handler_status',title:'处理状态',width:150
+                                },
+                                {
+                                    field:'production_way',title:'投产路径',width:150
+                                },
+                                {
+                                    field:'demand_time',title:'需求口径确认时间',width:150
+                                },
+                                {
+                                    field:'implementation_p_time',title:'回复实施计划时间',width:150
+                                },
+                                {
+                                    field:'demand_SLA',title:'需求回复SLA',width:150
+                                },
+                                {
+                                    field:'est_fir_submit_time',title:'预计首次提交探查测试时间',width:150
+                                },
+                                {
+                                    field:'est_beg_time',title:'预计开始数据探查时间',width:150
+                                },
+                                {
+                                    field:'fir_submit_time',title:'实际首次提交探查测试时间',width:150
+                                },
+                                {
+                                    field:'actual_beg_search_time',title:'实际开始数据探查时间',width:150
+                                },
+                                {
+                                    field:'search_SLA',title:'数据探查SLA',width:150
+                                },
+                                {
+                                    field:'gray_finish_time',title:'灰色发布完成时间',width:150
+                                },
+                                {
+                                    field:'gray_SLA',title:'灰色发布SLA',width:150
+                                },
+                                {
+                                    field:'implementation_time',title:'提供上线确认书/测试报告日期',width:200
+                                },
+                                {
+                                    field:'deliver_time',title:'投产交付日期',width:150
+                                },
+                                {
+                                    field:'deliver_SLA',title:'投产交付SLA',width:150
+                                },
+                                {
+                                    fixed: 'right', title:'操作', width:200, align:'center', toolbar: '#bank_toolbar'
+                                }
+                            ]
+                        ]
+                    })
+                }
+
+                table.on('tool(showBankList)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                    var data = obj.data; //获得当前行数据
+                    var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                    if(layEvent === 'del'){ //删除
+                        //console.log(data);
+                        layer.confirm('请确认是否删除', function(index){
+                            //obj.del();
+                            layer.close(index);
+                            $.ajax({
+                                url:contextPath+'/demo/deleteInfo',
+                                data:'id='+data.demo_pkid,
+                                type:'POST',
+                                dataType:'json',
+                                success:function (data) {
+                                    if(data.msg == "success"){
+                                        showBank();
+                                        return;
+                                    }
+                                    alert("删除失败");
+                                    showBank();
+                                }
+                            })
+                        });
+                    } else if(layEvent === 'edit'){ //编辑
+                        var editInfo = layer.open({
+                            //弹出框类型
+                            type: 2,
+                            content:contextPath+'/to_edit?id='+data.demo_pkid,     
+                            //设置宽和高
+                            //area: ['600px', '400px'],
+                            //设置按钮名称
+                            btn: ['关闭'],
+                            //设置按钮位置
+                            btnAlign: 'c',
+                            //透明度 和 被遮盖层颜色
+                            shade: [0.8, '#393D49'],
+                            //渐显动画
+                            anim: 5,
+                            scrollbar:true,
+                            end:function () {
+                                showBank();
+                            }
+                        });
+                    layer.full(editInfo);
+                    }
+                });
+
+                //导出到excel
+                var exportBtn = $('#btn-export');
+                exportBtn.unbind();
+                exportBtn.click(function(){
+                	location.href = contextPath + '/demo/exportToExcel?handler_status='+sear_handler_status;
+                });
+                
+                //新增
+                var addBtn = $('#btn_addBankInfo');
+                addBtn.unbind();
+                addBtn.click(function () {
+                    var addInfo = layer.open({
+                        type:2,
+                        title:'新增信息',
+                        //btn: ['关闭'],
+                        btnAlign: 'c',
+                        shade: [0.8, '#393D49'],
+                        //设置宽和高
+                        //area: ['600px', '400px'],
+                        anim: 5,
+                        content:contextPath+'/to_addDemoInfo',
+                        end:function () {
+                            showBank();
+                        }
+                    });
+                    layer.full(addInfo);
+                });
+
+            })
+        }
+
+    </script>
+</body>
+</html>

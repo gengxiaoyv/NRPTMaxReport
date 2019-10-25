@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.spdb.nrpt.mapper.reportDataMapper.NRPTAndPortalMapper" >
+
+    <resultMap id="EntranceListData" type="com.spdb.nrpt.entity.entrance.EntranceListData" >
+        <result column="RES_CLNAME" property="name"/>
+        <result column="RES_CUID" property="url"/>
+    </resultMap>
+
+    <select id="selectPortalDataFormMenuOrderByUserIDAndResID" resultMap="EntranceListData">
+        select distinct RES_CUID, RES_CLNAME from bi_sys_resource_ a
+            inner join bi_sys_role_res_ b on a.res_parentid = b.res_id
+            inner join bi_sys_usergroup c on b.role_pkid = c.usergroup_pkid
+            inner join bi_sys_usergroup_res d on c.usergroup_pkid = d.usergroup_pkid
+            inner join bi_sys_userinfo e on d.user_pkid = e.user_pkid
+        where e.login_name = #{param1} and a.res_parentid = #{param2}
+    </select>
+</mapper>

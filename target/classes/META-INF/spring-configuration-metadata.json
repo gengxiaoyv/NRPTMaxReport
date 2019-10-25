@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "name": "nrpt",
+      "type": "com.spdb.nrpt.config.ConfigBeanProp",
+      "sourceType": "com.spdb.nrpt.config.ConfigBeanProp"
+    }
+  ],
+  "properties": [
+    {
+      "name": "nrpt.ip",
+      "type": "java.lang.String",
+      "sourceType": "com.spdb.nrpt.config.ConfigBeanProp"
+    },
+    {
+      "name": "nrpt.url",
+      "type": "java.lang.String",
+      "sourceType": "com.spdb.nrpt.config.ConfigBeanProp"
+    }
+  ],
+  "hints": []
+}

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SAS比赛排名</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}" media="all"/>
+    <style>
+    	.layui-form-label{
+    		width:100px;
+    	}
+    </style>
+</head>
+<body>
+
+    <form class="layui-form"  id="myform" method="post" lay-filter="myform">
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">选择队伍类型</label>
+                <div class="layui-input-inline">
+                    <select name="team_type" id="team_type" lay-filter="team_type">
+                        <option value="">请选择队伍类型</option>
+                        <option value="01">零售</option>
+                        <option value="02">运营</option>
+                        <option value="03">对公</option>
+                        <option value="04">风险</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-sm" type="button" id="btn-query" lay-filter="btn-query">查询</button>
+            </div>
+        </div>
+    </form>
+
+    <table id="showRankList" lay-filter="showRankList"></table>
+
+    <script th:src="@{/js/layui/layui.js}"></script>
+    <script th:src="@{/js/base/jquery.min.js}"></script>
+    <script type="text/javascript" th:inline="javascript">
+
+        let contextPath = [[${#request.getContextPath()}]];
+
+        allMethod();
+
+        function allMethod() {
+            layui.use(['form','jquery','table','element','layer'],function () {
+                let form = layui.form;
+                let $ = layui.jquery;
+                let table = layui.table;
+                let element = layui.element;
+                let layer = layui.layer;
+
+                let btn_query = $('#btn-query');
+                btn_query.unbind();
+                btn_query.click(function () {
+                    showRank();
+                })
+
+
+                showRank();
+
+                function showRank() {
+                    table.render({
+                        elem:'#showRankList',
+                        url: contextPath+'/getRealRank',
+                        text: {
+                            none: '数据库中无数据'
+                        },
+                        skin: 'line',
+                        even: true,
+                        size: 'sm',
+                        method: 'POST',
+                        limit: 8,
+                        page: true,
+                        //toolbar: true,
+                        //defaultToolbar: ['exports'],
+                        where:{
+                            teamType:$('#team_type').val()
+                        },
+                        cols:[
+                            [
+                            	{
+                                    field:'teamRank',title:'队伍排名',sort:true
+                                },
+                                {
+                                    field:'teamName',title:'队伍名称'
+                                },
+                                {
+                                    field:'teamScore',title:'队伍得分'
+                                },
+                                {
+                                    field:'updateTime',title:'最后提交时间'
+                                }
+                            ]
+                        ]
+                    })
+                }
+            })
+        }
+    </script>
+</body>
+</html>

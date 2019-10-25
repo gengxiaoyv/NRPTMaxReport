@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.spdb.nrpt.mapper.backstageMapper.BackstageReturnMapper" >
+
+	<resultMap id="ReturnData" type="com.spdb.nrpt.entity.custom.CusReturnData" >
+        <result column="KPI_ID" property="kpiId" />
+        <result column="KPI_NAME" property="kpiName" />
+        <result column="ORG_ID" property="ogrId" />
+        <result column="ORG_NAME" property="orgName" />
+        <result column="KPI_VALUE" property="kpiValue" />
+    </resultMap>
+
+    <select id="queryKPI_ValueAndKPI_Name" resultMap="ReturnData">
+    	select KPI_NAME,KPI_VALUE,KPI_ID,ORG_ID,ORG_NAME from Report_DataTable
+        <where>
+            and KPI_ID = #{key}
+            <if test="orgID != null and orgID != ''">
+                and ORG_ID = #{orgID}
+            </if>
+        </where>
+    </select>
+	
+</mapper>

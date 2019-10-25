@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.spdb.nrpt.mapper.baseDataMapper.BaseDataMapper" >
+
+    <select id="selectAllReportBaseDataTableByID" resultType="com.spdb.nrpt.entity.basedata.BaseDataEntity">
+        select id,dataName,dataGroup,dataValue  from Report_BaseDataTable where id = #{id}
+    </select>
+    
+     <select id="selectAllReportBaseDataTableByDataName" resultType="com.spdb.nrpt.entity.basedata.BaseDataEntity">
+        select id,dataName,dataGroup,dataValue  from Report_BaseDataTable where dataName = #{dataName}
+    </select>
+    
+    <update id="updateReportBaseDataTableByID">
+        update Report_BaseDataTable set dataValue = #{param2} where id = #{param1}
+    </update>
+
+	 <insert id="insertReportBaseDataTable" parameterType="com.spdb.nrpt.entity.basedata.BaseDataEntity">
+
+        insert  into Report_BaseDataTable
+
+        (id,dataName,dataGroup,dataValue)
+
+        values (#{id},#{dataName},#{dataGroup},#{dataValue})
+
+    </insert>
+</mapper>

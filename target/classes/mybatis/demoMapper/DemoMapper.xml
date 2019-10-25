@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.spdb.nrpt.mapper.demoMapper.DemoMapper" >
+	
+	<select id="queryDemoVOByApply_value" resultType="com.spdb.nrpt.entity.demo.DemoVO">
+		SELECT contact_list_id FROM BANK_DEMO 
+		<where>
+			apply_channel = #{apply_value}
+		</where>
+		ORDER BY create_time
+	</select>
+    
+    <insert id="addDemoInfo" parameterType="com.spdb.nrpt.entity.demo.DemoReq">
+    	INSERT INTO BANK_DEMO
+    		(
+    		DEMO_PKID,
+    		APPLY_TIME,
+    		APPLY_DEPTID,
+    		APPLY_PLATE,
+    		PLATE_MANAGE_NAME,
+    		BUSINESS_NAME,
+    		APPLY_CHANNEL,
+    		CONTACT_LIST_ID,
+    		CONTACT_LIST_NAME,
+    		REPORT_NAME,
+    		REQUIREMENT_TYPE,
+    		REALIZATION,
+    		HANDLER_NAME,
+    		HANDLER_STATUS,
+    		PRODUCTION_WAY,
+    		DEMAND_TIME,
+    		IMPLEMENTATION_P_TIME,
+    		DEMAND_SLA,
+    		EST_FIR_SUBMIT_TIME,
+    		EST_BEG_TIME,
+    		FIR_SUBMIT_TIME,
+    		ACTUAL_BEG_SEARCH_TIME,
+    		SEARCH_SLA,
+    		GRAY_FINISH_TIME,
+    		GRAY_SLA,
+    		IMPLEMENTATION_TIME,
+    		DELIVER_TIME,
+    		DELIVER_SLA,
+    		CREATE_TIME,
+    		UPDATE_TIME
+    	) 
+    	VALUES
+    	(
+    		SYS_GUID(),
+    		#{apply_time},
+    		#{apply_deptid},
+    		#{apply_plate},
+    		#{plate_manage_name},
+    		#{business_name},
+    		#{apply_channel},
+    		#{contact_list_id},
+    		#{contact_list_name},
+    		#{report_name},
+    		#{requirement_type},
+    		#{realization},
+    		#{handler_name},
+    		#{handler_status},
+    		<choose>
+    			<when test="production_way != null and production_way != ''">
+					#{production_way},    			
+    			</when>
+    			<otherwise>
+    				null,
+    			</otherwise>
+    		</choose>
+    		<choose>
+    			<when test="demand_time != null and demand_time != ''">
+					#{demand_time},    			
+    			</when>
+    			<otherwise>
+    				null,
+    			</otherwise>
+    		</choose>
+    		<choose>
+    			<when test="implementation_p_time != null and implementation_p_time != ''">
+					#{implementation_p_time},    			
+    			</when>
+    			<otherwise>
+    				null,
+    			</otherwise>
+    		</choose>
+    		<choose>
+    			<when test="demand_SLA != null and demand_SLA != '' and demand_SLA != 'NaN'">
+					#{demand_SLA},    			
+    			</when>
+    			<otherwise>
+    				null,
+    			</otherwise>
+    		</choose>
+    		<choose>
+    			<when test="est_fir_submit_time != null and est_fir_submit_time != ''">
+					#{est_fir_submit_time},    			
+    			</when>
+    			<otherwise>
+    				null,
+    			</otherwise>
+    		</choose>
+    		<choose>
+    			<when test="est_beg_time != null and est_beg_time != ''">
+					#{est_beg_time},    			
+    			</when>
+    			<otherwise>
+    				null,
+    			</otherwise>
+    		</choose>
+    		<choose>
+    			<when test="fir_submit_time != null and fir_submit_time != ''">
+					#{fir_submit_time},    			
+    			</when>
+    			<otherwise>
+    				null,
+    			</otherwise>
+    		</choose>
+    		<choose>
+    			<when test="actual_beg_search_time != null and actual_beg_search_time != ''">
+					#{actual_beg_search_time},    			
+    			</when>
+    			<otherwise>
+    				null,
+    			</otherwise>
+    		</choose>
+    		<choose>
+    			<when test="search_SLA != null and search_SLA != '' and search_SLA != 'NaN'">
+					#{search_SLA},    			
+    			</when>
+    			<otherwise>
+    				null,
+    			</otherwise>
+    		</choose>
+    		<choose>
+    			<when test="gray_finish_time != null and gray_finish_time != ''">
+					#{gray_finish_time},    			
+    			</when>
+    			<otherwise>
+    				null,
+    			</otherwise>
+    		</choose>
+    		<choose>
+    			<when test="gray_SLA != null and gray_SLA != '' and gray_SLA != 'NaN'">
+					#{gray_SLA},    			
+    			</when>
+    			<otherwise>
+    				null,
+    			</otherwise>
+    		</choose>
+    		<choose>
+    			<when test="implementation_time != null and implementation_time != ''">
+					#{implementation_time},    			
+    			</when>
+    			<otherwise>
+    				null,
+    			</otherwise>
+    		</choose>
+    		<choose>
+    			<when test="deliver_time != null and deliver_time != ''">
+					#{deliver_time},    			
+    			</when>
+    			<otherwise>
+    				null,
+    			</otherwise>
+    		</choose>
+    		<choose>
+    			<when test="deliver_SLA != null and deliver_SLA != '' and deliver_SLA != 'NaN'">
+					#{deliver_SLA},    			
+    			</when>
+    			<otherwise>
+    				null,
+    			</otherwise>
+    		</choose>
+    		sysdate,
+    		null
+    	)
+    </insert>
+    
+    <select id="queryDemoVO" resultType="com.spdb.nrpt.entity.demo.DemoVO">
+    	SELECT * FROM BANK_DEMO
+    	<where>  
+    		<if test="apply_time != null and apply_time != '' and apply_time2 != null and apply_time2 != ''">
+	    		and apply_time = #{apply_time} or apply_time = #{apply_time2}
+	    	</if>
+	    	<if test="deliver_time != null and deliver_time != '' and deliver_time2 != null and deliver_time2 != ''">
+	    		and deliver_time = #{deliver_time} or deliver_time = #{deliver_time2}
+	    	</if>
+	    	<if test="handler_status != null and handler_status != ''">
+	    		and handler_status = #{handler_status} 
+	    	</if>
+	    	<if test="plate_manage_name != null and plate_manage_name != ''">
+	    		and plate_manage_name like '%${plate_manage_name}%'
+	    	</if>
+	    	<if test="handler_name != null and handler_name != ''">
+	    		and handler_name like '%${handler_name}%'
+	    	</if>
+	    	<if test="apply_deptid != null and apply_deptid != ''">
+	    		and apply_deptid like '%${apply_deptid}%'
+	    	</if>
+	    	<if test="apply_plate != null and apply_plate != ''">
+	    		and apply_plate like '%${apply_plate}%'
+	    	</if>
+	    	
+    	</where>
+    	ORDER BY  TO_DATE(APPLY_TIME,'yyyy/mm/dd') DESC
+    </select>
+    
+    <select id="queryAllDemoVO" resultType="com.spdb.nrpt.entity.demo.DemoVO">
+    	SELECT * FROM BANK_DEMO
+    	<if test="handler_status != null and handler_status != ''">
+    		where handler_status = #{handler_status}
+    	</if>
+    	ORDER BY  TO_DATE(APPLY_TIME,'yyyy/mm/dd') DESC
+    </select>
+    
+    <select id="queryOneById" resultType="com.spdb.nrpt.entity.demo.DemoVO">
+    	SELECT * FROM BANK_DEMO WHERE DEMO_PKID = #{id}
+    </select>
+    
+    <delete id="deleteInfoById">
+    	DELETE FROM BANK_DEMO WHERE DEMO_PKID = #{id}
+    </delete>
+    
+    <update id="editInfoById" parameterType="com.spdb.nrpt.entity.demo.DemoVO">
+    	UPDATE BANK_DEMO 
+    	<set>
+    			<if test="apply_time != null and apply_time != ''">
+    				apply_time = #{apply_time},
+    			</if>
+    			<if test="apply_deptid != null and apply_deptid != ''">
+    				apply_deptid = #{apply_deptid},
+    			</if>
+    			<if test="apply_plate != null and apply_plate != ''">
+    				apply_plate = #{apply_plate},
+    			</if>
+    			<if test="plate_manage_name != null and plate_manage_name != ''">
+    				plate_manage_name = #{plate_manage_name},
+    			</if>
+    			<if test="business_name != null and business_name != ''">
+    				business_name = #{business_name},
+    			</if>
+    			<if test="apply_channel != null and apply_channel != ''">
+    				apply_channel = #{apply_channel},
+    			</if>
+    			<if test="contact_list_id != null and contact_list_id != ''">
+    				contact_list_id = #{contact_list_id},
+    			</if>
+    			<if test="contact_list_name != null and contact_list_name != ''">
+    				contact_list_name = #{contact_list_name},
+    			</if>
+    			<if test="report_name != null and report_name != ''">
+    				report_name = #{report_name},
+    			</if>
+    			<if test="requirement_type != null and requirement_type != ''">
+    				requirement_type = #{requirement_type},
+    			</if>
+    			<if test="realization != null and realization != ''">
+    				realization = #{realization},
+    			</if>
+    			<if test="handler_name != null and handler_name != ''">
+    				handler_name = #{handler_name},
+    			</if>
+    			<if test="handler_status != null and handler_status != ''">
+    				handler_status = #{handler_status},
+    			</if>
+    			<if test="production_way != null and production_way != ''">
+					production_way = #{production_way},    			
+    			</if>
+    			<if test="demand_time != null and demand_time != ''">
+					demand_time = #{demand_time},    			
+    			</if>
+    			<if test="implementation_p_time != null and implementation_p_time != ''">
+					implementation_p_time = #{implementation_p_time},    			
+    			</if>
+    			<if test="demand_SLA != null and demand_SLA != '' and demand_SLA != 'NaN'">
+					demand_SLA = #{demand_SLA},    			
+    			</if>
+    			<if test="est_fir_submit_time != null and est_fir_submit_time != ''">
+					est_fir_submit_time = #{est_fir_submit_time},    			
+    			</if>
+    			<if test="est_beg_time != null and est_beg_time != ''">
+					est_beg_time = #{est_beg_time},    			
+    			</if>
+    			<if test="fir_submit_time != null and fir_submit_time != ''">
+					fir_submit_time = #{fir_submit_time},    			
+    			</if>
+    			<if test="actual_beg_search_time != null and actual_beg_search_time != ''">
+					actual_beg_search_time = #{actual_beg_search_time},    			
+    			</if>
+    			<if test="search_SLA != null and search_SLA != '' and search_SLA != 'NaN'">
+					search_SLA = #{search_SLA},    			
+    			</if>
+    			<if test="gray_finish_time != null and gray_finish_time != ''">
+					gray_finish_time = #{gray_finish_time},    			
+    			</if>
+    			<if test="gray_SLA != null and gray_SLA != '' and gray_SLA != 'NaN'">
+					gray_SLA = #{gray_SLA},    			
+    			</if>
+    			<if test="implementation_time != null and implementation_time != ''">
+					implementation_time = #{implementation_time},    			
+    			</if>
+    			<if test="deliver_time != null and deliver_time != ''">
+					deliver_time = #{deliver_time},    			
+    			</if>
+    			<if test="deliver_time == null or deliver_time == ''">
+					deliver_time = null,    			
+    			</if>
+    			<if test="deliver_SLA != null and deliver_SLA != '' and deliver_SLA != 'NaN'">
+					deliver_SLA = #{deliver_SLA},    			
+    			</if>
+    			<if test="deliver_SLA == null or deliver_SLA == '' or deliver_SLA == 'NaN'">
+					deliver_SLA = null,    			
+    			</if>
+    		UPDATE_TIME = sysdate
+    	</set>
+    	<where>
+    		DEMO_PKID = #{demo_pkid}
+    	</where>
+    </update>
+    
+    
+    <select id="queryBaseDataByValue" resultType="com.spdb.nrpt.entity.demo.BaseDataBank">
+    	SELECT * FROM BASE_DATA_BANK WHERE DATA_TYPE = #{data_type} AND DATA_VALUE = #{data_value}
+    </select>
+    
+    <select id="queryBaseDataByType" resultType="com.spdb.nrpt.entity.demo.BaseDataBank">
+    	SELECT * FROM BASE_DATA_BANK WHERE DATA_TYPE = #{data_type}
+    </select>
+    
+    <insert id="addBaseData">
+    	INSERT INTO BASE_DATA_BANK(ID,DATA_TYPE,DATA_VALUE) VALUES(SYS_GUID(),#{data_type},#{data_value})
+    </insert>
+</mapper>

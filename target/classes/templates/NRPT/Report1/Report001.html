@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="css/NRPT/Report1/firstEchart.css"/>
+	<style>
+
+		html {
+
+			height: 100%
+
+		}
+
+
+
+		.body-width {
+
+			height: 100%;
+
+			/* background-color: black; */
+
+			position: relative;
+
+			width: 177.6vmin;
+
+            min-height: 100vmin;
+
+            margin: 0 auto;
+
+		}
+
+		.body-height {
+
+            width: 100vw;
+
+            height: 56.25vw;
+
+            margin: 0 auto; 
+
+            position: relative;
+
+            top: 50%; 
+
+            transform: translateY(-50%);
+
+		}
+
+	</style>
+</head>
+<body>
+<div class="body-wrapper body-width" >
+<div id="top">
+	<div class="titTop">
+		<span id="titleSpan"></span>
+		<img class="logo-img" src="image/logoimg/logo.png" alt="">
+		<div class="from">数据口径来自：管会</div>
+		<div class="unit">单位：亿元</div>
+	</div>
+</div>
+<div id="content">
+	<div id="left">
+		<div id="left_1" >
+			<div class="all-message">
+				<span>信息总览</span> 
+			</div>
+			<div class="content-message"> 
+                  <div class="wrapper-message">
+					  <div class="message-incom">
+						  <span>营业收入</span>
+					  </div>
+					  <div class="incom-num">
+							<span class="incomeNum"></span>
+					  </div>
+				 </div>
+				 <div class="wrapper-message">
+						<div class="message-incom all-bank-store">
+								 <span>全行存款</span>
+							</div>
+							<div class="incom-num">
+								  <span class="storeNum"></span>
+							</div>
+				 </div>
+				 <div class="wrapper-message">
+						<div class="message-incom message-all-loan">
+								<span>全行贷款</span>
+						</div>
+						<div class="incom-num">
+								  <span class="loanNum"></span>
+						</div>
+				 </div>
+			</div>
+			<!-- <div id="left_1_row1">
+				<div id="td1"><div id="leftLabel_1">营业收入</div></div>
+				<div class="num1" id="num1">123,123,123</div>
+			</div>
+			<div id="left_1_row2">
+				<div id="td2"><div id="leftLabel_2">全行存款</div></div>
+				<div class="num2" id="num2">123,123</div>
+			</div>
+			<div id="left_1_row3">
+				<div id="td3">
+					<div id="leftLabel_3">全行贷款</div>
+				</div>
+				<div class="num3" id="num3">123,123</div>
+			</div> -->
+		</div>
+		<div id="left_2">
+			<div class="titLeft2">
+				<span>全行存款</span>
+			</div>
+			<div id="left_2ECharts"></div>
+		</div>
+		<div id="left_3">
+			<div class="titLeft3">
+				<span >全行贷款</span>
+			</div>
+			<div id="left_3ECharts" ></div>
+		</div>
+	</div>
+	<div id="middle">
+		<div id="middle_top">
+			<div id="conLeft">
+
+			</div>
+			<div class="store_loan">
+
+			</div>
+			<div id="valTip">
+				<span class="city"></span>
+				<span class="num"></span>
+			</div>
+			<div id="conRight">
+				<div class="con_bottom">
+						<div  id="quanhangcun" >
+							<span class="allBankFlag">全行存款排名</span>
+						</div>
+						<div id="con_topECharts"></div>
+				</div>
+				<div class="con_bottom">
+					<div id="quanhangdai" >
+						<span class="allBankFlag">全行贷款排名</span>
+					</div>
+					<div id="con_bottomECharts"></div>
+				</div>
+			</div>
+		</div>
+		<div id="middle_bottom">
+			<div id="mid_bottom_label">
+				 <span>营收趋势（单位：百万）</span>
+			</div>
+			<div id="middle_bottomECharts" ></div>
+		</div>
+	</div>
+	<div id="right">
+		<div id="right_top">
+			<div id="fenhangdai" >
+				<span class="allBankFlag">全行存、贷款情况</span>
+			</div>
+			<div id="right_topECharts" >
+                  <div class="branchBank" >
+                     <div class="store-loan">
+						 <div class="store">
+							<span>存款</span>
+						 </div>
+						 <div class="loan"> 
+							<span >贷款</span>
+						 </div>
+					 </div>
+                     <div class="branchBank-list">
+                          <ul>
+							 
+							  
+						  </ul>
+                         
+					 </div>
+				  </div>
+			</div>
+		</div>
+		<div id="right_bottom">
+			<div id="tongyefuzhai" >
+				<span>同业负债结构</span> 
+			</div>
+			<div id="right_bottomECharts" ></div>
+		</div>
+	</div> 
+</div>
+<div id="bottom"></div>
+</div>
+</body>
+
+<script src="js/libs/echarts.min.js"></script>
+
+<script src="js/publickMethods/customed1.js"></script>
+<script src="js/publickMethods/publickMethods.js"></script>
+<script src="js/NRPT/Report1/firstComponents/china.js"></script>
+<script src="js/NRPT/Report1/firstComponents/listStore.js"></script>
+<script src="js/NRPT/Report1/firstComponents/listLoan.js"></script>
+<script src="js/NRPT/Report1/firstComponents/map.js"></script>
+<script src="js/NRPT/Report1/firstComponents/lineEchart.js"></script>
+<script src="js/NRPT/Report1/firstComponents/allBankLoan.js"></script>
+<script src="js/NRPT/Report1/firstComponents/allBankStore.js"></script>
+<script src="js/NRPT/Report1/firstComponents/radarEchart.js"></script>
+<script src="js/NRPT/Report1/firstComponents/branchBankLoan.js"></script>
+<script src="js/NRPT/Report1/firstComponents/resolveEchart.js"></script>
+<script src="js/NRPT/Report1//firstComponents/resolveData.js"></script>
+<!--<script src="./publickMethods/wesocket.js"></script>-->
+<script>
+
+	!function () {
+
+			let oBody = document.getElementsByClassName("body-wrapper")[0]
+
+		let _height = document.body.clientHeight
+
+		let _width = document.body.clientWidth;
+
+		if (_width/_height < (16/9)) {
+
+			oBody.classList.remove('body-width')
+
+			oBody.classList.add('body-height')
+
+		} else {
+
+			oBody.classList.remove('body-height')
+
+			oBody.classList.add('body-width')
+
+		}
+
+
+
+
+
+	}()
+
+</script>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>competition</title>
+    <link rel="stylesheet" href="css/sasGame/competition.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.js"></script> -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.css"> -->
+
+</head>
+
+<body>
+    <div id="app">
+        <!-- <div id="aa" style="width: 600px;height: 400px;"></div> -->
+        <img class="logo-img" src="css/sasGame/img/LOGO.png" alt="">
+
+        <div class="title">
+            <img class="title-text-img" src="css/sasGame/img/titleText.png" alt="">
+
+        </div>
+        <!-- <div class="start-but" style="color: aliceblue" @click="bindStart" v-show="startShow">开始</div> -->
+        <div v-show="false">
+            <audio controls="controls" autoplay="autoplay" id="music1">
+                <!-- <source src="css/sasGame/img/11763.wav" type="audio/ogg" /> -->
+                <source src="music/11672.mp3" type="audio/ogg" />
+               <!--  <img src="css/sasGame/img/11763.wav"/> -->
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+        <div class="time-wrapper">
+            <div class="time-tltle">
+                <div class="time-tltle-div">
+                    <img class="time-tltle-div-img" src="css/sasGame/img/countDown.png" alt="">
+                </div>
+            </div>
+            <div class="time-number">
+                <div class="time-number-div"><img class="time-number-div-img" :src="imgsrc[timeObj.hTwo]" alt=""></div>
+                <div class="time-number-div"><img class="time-number-div-img" :src="imgsrc[timeObj.hOne]" alt=""></div>
+                <div class="time-number-div  time-maohao-div-img"><img class="time-number-div-img"
+                        src="css/sasGame/img/maohao.png" alt=""></div>
+                <div class="time-number-div"><img class="time-number-div-img" :src="imgsrc[timeObj.mTwo]" alt=""></div>
+                <div class="time-number-div"><img class="time-number-div-img" :src="imgsrc[timeObj.mOne]" alt=""></div>
+                <div class="time-number-div  time-maohao-div-img"><img class="time-number-div-img"
+                        src="css/sasGame/img/maohao.png" alt=""></div>
+                <div class="time-number-div"><img class="time-number-div-img" :src="imgsrc[timeObj.sTwo]" alt=""></div>
+                <div class="time-number-div"><img class="time-number-div-img" :src="imgsrc[timeObj.sOne]" alt=""></div>
+
+            </div>
+        </div>
+        <div class="ranking-wrapper">
+            <img class="top-left-img" src="css/sasGame/img/cornerTopLeft.png" alt="">
+            <img class="top-right-img" src="css/sasGame/img/cornerTopRight.png" alt="">
+            <img class="bottom-left-img" src="css/sasGame/img/cornerBottomLeft.png" alt="">
+            <img class="bottom-right-img" src="css/sasGame/img/cornerBottomRight.png" alt="">
+            <div class="ranking-title">
+                <div class="ranking-title-three-div">
+                    <img class="ranking-title-three-img" src="css/sasGame/img/threeLine.png" alt="">
+                </div>
+                <div class="ranking-title-div">
+                    <img class="ranking-title-img" src="css/sasGame/img/countDownTitle.png" alt="">
+                </div>
+                <div class="ranking-title-three-div">
+                    <img class="ranking-title-three-img" src="css/sasGame/img/threeLine.png" alt="">
+                </div>
+            </div>
+            <div class="ranking-content-wrapper margin-right-0" :class="shadowStyle1">
+                <div class="ranking-content-title">
+                    <div class="ranking-content-title-text" v-if="main01.type.length"
+                        v-for="(item,index) in main01.type" v-html="item"></div>
+
+                </div>
+
+                <transition-group class="ranking-content-echart " :style='{top:offsetTopNumber + "%"}' tag="div"
+                    name="flip-list" v-if="main01.id.length">
+                    <div class="ranking-content-echart-wrapper" v-for="(item,index) in main01.id"
+                        :key="main01.id[index]">
+                        <div class="div-name">
+                            <div class="div-ranking" v-html="index + 1"></div>
+                            <div v-html="main01.yData[index]"></div>
+                        </div>
+                        <div class="div-bg"></div>
+                        <div class="div-plan" :style="main01.dataWidth[index]"></div>
+                        <div class="div-span-text" :style="main01.textLeft[index]" v-html="main01.dataLine[index]">
+                        </div>
+
+                        <div :id="forId(1,index)" class="pie-echart-style">
+                        </div>
+                    </div>
+                </transition-group>
+
+            </div>
+
+            <div class="ranking-content-wrapper margin-left-0" :class="shadowStyle2">
+                <div class="ranking-content-title">
+                    <div class="ranking-content-title-text" v-if="main02.type.length"
+                        v-for="(item,index) in main02.type" v-html="item"></div>
+                </div>
+                <transition-group class="ranking-content-echart" :style='{top:offsetTopNumber + "%"}' tag="div"
+                    name="flip-list" v-if="main02.id.length">
+                    <div class="ranking-content-echart-wrapper" v-for="(item,index) in main02.id"
+                        :key="main02.id[index]">
+                        <div class="div-name">
+                            <div class="div-ranking" v-html="index + 1"></div>
+                            <div v-html="main02.yData[index]"></div>
+                        </div>
+                        <div class="div-bg"></div>
+                        <div class="div-plan" :style="main02.dataWidth[index]"></div>
+                        <div class="div-span-text" :style="main02.textLeft[index]" v-html="main02.dataLine[index]">
+                        </div>
+
+                        <div :id="forId(2,index)" class="pie-echart-style">
+                        </div>
+                    </div>
+                </transition-group>
+
+            </div>
+
+            <div class="ranking-content-wrapper margin-right-0" :class="shadowStyle3">
+                <div class="ranking-content-title">
+                    <div class="ranking-content-title-text" v-if="main03.type.length"
+                        v-for="(item,index) in main03.type" v-html="item"></div>
+
+                </div>
+                <transition-group class="ranking-content-echart" :style='{top:offsetTopNumber + "%"}' tag="div"
+                    name="flip-list" v-if="main03.id.length">
+                    <div class="ranking-content-echart-wrapper" v-for="(item,index) in main03.id"
+                        :key="main03.id[index]">
+                        <div class="div-name">
+                            <div class="div-ranking" v-html="index + 1"></div>
+                            <div v-html="main03.yData[index]"></div>
+                        </div>
+                        <div class="div-bg"></div>
+                        <div class="div-plan" :style="main03.dataWidth[index]"></div>
+                        <div class="div-span-text" :style="main03.textLeft[index]" v-html="main03.dataLine[index]">
+                        </div>
+
+                        <div :id="forId(3,index)" class="pie-echart-style">
+                        </div>
+                    </div>
+                </transition-group>
+
+            </div>
+
+            <div class="ranking-content-wrapper margin-left-0" :class="shadowStyle4">
+                <div class="ranking-content-title">
+                    <div class="ranking-content-title-text" v-if="main04.type.length"
+                        v-for="(item,index) in main04.type" v-html="item"></div>
+
+                </div>
+                <transition-group class="ranking-content-echart" :style='{top:offsetTopNumber + "%"}' tag="div"
+                    name="flip-list" v-if="main04.id.length">
+                    <div class="ranking-content-echart-wrapper" v-for="(item,index) in main04.id"
+                        :key="main04.id[index]">
+                        <div class="div-name">
+                            <div class="div-ranking" v-html="index + 1"></div>
+                            <div v-html="main04.yData[index]"></div>
+                        </div>
+                        <div class="div-bg"></div>
+                        <div class="div-plan" :style="main04.dataWidth[index]"></div>
+                        <div class="div-span-text" :style="main04.textLeft[index]" v-html="main04.dataLine[index]">
+                        </div>
+
+                        <div :id="forId(4,index)" class="pie-echart-style">
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+        <div class="log-wrapper">
+            <img class="top-left-img" src="css/sasGame/img/cornerTopLeft.png" alt="">
+            <img class="top-right-img" src="css/sasGame/img/cornerTopRight.png" alt="">
+            <img class="bottom-left-img" src="css/sasGame/img/cornerBottomLeft.png" alt="">
+            <img class="bottom-right-img" src="css/sasGame/img/cornerBottomRight.png" alt="">
+            <div class="log-title">
+                <div class="log-title-three-div">
+                    <img class="log-title-three-img" src="css/sasGame/img/threeLine.png" alt="">
+                </div>
+                <div class="log-title-div">
+                    <img class="log-title-img" src="css/sasGame/img/logTitle.png" alt="">
+                </div>
+                <div class="log-title-three-div">
+                    <img class="log-title-three-img" src="css/sasGame/img/threeLine.png" alt="">
+                </div>
+            </div>
+            <transition-group name="list" tag="p" class="flex">
+                <div class="log-content-wrapper list-item" v-if="logData.length" v-for="(item,index) in logData"
+                    :key="item.updateTime">
+                    <div class="log-content-wrapper-left">
+                        <div class="padding-3">
+                            <!-- <img class="team-name-img" src="./img/logTitle.png" alt=""> -->
+                            {{item.teamName}}
+                        </div>
+                        <div class="padding-3">
+                            新获分数：{{item.teamChange}}
+                        </div>
+                    </div>
+                    <div class="log-content-wrapper-right">
+                        <div class="padding-3">
+                            最新战报提交：{{item.updateTime}}
+                        </div>
+
+                        <div class="padding-3">
+                            目前排名：{{item.teamRank}}
+                        </div>
+                    </div>
+                    <div class="log-content-wrapper-right-img">
+                        <img class="team-name-img" :src="item.imagePath" alt="">
+                    </div>
+                </div>
+            </transition-group>
+
+        </div>
+
+    </div>
+    <script src="js/sasGame/echarts-en.js"></script>
+    <script src="js/sasGame/axios.min.js"></script>
+    <!-- <script src="./vue.common.dev.js"></script> -->
+    <script src="js/sasGame/vue.min.js"></script>
+    <script src="js/sasGame/competition.js"></script>
+
+</body>
+<script type="text/javascript">
+	window.addEventListener("beforeunload",function(e){
+		alert("111")
+	})
+</script>
+</html>

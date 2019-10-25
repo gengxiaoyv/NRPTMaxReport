@@ -1,0 +1,706 @@
+	body,
+	html {
+		width: 100%;
+		height: 100%;
+		font-family: '寰蒋闆呴粦';
+	}
+	
+	* {
+		margin: 0;
+		padding: 0;
+		/*background: #999;*/
+	}
+	
+	body{
+		background: url(../../../image/img/bg.png) no-repeat;
+		background-size:100% 100%;
+	}
+	/*椤堕儴*/
+	#top {
+		width: 100%;
+		height: 9%;
+		/*background: darkred;*/
+		background: url(../../../image/img/title.png) no-repeat;
+		background-size:100% 100%;
+		position: relative;
+		
+	}
+	.titTop{
+		/*background: #008000;*/
+		height: 100%;
+		position: relative;
+		color: white;
+		font-size: 20px;
+	}
+	.titTop span{
+		    position: absolute;
+			top: 40%;
+			left: 50%;
+			transform: translate(-50%,-50%);
+	}
+	
+	/*搴曢儴*/
+	#bottom {
+		width: 100%;
+		height: 2%;
+		/*background: darkred;*/
+	}
+	
+	/*涓棿*/
+	#content {
+		width: 100%;
+		height: 89%;
+		overflow: hidden;
+	}
+	
+	/*宸﹀彸闂撮殧*/
+	#left,
+	#right,
+	#middle {
+		width: 20%;
+		height: 100%;
+		/*background: green;*/
+		float: left;
+	}
+	#left {
+		margin-left: 1%;
+	}
+	
+	#right {
+		margin-right: 1%;
+	}
+	
+	#middle {
+		width: 56%;
+		/*background: yellowgreen;*/
+		float: left;
+		margin: 0 1%;
+		position: relative;
+	}
+	
+	
+	#left_1,#left_2,#left_3{
+		/*height: 31.3333%;*/
+		height: 32.6%;
+	}
+	#left_1{
+		/*background: #46A3FF;*/
+		background: url(../../../image/img/allMessage/bg.png) no-repeat;
+		background-size:100% 100%;
+		position: relative;
+	}
+	#left_2{
+		margin: 2% 0;
+		/*background: goldenrod;*/
+		background: url(../../../image/img/allBankStore/bg.png) no-repeat;
+		background-size:100% 100%;
+		position: relative;
+	}
+	#left_3{
+		/*background: #8A2BE2;*/
+		background: url(../../../image/img/allBankLoan/bg4.png) no-repeat;
+		background-size:100% 100%;
+		position: relative;
+	}
+	/*宸︿笅瑙�*/
+	#gedai{
+		width: 20%;
+		height: 13%;
+		/*background: green;*/
+		position: absolute;
+		left: 6%;
+		top: 18%;
+		background: url(../../../image/img/allBankLoan/nomalPublickStore.png) no-repeat;
+		/* background: url(../image/img/鍏ㄨ璐锋/涓�鑸鍏捶娆�.png) no-repeat; */
+		background-size:100% 100%;
+	}
+	#duigong{
+		width: 30%;
+		height: 13%;
+		/*background: #46A3FF;*/
+		position: absolute;
+		right: 6%;
+		top: 18%;
+		/* background: url(img/鍏ㄨ璐锋/涓�鑸鍏捶娆�.png) no-repeat; */
+		background: url(../../../image/img/allBankLoan/nomalPublickStore.png) no-repeat;
+		background-size:100% 100%;
+	}
+	#middle_top{
+		height: 66.7%;
+		/*background: #844200;*/
+		margin-bottom: 0.6%;
+		position: relative;
+		/* background: url(img/鍦板浘/bg.png) no-repeat; */
+		background: url(../../../image/img/map/bgReport1.png) no-repeat;
+		background-size:100% 100%;
+	}
+	#middle_bottom{
+		height: 32.5%;
+		/*background: #0000FF;*/
+		/* background: url(img/钀ユ敹瓒嬪娍/bg.png) no-repeat; */
+		background: url(../../../image/img/incomeTrend/bg.png) no-repeat;
+		background-size:100% 100%;
+		position: relative;
+	}
+	#right_top{
+		height: 66.7%;
+		/*background: #46A3FF;*/
+		margin-bottom: 1.5%;
+		/* background: url(img/鍒嗚瀛樿捶娆炬儏鍐�/bg.png) no-repeat; */
+		background: url(../../../image/img/desprateBank/bg.png) no-repeat;
+		background-size:100% 100%;
+		position: relative;
+	}
+	#quanhangcun{
+		color: white;
+		height: 15%;
+		position: relative;
+	}
+    #quanhangcun span {
+		position: absolute;
+		top: 50%;
+		left: 8%;
+		transform: translate(0,-50%);
+	}
+	#quanhangdai{
+		color: white;
+		height: 15%;
+		position: relative;
+	}
+	#quanhangdai span {
+		position: absolute;
+		top: 50%;
+		left: 8%;
+		transform: translate(0,-50%);
+
+	}
+	#right_bottom{
+		/*height: 31.3333%;*/
+		height: 32.6%;
+		/*background: #8A2BE2;*/
+		/* background: url(img/鍚屼笟璐熷�虹粨鏋�/bg.png) no-repeat; */
+		background: url(../../../image/img/constructor/bg.png) no-repeat;
+		background-size:100% 100%;
+		position: relative;
+	}
+
+	
+	#conLeft{
+		width: 65%;
+		height: 100%;
+		/*background: green;*/
+		float: left;
+	}
+	#valTip{
+		width: 40%;
+		height: 10%;
+		/*background: #80FFFF;*/
+		position: absolute;
+		left: 3%;
+		top: 3%;
+		/* background: url(img/鍦板浘/鍦板尯.png) no-repeat; */
+		background: url(../../../image/img/map/loaction1.png) no-repeat;
+		background-size:100% 100%;
+		display: flex;
+		padding: 2%;
+		box-sizing: border-box;
+	}
+	#valTip .city {
+		font-size: 20px;
+		color: white;
+		display: inline-block;
+		flex: 2;
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+	#valTip .num {
+		font-size: 20px;
+		color: white;
+		display: inline-block;
+		flex: 8;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translateY(-50%);
+	}
+	#name{
+		height: 40%;
+		text-align: center;
+		/*background: #8A2BE2;*/
+		/* line-height: 40%;*/
+        display:flex;
+        align-items:center;
+        justify-content:center;
+	}
+	#val{
+		width: 100%;
+		height: 60%;
+		text-align: center;
+		/*background: #FFBD9D;
+	    line-height: 60%;*/
+        display:flex;
+        align-items:center;
+        justify-content:center;
+		
+		
+	}
+	/*#val span{
+		display: table-cell;
+		vertical-align:middle;
+	}*/
+	#conRight{
+		width: 35%;
+		height: 100%;
+		float: right;
+		/*background: #8A2BE2;*/
+		display: flex;
+		flex-direction: column;
+		/*justify-content:space-around;*/
+		justify-content:center;
+		align-items: center;
+		
+	}
+	#con_top{
+		width: 92%;
+		height: 46%;
+		/*background: blue;*/
+		margin-bottom: 3% ;
+		/* background: url(img/鍦板浘/鍏ㄨ瀛樻鎺掑悕.png) no-repeat; */
+		background: url(../../../image/img/map/allStoreAndLoanList.png) no-repeat;
+
+		background-size:100% 100%;
+		position: relative;
+		padding:5%;
+		box-sizing: border-box
+	}
+	.con_bottom{
+		width: 92%;
+		height: 46%;
+		/*background: #A6A600;*/
+		/* background: url(img/鍦板浘/鍏ㄨ璐锋鎺掑悕.png) no-repeat; */
+		background: url(../../../image/img/map/allStoreAndLoanList.png) no-repeat;
+		background-size:100% 100%;
+		position: relative;
+	}
+	
+	/*宸︿笂瑙�*/
+	#left_1_row1,#left_1_row2,#left_1_row3{
+		
+		width: 100%;
+		height: 18%;
+		
+	}
+	#left_1_row1{
+		/* background: #0000FF; */
+		/* margin-top: 3%; */
+	}
+	#left_1_row2{
+		/*background: #80FFFF;*/
+		
+	}
+	#left_1_row3{
+		/*background: #A6A600;*/
+	}
+	#td1,#td2,#td3{
+		float: left;
+		color: white;
+		margin-left: 4%;
+		position: relative;
+	}
+	#leftLabel_1{
+		position: absolute;
+		right: 8%;
+	
+	}
+	#leftLabel_2{
+		position: absolute;
+		right: 8%;
+	}
+	#leftLabel_3{
+		position: absolute;
+		right: 8%;
+	}
+	#td1{
+		
+		width: 36%;
+		height: 100%;
+		/*display: inline-block;*/
+		/* background: url(img/淇℃伅鎬昏/钀ヤ笟鏀跺叆.png) no-repeat; */
+		background: url(../../../image/img/allMessage/income.png) no-repeat;
+		background-size:100% 100%;
+		font-size: 12px;
+		text-align: center;
+		display:flex; justify-content:center; align-items:center;
+	}
+	#td2{
+		width: 36%;
+		height: 100%;
+		/*display: inline-block;*/
+		/* background:url(img/淇℃伅鎬昏/鍏ㄨ瀛樻.png) no-repeat; */
+		background: url(../../../image/img/allMessage/allBankStore.png) no-repeat;
+		background-size:100% 100%;
+		font-size: 12px;
+		text-align: center;
+		display:flex; justify-content:center; align-items:center;
+	}
+	#td3{
+		width: 36%;
+		height: 100%;
+		/*display: inline-block;*/
+		/* background:url(img/淇℃伅鎬昏/鍏ㄨ璐锋.png) no-repeat; */
+		background: url(../../../image/img/allMessage/allBankLoan.png) no-repeat;
+		background-size:100% 100%;
+		font-size: 12px;
+		text-align: center;
+		display:flex; justify-content:center; align-items:center;
+	}
+	.num1,.num2,.num3{
+		width: 52%;
+		height: 100%;
+		float: right;
+		color: white;
+		font-size: 12px;
+		text-align: center;
+		display:flex; 
+		justify-content:flex-end; 
+		align-items:center;
+		padding-right: 4%;
+	}
+	
+	#left_1{
+		/* display: flex;
+		flex-direction: column;
+		justify-content:space-around */
+	}
+	.all-message {
+		height:15%;
+		color: white;
+		display: flex;
+		align-items:center;
+		padding-left: 8%;
+		box-sizing: border-box;
+	}
+	.all-message span {
+	   display: inline-block;
+	}
+	.content-message{
+	   height: 85%;
+	   padding:7% 6%;
+	   display: flex;
+	   flex-direction: column;
+	   justify-content:space-between;
+	   box-sizing: border-box;
+	   font-size: 10px;
+	}
+	.content-message div {
+		height: 23%;
+	}
+	.content-message .message-incom {
+		background: url(../../../image/img/allMessage/income.png) no-repeat;
+        /* background: url(../image/img/淇℃伅鎬昏/钀ヤ笟鏀跺叆.png) no-repeat; */
+		background-size: 100% 100%;
+		width: 40%;
+		height: 100%;
+		position: relative;
+	}
+	.content-message .all-bank-store{
+		/* background: url(../image/img/淇℃伅鎬昏/鍏ㄨ瀛樻.png) no-repeat; */
+		background: url(../../../image/img/allMessage/allBankStore.png) no-repeat;
+		background-size: 100% 100%;
+	}
+	.content-message .message-all-loan {
+		/* background: url(../image/img/all/鍏ㄨ璐锋.png) no-repeat; */
+        background: url(../../../image/img/allMessage/allBankLoan.png) no-repeat;
+		background-size: 100% 100%;
+	}
+	.wrapper-message {
+		display: flex;
+		flex-direction: row;
+	}
+	.content-message .incom-num {
+		display: inline-block;
+		height: 100%;
+		flex:1;
+		position: relative;
+		box-sizing: border-box;
+	}
+	.incom-num span{
+        position: absolute;
+		left: 50%;
+		top: 40%;
+		transform: translate(-50%,-50%);
+		width: 100%;
+		display: inline-block;
+		text-align: right;
+		font-size: 16px;
+		color: rgba(0,255,255,1)
+	} 
+
+	.content-message .message-incom span {
+		position: absolute;
+		left: 65%;
+		top: 50%;
+		transform: translate(-50%,-50%);
+		width: 70%;
+		text-align: center;
+		color: #fff;
+	}
+	.titLeft1{
+		color: white;
+		margin: -1% 0 0 7%;
+		position: relative;
+		top:-1%;
+	}
+	.titLeft2{
+		color: white;
+		display: flex;
+		height: 12%;
+		position: relative;
+	}
+    .titLeft2 span{
+		position: absolute;
+        left: 8%;
+		top: 50%;
+		transform: translate(0,-50%);
+	}
+	.titLeft3{
+		color: white;
+		display: flex;
+		height: 12%;
+		position: relative;
+	}
+	.titLeft3 span{
+		position: absolute;
+        left: 8%;
+		top: 50%;
+		transform: translate(0,-50%);
+	}
+	/*鍙宠竟*/
+	#fenhangdai{
+		color: white;
+		height: 8%;
+		position: relative;
+	}
+	#fenhangdai span {
+		position: absolute;
+        left: 8%;
+		top: 40%;
+		transform: translate(0,-50%);
+	}
+	#tongyefuzhai{
+		color: white;
+		height: 15%;
+		position: relative;
+	}
+	#tongyefuzhai span{
+		position: absolute;
+        left: 8%;
+		top: 40%;
+		transform: translate(0,-50%);
+	}
+	/*涓棿涓嬮潰鏂囧瓧*/
+	#mid_bottom_label{
+		color: white;
+		height: 15%;
+		position: relative;
+	}
+	#mid_bottom_label span{
+		position: absolute;
+        left: 3%;
+		top: 40%;
+		transform: translate(0,-50%);
+	}
+
+#left_2ECharts {
+	width: 100%; 
+	height: 100%;
+	margin-top: 5%;
+}
+#left_3ECharts{
+	width: 100%; 
+	height: 100%;
+	margin-top: 5%;
+}
+#con_topECharts{
+	width: 100%;
+	height: 100%;
+}
+#con_bottomECharts{
+	width: 100%; 
+	height: 97%;
+	margin-top: 5%;
+}
+#middle_bottomECharts{
+	width: 100%; 
+	height: 90%;
+}
+#right_topECharts{
+	width: 100%; 
+	height: 97%;
+	margin-top: 2%;
+}
+#right_bottomECharts{
+	width: 100%;
+	 height: 97%;
+	 margin-top: 5%;
+}
+.store_loan {
+	height: 17%;
+	width: 10%;
+	position: absolute;
+	bottom: 6%;
+	left: 3%;
+	border-radius: 50%;
+	/* background: url(../image/img/map/瀛樻1.png) no-repeat; */
+	background: url(../../../image/img/map/store1.png) no-repeat;
+	background-size:100% 100%;
+	/* margin-bottom: 2%; */
+} 
+.loan_store {
+	height: 17%;
+	width: 10%;
+	position: absolute;
+	bottom: 6%;
+	left: 3%;
+	border-radius: 50%;
+	/* background: url(../image/img/鍦板浘/璐锋1.png) no-repeat; */
+	background: url(../../../image/img/map/loan1.png) no-repeat;
+	background-size:100% 100%;
+	/* margin-bottom: 2%; */
+} 
+.store_loan .img {
+	height: 100%;
+	width: 100%;
+}
+.branchBank {
+	height:88%;
+	width:85%;
+	margin: 0 auto;
+}
+.store-loan {
+	height: 10%;
+	width:100%;
+	/* background: blue; */
+	display: flex;
+}
+.store,.loan{
+	flex:1;
+	position: relative;
+}
+
+.store{
+
+}
+.store-loan span{
+   position: absolute;
+   left: 50%;
+   top: 50%;
+   transform: translate(-50%,-50%);
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+}
+
+.store span{
+	/* background: url('../image/2瀵瑰叕/瀛樻銆佽捶娆惧垎鏋�/瀛樻.png') no-repeat; */
+	background: url('../../../image/forPublick/loanAndStore/store.png') no-repeat;
+
+	background-size:100% 100%;
+	display: inline-block;
+	width: 60%;
+	text-align: center;
+	color: #fff;
+	padding: 4px 0;
+}
+.loan span{
+	background: url('../../../image/forPublick/loanAndStore/loan.png') no-repeat;
+	background-size:100% 100%;
+	display: inline-block;
+	width: 60%;
+	text-align: center;
+	color: #fff;
+	padding: 4px 0;
+}
+
+.branchBank-list {
+	margin-top: 3%; 
+	height:87%;
+	width:100%;
+	padding-bottom: 2%;
+	overflow: hidden;
+	position: relative;
+}
+ul {
+	height: 100%;
+	width: 100%;
+	font-size: 0;
+    position: absolute;
+}
+li span {
+	display: inline-block;
+	font-size: 12px;
+	color: #fff;
+}
+ul li{
+	list-style: none;
+	display: flex;
+}
+li .store-num{
+	flex:5;
+	position: relative;
+}
+li .store-num span {
+	height: 40%;
+	position: absolute;
+	right: 0;
+	top: 50%;
+	transform: translate(0,-50%);
+}
+li .loan-num {
+	flex:5;
+	position: relative;
+}
+li .loan-num span {
+	height: 40%;
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translate(0,-50%);
+}
+li .city-name {
+	flex: 6;
+	text-align: center;
+	height: 100%;
+}
+li .city-name span {
+	height: 100%;
+}
+.storeWidth {
+	background: rgba(0,255,255,1)
+}
+.loanWidth {
+	background: rgba(0,110,255,1)
+}
+	.unit {
+		position: absolute;
+		right: 1.5%;
+		bottom:20%;
+		color: #fff;
+		font-size: 12px;
+	}
+	.from {
+		position: absolute;
+		/* left: 1.5%; */
+		left: 4%;
+		bottom: 20%;
+		color: #ccc;
+		opacity: 0.5;
+		font-size: 12px;
+	}
+	img.logo-img {
+		position: absolute;
+		width: 3%;
+		height: 40px;
+		margin: 5px;
+	}

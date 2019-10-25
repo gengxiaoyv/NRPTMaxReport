@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>addBankInfo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}" media="all"/>
+    <style>
+    	.layui-form-label{
+    		width:150px;
+    	}
+    </style>
+</head>
+<body>
+
+    <form class="layui-form"  id="myform" method="post" lay-filter="myform">
+		
+		<div class="layui-form-item">
+            <label class="layui-form-label">主机名</label>
+            <div class="layui-input-inline" >
+                <input type="text" name="machineID" lay-verify="required" class="layui-input" id="machineID" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">进程ID</label>
+            <div class="layui-input-inline" >
+                <input type="text" name="proID" lay-verify="required" class="layui-input" id="proID">
+            </div>
+        </div>
+        
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+            	<button class="layui-btn" type="button" lay-filter="btn_query" id="btn_query">查询进程</button>
+                <button class="layui-btn" lay-submit lay-filter="btn_submit" id="btn_submit">杀死进程</button>
+            </div>
+        </div>
+    </form>
+    
+    	<div class="layui-form-item">
+            <label class="layui-form-label">主机名</label>
+            <div class="layui-input-inline" >
+                <input type="text" name="RemachineID"  class="layui-input" id="RemachineID" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">重启bi_server</label>
+            <div class="layui-input-inline" >
+                <input type="text" name="ReproID"  class="layui-input" id="ReproID">
+            </div>
+        </div>
+        
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" type="button" lay-filter="btn_reStart" id="btn_reStart">重启</button>
+            </div>
+        </div>
+       
+
+
+    <script th:src="@{/js/layui/layui.js}"></script>
+    <script th:src="@{/js/base/jquery.min.js}"></script>
+    <script type="text/javascript" th:inline="javascript">
+    
+        var contextPath = [[${#request.getContextPath()}]];
+        
+        $(function(){
+        	login();
+        })
+        
+        var count = 1;
+        
+        function login(){
+        	$.ajax({
+        		url:contextPath+'/linux/loginLinux',
+        	    type:'POST',
+        	    //data:'ip=10.134.33.183&username=biee&count='+count,
+        	    //data:'ip=10.129.40.119&username=biee&count='+count,//测试
+        	    data:'ip=10.200.177.84&username=biee&count='+count,//生产
+        	    dataType:'json',
+        	    success:function(data){
+        	    	if(data.msg=='success'){
+        	    		console.log('免密登入84环境成功');
+        	    	}else{
+        	    		 count = count+1;
+						 login2();       	    		
+        	    	}       	    	
+        	    }
+        	})        	
+        }
+        
+        function login2(){
+        	$.ajax({
+        		url:contextPath+'/linux/loginLinux',
+        	    type:'POST',
+        	    //data:'ip=10.129.40.119&username=biee&count='+count,//测试
+        	    data:'ip=10.200.177.84&username=biee&count='+count,
+        	    dataType:'json',
+        	    async:false,
+        	    success:function(data){
+        	    	count = 1;
+        	    	if(data.msg=='success'){
+        	    		console.log('非免密登入84环境成功');
+        	    	}else{
+        	    		console.log('登入84环境失败');		
+        	    	}       	    	
+        	    }
+        	})
+        }
+        
+        var queryBtn = $('#btn_query');
+        queryBtn.unbind();
+        queryBtn.click(function(){
+        	queryProcess();
+        });
+        
+        function queryProcess(){     	
+     		location.href=contextPath+'/linux/queryProcess';
+        }
+
+        var btnReStart = $('#btn_reStart');
+        btnReStart.unbind();
+        btnReStart.click(function(){
+        	reStart();
+        });
+        
+        function reStart(){
+        	
+        	 $.ajax({
+        		url:contextPath+'/linux/restartService',
+        		type:'POST',
+        		data:'RemachineID='+$('#RemachineID').val()+'&ReproID='+$('#ReproID').val(),
+        		dataType:'json',
+        		success:function(data){
+        			alert(data.msg);
+        		}
+        	}) 
+        };
+        
+        layui.use(['form','jquery','laydate'],function () {
+            var form = layui.form;
+            var $ = layui.jquery;
+            
+            form.on('submit(btn_submit)',function(data){
+            	$.ajax({
+            		url:contextPath+'/linux/killLinuxProcess',
+            		type:'POST',
+            		data: 'machineID='+$('#machineID').val()+'&proID='+$('#proID').val(),
+            		dataType:'json',
+            		success:function(res){
+            			alert(res.msg);
+            		}
+            	})        	
+            }) 
+        })
+
+
+    </script>
+</body>
+</html>
