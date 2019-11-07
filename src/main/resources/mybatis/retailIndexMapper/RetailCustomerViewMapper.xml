@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.spdb.nrpt.mapper.retailIndexMapper.RetailCustomerViewMapper" >
+
+    <resultMap id="RetailCustomerBaseData" type="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData" >
+        <result column="amt" property="amt"/>
+        <result column="data_date" property="date_date"/>
+        <!--<result column="ORG_NAME" property="org"/>
+        <result column="STATIS_DT" property="time" jdbcType="TIMESTAMP"/>-->
+    </resultMap>
+    
+    <select id="selectTileDataByDayOrgTypeAndIndex" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData">
+        select amt,index_name from S_RT_CST_ECHARTS
+        <where>
+            <if test="dims2 != null and dims2 != ''">
+                and dims2 = #{dims2}
+            </if>
+            <if test="dims3 != null and dims3 != ''">
+                and dims3 = #{dims3}
+            </if>
+            <if test="org_id != null and org_id != ''">
+                and org_id = #{org_id}
+            </if>
+            <if test="data_date != null">
+                and data_date = #{data_date}
+            </if>
+            <if test="tileNameList != null">
+                and index_name in
+                <foreach collection="tileNameList" item="tileName" separator=","  open="(" close=")">
+                    #{tileName}
+                </foreach>
+            </if>
+        </where>
+
+    </select>
+
+    <select id="getSexAgeRankData" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData">
+        select amt,dims4 from S_RT_CST_ECHARTS
+        <where>
+            <if test="index_name != null and index_name != ''">
+                and index_name = #{index_name}
+            </if>
+            <if test="dims2 != null and dims2 != ''">
+                and dims2 = #{dims2}
+            </if>
+            <if test="dims3 != null and dims3 != ''">
+                and dims3 = #{dims3}
+            </if>
+            <if test="org_id != null and org_id != ''">
+                and org_id = #{org_id}
+            </if>
+            <if test="data_date != null">
+                and data_date = #{data_date}
+            </if>
+            <if test="dims4 != null and dims3 != ''">
+                and dims4 != #{dims4}
+            </if>
+        </where>
+
+    </select>
+
+
+    <select id="getMapDataCount" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="java.lang.Long">
+        select amt from S_RT_CST_ECHARTS
+        <where>
+            <if test="index_name != null and index_name != ''">
+                and index_name = #{index_name}
+            </if>
+            <if test="dims2 != null and dims2 != ''">
+                and dims2 = #{dims2}
+            </if>
+            <if test="dims3 != null and dims3 != ''">
+                and dims3 = #{dims3}
+            </if>
+            <if test="org_id != null and org_id != ''">
+                and org_id = #{org_id}
+            </if>
+            <if test="data_date != null">
+                and data_date = #{data_date}
+            </if>
+        </where>
+
+
+    </select>
+
+
+
+    <select id="getMapDataPercent" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="java.lang.Double">
+    select amt from S_RT_CST_ECHARTS
+    <where>
+        <if test="index_name != null and index_name != ''">
+            and index_name = #{index_name}
+        </if>
+        <if test="dims2 != null and dims2 != ''">
+            and dims2 = #{dims2}
+        </if>
+        <if test="dims3 != null and dims3 != ''">
+            and dims3 = #{dims3}
+        </if>
+        <if test="org_id != null and org_id != ''">
+            and org_id = #{org_id}
+        </if>
+        <if test="data_date != null">
+            and data_date = #{data_date}
+        </if>
+    </where>
+    </select>
+
+
+    <select id="getHeadMapData" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData">
+        select amt,org_name,org_id from S_RT_CST_ECHARTS
+        <where>
+            <if test="index_name != null and index_name != ''">
+                and index_name = #{index_name}
+            </if>
+            <if test="dims2 != null and dims2 != ''">
+                and dims2 = #{dims2}
+            </if>
+            <if test="dims3 != null and dims3 != ''">
+                and dims3 = #{dims3}
+            </if>
+            <if test="data_date != null">
+                and data_date = #{data_date}
+            </if>
+            <if test="org_idList != null">
+                and org_id in
+                <foreach collection="org_idList" item="org_id" separator=","  open="(" close=")">
+                    #{org_id}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+
+
+    <!-- 近三十天趋势-->
+
+    <select id="selectOneMonthTrend" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData">
+        select amt,data_date from S_RT_CST_ECHARTS
+        <where>
+            <if test="index_name != null and index_name != ''">
+                and index_name = #{index_name}
+            </if>
+            <if test="dims2 != null and dims2 != ''">
+                and dims2 = #{dims2}
+            </if>
+            <if test="dims3 != null and dims3 != ''">
+                and dims3 = #{dims3}
+            </if>
+            <if test="dims4 != null and dims4 != ''">
+                and dims4 = #{dims4}
+            </if>
+            <if test="org_id != null and org_id != ''">
+                and org_id = #{org_id}
+            </if>
+            <if test="data_date != null">
+                and data_date between add_months(#{data_date},-1) and #{data_date}
+            </if>
+        </where>
+    </select>
+
+    <!--三十天趋势中客户占比-->
+
+    <select id="selectCustPercent" resultType="java.lang.Double" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO">
+        select * from(
+        select distinct dims4 dims4,sum(amt)over(partition by dims4)/sum(amt)over(partition by index_name) as
+        amt_zb,index_name from S_RT_CST_ECHARTS
+        <where>
+        <if test="index_name != null and index_name != ''">
+            and index_name = #{index_name}
+        </if>
+        <if test="dims2 != null and dims2 != ''">
+            and dims2 = #{dims2}
+        </if>
+        <if test="dims3 != null and dims3 != ''">
+            and dims3 = #{dims3}
+        </if>
+        <if test="dims4 != null and dims3 != ''">
+            and dims4 = #{dims4}
+        </if>
+        <if test="org_id != null and org_id != ''">
+            and org_id = #{org_id}
+        </if>
+        <if test="data_date != null">
+            and data_date = #{data_date}
+        </if>
+    </where>) t
+        where t.dims4 not in('6','7')
+    </select>
+
+<!--较上月/上年末净增-->
+    <select id="getincrthan" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="java.lang.Long">
+        select amt from S_RT_CST_ECHARTS
+        <where>
+            <if test="index_name != null and index_name != ''">
+                and index_name = #{index_name}
+            </if>
+            <if test="dims2 != null and dims2 != ''">
+                and dims2 = #{dims2}
+            </if>
+            <if test="dims3 != null and dims3 != ''">
+                and dims3 = #{dims3}
+            </if>
+            <if test="dims4 != null and dims3 != ''">
+                and dims4 = #{dims4}
+            </if>
+            <if test="org_id != null and org_id != ''">
+                and org_id = #{org_id}
+            </if>
+            <if test="data_date != null">
+                and data_date = #{data_date}
+            </if>
+
+            and dims4 not in('6','7')
+        </where>
+    </select>
+
+    <!--年初私行基准线-->
+    <select id="getYearBeginLine" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="java.lang.Long">
+        select amt from S_RT_CST_ECHARTS
+        <where>
+            <if test="index_name != null and index_name != ''">
+                and index_name = #{index_name}
+            </if>
+            <if test="dims3 != null and dims3 != ''">
+                and dims3 = #{dims3}
+            </if>
+            <if test="org_id != null and org_id != ''">
+                and org_id = #{org_id}
+            </if>
+            <if test="data_date != null">
+                and data_date = to_date(to_char(#{data_date},'yyyy')-1||'1231','yyyy-mm-dd')
+            </if>
+            <if test="dims4 != null and dims4 != ''">
+                and dims4 = #{dims4}
+            </if>
+            <if test="dims2 != null and dims2 != ''">
+                and dims2 = #{dims2}
+            </if>
+        </where>
+    </select>
+
+    <!--月初私行基准线-->
+
+    <select id="getMonthBeginLine" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="java.lang.Long">
+        select amt from S_RT_CST_ECHARTS
+        <where>
+            <if test="index_name != null and index_name != ''">
+                and index_name = #{index_name}
+            </if>
+            <if test="dims3 != null and dims3 != ''">
+                and dims3 = #{dims3}
+            </if>
+            <if test="org_id != null and org_id != ''">
+                and org_id = #{org_id}
+            </if>
+            <if test="data_date != null">
+                and data_date = #{data_date}
+            </if>
+            <if test="dims4 != null and dims4 != ''">
+                and dims4 = #{dims4}
+            </if>
+            <if test="dims2 != null and dims2 != ''">
+                and dims2 = #{dims2}
+            </if>
+        </where>
+    </select>
+
+
+
+    <!-- 近一年趋势-->
+
+    <select id="selectOneYearTrend" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData">
+        select amt,data_date from S_RT_CST_ECHARTS
+        <where>
+            <if test="index_name != null and index_name != ''">
+                and index_name = #{index_name}
+            </if>
+            <if test="dims2 != null and dims2 != ''">
+                and dims2 = #{dims2}
+            </if>
+            <if test="dims3 != null and dims3 != ''">
+                and dims3 = #{dims3}
+            </if>
+            <if test="dims4 != null and dims4 != ''">
+                and dims4 = #{dims4}
+            </if>
+            <if test="org_id != null and org_id != ''">
+                and org_id = #{org_id}
+            </if>
+            <if test="data_date != null">
+                and data_date between add_months(#{data_date},-12) and #{data_date}
+            </if>
+        </where>
+    </select>
+
+    <!--非0基客客户数-->
+    <select id="selectCustSliceCount" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="java.lang.Long">
+        select sum(amt) from S_RT_CST_ECHARTS
+        <where>
+            <if test="index_name != null and index_name != ''">
+                and index_name = #{index_name}
+            </if>
+            <if test="dims2 != null and dims2 != ''">
+                and dims2 = #{dims2}
+            </if>
+            <if test="dims3 != null and dims3 != ''">
+                and dims3 = #{dims3}
+            </if>
+            <if test="dims4 != null and dims4 != ''">
+                and dims4 = #{dims4}
+            </if>
+            <if test="org_id != null and org_id != ''">
+                and org_id = #{org_id}
+            </if>
+            <if test="data_date != null">
+                and data_date = #{data_date}
+            </if>
+            and dims4!='7'
+        </where>
+        group by dims4
+
+    </select>
+
+    <!--非0基客客户数占总客户比-->
+    <select id="selectCustSlicePercent" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="java.lang.Double">
+        select amt_zb from(
+        select distinct dims4 dims4,sum(amt)over(partition by dims4)/sum(amt)over(partition by index_name) as amt_zb,index_name from S_RT_CST_ECHARTS
+        <where>
+            <if test="index_name != null and index_name != ''">
+                and index_name = #{index_name}
+            </if>
+            <if test="dims2 != null and dims2 != ''">
+                and dims2 = #{dims2}
+            </if>
+            <if test="dims3 != null and dims3 != ''">
+                and dims3 = #{dims3}
+            </if>
+            <if test="dims4 != null and dims4 != ''">
+                and dims4 = #{dims4}
+            </if>
+            <if test="org_id != null and org_id != ''">
+                and org_id = #{org_id}
+            </if>
+            <if test="data_date != null">
+                and data_date = #{data_date}
+            </if>
+        </where>) t
+        where t.dims4!='7'
+
+
+    </select>
+
+
+    <!--卡分层客户数信息-->
+    <select id="selectCardSlice" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomResponseData">
+        select sum(amt) as amt,dims5 from S_RT_CST_ECHARTS
+        <where>
+            <if test="index_name != null and index_name != ''">
+                and index_name = #{index_name}
+            </if>
+            <if test="dims2 != null and dims2 != ''">
+                and dims2 = #{dims2}
+            </if>
+            <if test="dims3 != null and dims3 != ''">
+                and dims3 = #{dims3}
+            </if>
+
+            <if test="org_id != null and org_id != ''">
+                and org_id = #{org_id}
+            </if>
+            <if test="data_date != null">
+                and data_date = #{data_date}
+            </if>
+            and dims5 !='4'
+        </where>
+        group by dims5
+
+
+    </select>
+
+    <!--一类二类等卡账号下分层客户数信息-->
+    <select id="getAssetsSlice" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData">
+        select amt,dims4 from S_RT_CST_ECHARTS
+        <where>
+            <if test="index_name != null and index_name != ''">
+                and index_name = #{index_name}
+            </if>
+            <if test="dims2 != null and dims2 != ''">
+                and dims2 = #{dims2}
+            </if>
+            <if test="dims3 != null and dims3 != ''">
+                and dims3 = #{dims3}
+            </if>
+            <if test="dims5 != null and dims5 != ''">
+                and dims5 = #{dims5}
+            </if>
+            <if test="org_id != null and org_id != ''">
+                and org_id = #{org_id}
+            </if>
+            <if test="data_date != null">
+                and data_date = #{data_date}
+            </if>
+            and dims5!='4' and dims4!='7'
+        </where>
+
+
+    </select>
+
+
+
+
+
+
+
+    <!--卡分层客户数占比-->
+    <select id="getCardCustPercent" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData">
+        select * from(
+        select distinct dims4 dims4,sum(amt)over(partition by dims4)/sum(amt)over(partition by index_name) as amt_zb,index_name from S_RT_CST_ECHARTS         <where>
+            <if test="index_name != null and index_name != ''">
+                and index_name = #{index_name}
+            </if>
+            <if test="dims2 != null and dims2 != ''">
+                and dims2 = #{dims2}
+            </if>
+            <if test="dims3 != null and dims3 != ''">
+                and dims3 = #{dims3}
+            </if>
+            <if test="dims5 != null and dims5 != ''">
+                and dims5 = #{dims5}
+            </if>
+            <if test="org_id != null and org_id != ''">
+                and org_id = #{org_id}
+            </if>
+            <if test="data_date != null">
+                and data_date = #{data_date}
+            </if>
+        </where>) t
+        where t.dims4 !='7'
+
+    </select>
+
+    <!--一年趋势图中的每月的流失率-->
+
+    <select id="selectCustLossPercent" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="java.lang.Double">
+        select amt/amt1 from S_ORG_OS_RBB_CST_MG_ST_MODEL
+        <where>
+            <if test="index_name != null and index_name != ''">
+                and index_name = #{index_name}
+            </if>
+            <if test="data_date != null">
+                and data_date = #{data_date}
+            </if>
+            <if test="org_id != null and org_id != ''">
+                and org_id = #{org_id}
+            </if>
+            <if test="dims2 != null and dims2 != ''">
+                and data_pd  = #{dims2}
+            </if>
+            <if test="dims3 != null and dims3 != ''">
+                and dims1=#{dims3}
+            </if>
+            <if test="dims4 != null and dims4 != ''">
+                and dims2 = #{dims4}
+            </if>
+        </where>
+
+    </select>
+
+
+</mapper>
