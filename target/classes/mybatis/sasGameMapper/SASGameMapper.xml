@@ -1,50 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
-<mapper namespace="com.spdb.nrpt.mapper.sasGameMapper.SASGameMapper" >
-
-    <select id="getSASGameAllDataOrderByScoreDesc" resultType="com.spdb.nrpt.entity.sasgame.SASGameData">
-        select id,teamName,score,change,progress,teamType,imagePath
-        from SAS_GameDataTable
-        where teamType = #{teamType}
-        order by to_number(score) desc,update_time asc
-    </select>
-
-    <select id="getSASGameAllLogDataOrderByScoreDesc" resultType="com.spdb.nrpt.entity.sasgame.SASGameSendDataEntity">
-        select id,teamName,score,change,progress,to_char( upteTime,'YYYY-MM-DD HH24:MI:SS') as upteTime
-        from SAS_GameDataLogTable
-        order by upteTime desc
-    </select>	<!-- 根据Id将队伍排名存入数据库中 -->	<update id="updateTeamRankById">		update SAS_GameDataTable 		<set>			team_rank = #{teamRank}		</set>		<where>			id = #{teamId}		</where>	</update>	<!-- 根据ID和Type获得相同分数的队伍数量   江 -->	<select id = "getSeam_Score_Count" resultType="Integer">		select count(*) from SAS_GameDataTable where to_number(score) = to_number((select score from SAS_GameDataTable where id = #{teamId})) and teamtype = #{teamType}	</select>	<select id ="getNowRankData" resultType="Integer">    	select count(*) from SAS_GameDataTable where to_number(score) &gt; to_number((select score from SAS_GameDataTable where id = #{param1})) and teamtype = #{param2}    </select>
-    <!-- <select id ="getNowRankData" resultType="string">    	select count(*) from SAS_GameDataTable where to_number(score) >= to_number((select score from SAS_GameDataTable where id = #{param1})) and teamtype = #{param2}    </select> -->        <!-- 获得某一队伍的分数 江 -->    <select id="getTeamScore" resultType="string">    	select score from SAS_GameDataTable where id = #{teamId}    </select>        <!-- 相同分数下，得到提交时间和自己相同的队伍数量  江 -->    <select id="getSameUPCount" resultType="Integer">    	select count(*) from SAS_GameDataTable    	<where>    		score = #{score}    		and teamtype = #{teamType}    		and update_time = (select update_time from SAS_GameDataTable where id = #{teamId})    	</where>    </select>        <!-- 得到分数比自己队伍高的队伍的排名，降序  江 -->    <select id="getBiggerScoreTeamRank" resultType="Integer">    	select to_number(team_rank) from SAS_GameDataTable    	<where>    		score &gt; #{score} and teamtype = #{teamType}    	</where>    	order by to_number(team_rank) desc    </select>        <!-- 相同分数下，得到提交时间比自己队伍早的队伍排名  降序  江 -->    <select id="getSameScoreEarlierCount" resultType="Integer">    	select to_number(team_rank) from SAS_GameDataTable    	<where>    		score = #{score}     		and teamtype = #{teamType}    		and update_time &lt; (select update_time from SAS_GameDataTable where id = #{teamId})    	</where>    	order by to_number(team_rank) desc    </select>        <!-- 相同分数下，获得比自己提前提交数据的队伍数量   江 -->    <select id="getEarlierCount" resultType="Integer">    	select count(*) from SAS_GameDataTable    	<where>    		score = #{score}     		and teamtype = #{teamType}     		and update_time &lt; (select update_time from SAS_GameDataTable where id = #{teamId})    	</where>    </select>        <select id="getTeamType" resultType="string">    	select teamType from SAS_GameDataTable where id = #{id}    </select>        <select id="getTeamName" resultType="string">    	select teamName from SAS_GameDataTable where id = #{teamID}    </select>        <select id="getImagePath" resultType="string">    	select imagePath from SAS_GameDataTable where id = #{teamID}    </select>
-
-    <update id="updateSASGameDataByID" parameterType="com.spdb.nrpt.entity.sasgame.SASGameSendDataEntity">
-        update SAS_GameDataTable
-        <set>
-            <if test="score != null and score != ''">
-                score = #{score},
-            </if>
-            <if test="change != null and change != ''">
-                change = #{change},
-            </if>
-            <if test="progress != null and progress != ''">
-                progress = #{progress},
-            </if>
-           <if test="upteTime != null and upteTime != ''">
-                update_time = to_date ( #{upteTime},'YYYY-MM-DD HH24:MI:SS' ),
-            </if>
-            id = #{id}
-        </set>
-        where id = #{id}
-    </update>
-
-    <insert id="insertSASGameDataTable" parameterType="com.spdb.nrpt.entity.sasgame.SASGameData">
-        insert  into SAS_GameDataTable
-        (id,teamName,score,change,progress,teamType,imagePath)
-        values (#{id},#{teamName},#{score},#{change},#{progress},#{teamType},#{imagePath})
-    </insert>
-
-    <insert id="insertSASGameDataLogTable" parameterType="com.spdb.nrpt.entity.sasgame.SASGameSendDataEntity">
-        insert  into SAS_GameDataLogTable
-        (id,teamName,score,change,progress,upteTime)
-        values (#{id},#{teamName},#{score},#{change},#{progress},to_date ( #{upteTime},'YYYY-MM-DD HH24:MI:SS' ))
-    </insert>        <!-- 得到某一分组下的所有队伍信息 -->    <select id="getTeamInfoByType" resultType="com.spdb.nrpt.entity.sasgame.SASGameDataBean">    	select * from SAS_GameDataTable where teamtype = #{teamType}     </select>
-</mapper>
