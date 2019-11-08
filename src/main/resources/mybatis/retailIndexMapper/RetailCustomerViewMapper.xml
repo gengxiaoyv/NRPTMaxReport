@@ -10,7 +10,7 @@
     </resultMap>
     
     <select id="selectTileDataByDayOrgTypeAndIndex" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData">
-        select amt,index_name from S_RT_CST_ECHARTS
+        select sum(amt) as amt,index_name from S_RT_CST_ECHARTS
         <where>
             <if test="dims2 != null and dims2 != ''">
                 and dims2 = #{dims2}
@@ -31,6 +31,7 @@
                 </foreach>
             </if>
         </where>
+        group by index_name
 
     </select>
 
@@ -61,7 +62,7 @@
 
 
     <select id="getMapDataCount" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="java.lang.Long">
-        select amt from S_RT_CST_ECHARTS
+        select sum(amt) from S_RT_CST_ECHARTS
         <where>
             <if test="index_name != null and index_name != ''">
                 and index_name = #{index_name}
@@ -86,7 +87,7 @@
 
 
     <select id="getMapDataPercent" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="java.lang.Double">
-    select amt from S_RT_CST_ECHARTS
+    select sum(amt) from S_RT_CST_ECHARTS
     <where>
         <if test="index_name != null and index_name != ''">
             and index_name = #{index_name}
@@ -243,7 +244,7 @@
     <!--月初私行基准线-->
 
     <select id="getMonthBeginLine" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="java.lang.Long">
-        select amt from S_RT_CST_ECHARTS
+        select sum(amt) from S_RT_CST_ECHARTS
         <where>
             <if test="index_name != null and index_name != ''">
                 and index_name = #{index_name}
