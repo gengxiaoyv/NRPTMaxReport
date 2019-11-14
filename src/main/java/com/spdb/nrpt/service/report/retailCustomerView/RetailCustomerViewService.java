@@ -41,6 +41,9 @@ public class RetailCustomerViewService {
 
     }
 
+    public static void main(String[] args) throws Exception{
+        System.out.println(onlyGetDay(getLastDay(new Date())));
+    }
 
     public static Date getLastMonth(Date date) {
 
@@ -61,7 +64,7 @@ public class RetailCustomerViewService {
 
     }
 
-    public Date onlyGetDay(Date date) throws Exception {
+    public static Date onlyGetDay(Date date) throws Exception {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String s = sdf.format(date);
@@ -270,6 +273,7 @@ public class RetailCustomerViewService {
     //查询不同客户的趋势图及数据
     public RetailCustomResponseData getDifCustTrendData(RetailCustomerRequestVO requestVO) throws Exception {
         //DecimalFormat df = new DecimalFormat("0%");
+        requestVO.setData_date(onlyGetDay(getLastDay(new Date())));
         RetailCustomResponseData retailCustomResponseData = new RetailCustomResponseData();
         //查询趋势图基础数据
         requestVO.setIndex_name("客户情况及趋势_客户数");
@@ -343,6 +347,7 @@ public class RetailCustomerViewService {
     //查询不同客户近一年的趋势图及数据
     public RetailCustomResponseData getDifCustYearTrendData(RetailCustomerRequestVO requestVO) throws Exception {
         //DecimalFormat df = new DecimalFormat("0%");
+        requestVO.setData_date(onlyGetDay(getLastDay(new Date())));
         RetailCustomResponseData retailCustomResponseData = new RetailCustomResponseData();
         //查询趋势图基础数据
         requestVO.setIndex_name("客户情况及趋势_客户数");
@@ -494,6 +499,7 @@ public class RetailCustomerViewService {
         for (int i = 1; i <= 6; i++) {
             requestVO.setDims4(i + "");
             //非0基客客户数
+            requestVO.setOrg_id(retailCustomerViewVO.getOrgId());
             Long custCount = retailCustomerViewMapper.selectCustSliceCount(requestVO);
 
             Double branPercent = retailCustomerViewMapper.selectCustSlicePercent(requestVO);
