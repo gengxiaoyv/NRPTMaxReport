@@ -496,20 +496,37 @@ public class RetailCustomerViewService {
             requestVO.setData_date(getThisMonthLastDay(retailCustomerViewVO.getDate()));
         }
         List<RetailCustomerBaseData> returnList = new ArrayList<>();
+
+        requestVO.setOrg_id(retailCustomerViewVO.getOrgId());
+        List<RetailCustomerBaseData> custCount = retailCustomerViewMapper.selectCustSliceCount(requestVO);
+        Map<String,Long> custcountMap = new HashMap<>();
+        for (RetailCustomerBaseData custcountdata:custCount){
+
+            custcountMap.put(custcountdata.getDims4(),custcountdata.getAmt());
+        }
+
+        List<RetailCustomerBaseData> branPercent = retailCustomerViewMapper.selectCustSlicePercent(requestVO);
+        Map<String,Double> branPerMap = new HashMap<>();
+
+        for (RetailCustomerBaseData branPerData:branPercent){
+            branPerMap.put(branPerData.getDims4(),branPerData.getAmt_zb());
+        }
+        requestVO.setOrg_id("9900");
+        List<RetailCustomerBaseData> headPercent = retailCustomerViewMapper.selectCustSlicePercent(requestVO);
+
+        Map<String,Double> headPerMap = new HashMap<>();
+        for (RetailCustomerBaseData headData:headPercent){
+            headPerMap.put(headData.getDims4(),headData.getAmt_zb());
+        }
         for (int i = 1; i <= 6; i++) {
             requestVO.setDims4(i + "");
             //非0基客客户数
-            requestVO.setOrg_id(retailCustomerViewVO.getOrgId());
-            Long custCount = retailCustomerViewMapper.selectCustSliceCount(requestVO);
 
-            Double branPercent = retailCustomerViewMapper.selectCustSlicePercent(requestVO);
-            requestVO.setOrg_id("9900");
-            Double headPercent = retailCustomerViewMapper.selectCustSlicePercent(requestVO);
 
             RetailCustomerBaseData retailCustomerBaseData = new RetailCustomerBaseData();
-            retailCustomerBaseData.setAmt(custCount);
-            retailCustomerBaseData.setBranPercent(branPercent);
-            retailCustomerBaseData.setHeadPercent(headPercent);
+            retailCustomerBaseData.setAmt(custcountMap.get(i+""));
+            retailCustomerBaseData.setBranPercent(branPerMap.get(i+""));
+            retailCustomerBaseData.setHeadPercent(headPerMap.get(i+""));
             retailCustomerBaseData.setDims4(RetailCustomerViewContext.CustSlice.get(i + ""));
             returnList.add(retailCustomerBaseData);
 
