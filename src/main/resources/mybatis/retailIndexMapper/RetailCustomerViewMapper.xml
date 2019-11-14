@@ -163,7 +163,7 @@
     <!--三十天趋势中客户占比-->
 
     <select id="selectCustPercent" resultType="java.lang.Double" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO">
-        select * from(
+        select amt_zb from(
         select distinct dims4 dims4,sum(amt)over(partition by dims4)/sum(amt)over(partition by index_name) as
         amt_zb,index_name from S_RT_CST_ECHARTS
         <where>
@@ -176,9 +176,7 @@
         <if test="dims3 != null and dims3 != ''">
             and dims3 = #{dims3}
         </if>
-        <if test="dims4 != null and dims3 != ''">
-            and dims4 = #{dims4}
-        </if>
+
         <if test="org_id != null and org_id != ''">
             and org_id = #{org_id}
         </if>
@@ -186,7 +184,7 @@
             and data_date = #{data_date}
         </if>
     </where>) t
-        where t.dims4 not in('6','7')
+        where t.dims4 not in('6','7') and dims4=#{dims4}
     </select>
 
 <!--较上月/上年末净增-->
