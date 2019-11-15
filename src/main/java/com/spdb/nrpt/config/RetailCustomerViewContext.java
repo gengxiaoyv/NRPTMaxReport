@@ -99,6 +99,52 @@ public class RetailCustomerViewContext {
         //Orgs.put("9940","总行本部");
     }
 
+    public static Map<String,String> OrgsCity = new HashMap<>();
+
+    //分行编号与省份对应关系
+    static {
+        OrgsCity.put("3200","拉萨");
+        OrgsCity.put("3300","银川");
+        OrgsCity.put("3400","海口");
+        OrgsCity.put("3500","西宁");
+        OrgsCity.put("3600","厦门");
+        OrgsCity.put("3700","贵阳");
+        OrgsCity.put("4300","福州");
+        OrgsCity.put("4500","石家庄");
+        OrgsCity.put("4800","兰州");
+        OrgsCity.put("5800","合肥");
+        OrgsCity.put("5900","呼和浩特");
+        OrgsCity.put("6000","乌鲁木齐");
+        OrgsCity.put("6100","长春");
+        OrgsCity.put("6300","南宁");
+        OrgsCity.put("6400","南昌");
+        OrgsCity.put("6500","哈尔滨");
+        OrgsCity.put("6600","长沙");
+        OrgsCity.put("6800","太原");
+        OrgsCity.put("6900","青岛");
+        OrgsCity.put("7000","武汉");
+        OrgsCity.put("7100","沈阳");
+        OrgsCity.put("7200","西安");
+        OrgsCity.put("7300","成都");
+        OrgsCity.put("7400","济南");
+        OrgsCity.put("7500","大连");
+        OrgsCity.put("7600","郑州");
+        OrgsCity.put("7700","天津");
+        OrgsCity.put("7800","昆明");
+        OrgsCity.put("7900","深圳");
+        OrgsCity.put("8200","广州");
+        OrgsCity.put("8300","重庆");
+        OrgsCity.put("8900","苏州");
+        OrgsCity.put("9100","北京");
+        OrgsCity.put("9300","南京");
+        OrgsCity.put("9400","宁波");
+        OrgsCity.put("9500","杭州");
+        OrgsCity.put("9800","上海");
+        OrgsCity.put("9900","全行");
+        //Orgs.put("9940","总行本部");
+    }
+
+
 
     public static Map<String,String> provinceName = new HashMap<>();
     static {

@@ -1,347 +1,346 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
-<mapper namespace="com.spdb.nrpt.mapper.reportDataMapper.NRPTReportDataMapper" >
+<mapper namespace="com.spdb.nrpt.mapper.retailIndexMapper.RetailIndexDataMapper">
 
-    <resultMap id="ReturnData" type="com.spdb.nrpt.entity.report.ReturnData" >
-        <result column="KPI_NAME" property="name"/>
-        <result column="KPI_VALUE" property="value"/>
-        <!--<result column="ORG_NAME" property="org"/>
-        <result column="STATIS_DT" property="time" jdbcType="TIMESTAMP"/>-->
-    </resultMap>
-    
-    <select id="selectOneReportDataByDivIDAndOrgID" resultMap="ReturnData">
-        select KPI_NAME,KPI_VALUE from Report_DataTable
-        <where>
-            and KPI_ID = #{param1}
-            <if test="param2 != null and param2 != ''">
-                and ORG_ID = #{param2}
-            </if>
-        </where>
+
+    <!--==========================================存款===============================-->
+    <!--当日存款增量排名前五-->
+
+    <!--到时分秒-->
+    <select id="getdepIncTopFive" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+
+        SELECT * from (
+        SELECT v2.sum2-v1.sum1  as dataValue,v1.bankCode1 as bankCode from
+        (select sum(a.dep_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') GROUP BY a.LVL1_BR) v1,
+        (select b.dep_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where to_date(b.dt,'yyyy-MM-dd hh24:mi:ss')=
+        (select max(to_date(dt,'yyyy-MM-dd hh24:mi:ss')) from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL a where a.org = b.org) ) v2
+        where v1.bankCode1 = v2.bankCode2  ORDER BY dataValue desc
+        ) where rownum &lt;=5
     </select>
 
-    <select id="selectReportDataByDivIDAndOrgID" resultMap="ReturnData">
-        select KPI_NAME,KPI_VALUE from Report_DataTable
-        <where>
-            and KPI_ID = #{param1}
-            <if test="param2 != null and param2 != ''">
-                and ORG_ID = #{param2}
-            </if>
-        </where>
+
+    <!--当日存款增量排名后五-->
+    <select id="getdepIncLastFive" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+        SELECT * from (
+        SELECT v2.sum2-v1.sum1  as dataValue,v1.bankCode1 as bankcode from
+        (select sum(a.dep_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') GROUP BY a.LVL1_BR) v1,
+        (select b.dep_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where to_date(b.dt,'yyyy-MM-dd hh24:mi:ss')=
+        (select max(to_date(dt,'yyyy-MM-dd hh24:mi:ss')) from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL a where a.org = b.org) ) v2
+        where v1.bankCode1 = v2.bankCode2  ORDER BY dataValue asc
+        ) where rownum &lt;=5
+    </select>
+    <!--当日存款余额前五-->
+    <!--<select id="getDepBalTopFive" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">-->
+    <!--select *from-->
+    <!--(select SUM(a.dep_bal) as dataValue,a.org as bankCode,MAX(b.LVL1_NAME) as bankName-->
+    <!--from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL a, LVL1_BR_NAME_CODE b-->
+    <!--where b.LVL1_CODE=a.org and to_char(a.dt,'yyyy-mm-dd')=to_char(sysdate,'yyyy-mm-dd')-->
+    <!--GROUP BY a.org ORDER BY dataValue desc)-->
+    <!--where rownum &lt;=5-->
+
+    <!--</select>-->
+
+    <select id="getDepBalTopFive" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+
+        select * from
+        (select b.dep_bal as dataValue,b.org as bankCode from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where to_date(b.dt,'yyyy-MM-dd hh24:mi:ss')=
+        (select max(to_date(dt,'yyyy-MM-dd hh24:mi:ss')) from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL a where a.org = b.org)
+        and b.org in('3200','3300','3400','3500','3600','3700','4300','4500','4800','5800','5900','6000','6100','6300','6400','6500','6600','6800','6900','7000','7100','7200','7300','7400','7500','7600','7700','7800','7900','8200','8300','8900','9100','9300','9400','9500','9800')
+         ORDER BY dataValue desc
+        )where rownum &lt;=5
+    </select>
+    <!--当日存款余额后五-->
+    <select id="getDepBalLastFive" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+        select * from
+        (select b.dep_bal as dataValue,b.org as bankCode from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where to_date(b.dt,'yyyy-MM-dd hh24:mi:ss')=
+        (select max(to_date(dt,'yyyy-MM-dd hh24:mi:ss')) from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL a where a.org = b.org)
+        and b.org in('3200','3300','3400','3500','3600','3700','4300','4500','4800','5800','5900','6000','6100','6300','6400','6500','6600','6800','6900','7000','7100','7200','7300','7400','7500','7600','7700','7800','7900','8200','8300','8900','9100','9300','9400','9500','9800')
+         ORDER BY dataValue asc
+        )where rownum &lt;=5
     </select>
 
-    <select id="selectReportDataByDivIDAndNotInOrgID" resultMap="ReturnData">
-        select KPI_NAME,KPI_VALUE from Report_DataTable
-        <where>
-            KPI_ID = #{keyID}
-            and ORG_ID not in ('9900','9940')
-        </where>
-        order by to_number(KPI_VALUE)
+    <select id="getdepThreeMonKline" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+	select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata
+  from (select data_dt,sum(dep_bal) count from DLA_RPT_R_DEP_LOAN_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -1) and  sysdate GROUP BY data_dt ) t2
+  inner join
+  (select data_dt,sum(dep_bal) count from DLA_RPT_R_DEP_LOAN_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -1) and  sysdate GROUP BY data_dt ) t1 --jintian
+  on t1.data_dt = t2.data_dt+1  order BY t1.data_dt asc
+
+
     </select>
 
-    <select id="selectReportDataByDivIDAndOrgIDDesc" resultType="com.spdb.nrpt.entity.report.ReturnData">
-        select distinct ORG_ID, ORG_NAME as name , KPI_VALUE as value from Report_DataTable
-        <where>
-            and KPI_ID = #{keyID}
-            and ORG_ID not in ('9900','9940')
-        </where>
-        order by to_number(KPI_VALUE) desc
+    <!--存款近三月趋势-->
+    <select id="getdepThreeMonTrend" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+     select sum(Dep_Y_Avg_Bal) as dataValue,data_dt as dataDate from DLA_RPT_R_DEP_LOAN_SCL where data_dt
+     BETWEEN ADD_MONTHS(sysdate, -3) and  sysdate GROUP BY data_dt
+
     </select>
 
-    <select id="selectReportDataByDivIDAndOrgIDAsc" resultType="com.spdb.nrpt.entity.report.ReturnData">
-        select ORG_NAME as name , KPI_VALUE as value from Report_DataTable
-        <where>
-            and KPI_ID = #{keyID}
-            and ORG_ID not in ('9900','9940')
-        </where>
-        order by to_number(KPI_VALUE) asc
+    <!--当日存款增量总和-->
+    <select id="getdepIncSum" resultType="java.lang.Double">
+
+    select sum(dataValue)  from (SELECT v2.sum2-v1.sum1  as dataValue,v1.bankCode1 from
+        (select sum(a.dep_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') GROUP BY a.LVL1_BR) v1,
+        (select b.dep_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where to_date(b.dt,'yyyy-MM-dd hh24:mi:ss')=
+        (select max(to_date(dt,'yyyy-MM-dd hh24:mi:ss')) from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL a where a.org = b.org) ) v2
+        where v1.bankCode1 = v2.bankCode2)
+
+</select>
+
+    <!--当日存款余额总和-->
+
+    <select id="getdepBalSum" resultType="java.lang.Double">
+
+        select sum(sum2)  from
+        (select b.dep_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where to_date(b.dt,'yyyy-MM-dd hh24:mi:ss')=
+        (select max(to_date(dt,'yyyy-MM-dd hh24:mi:ss')) from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL a where a.org = b.org)
+         and b.org in('3200','3300','3400','3500','3600','3700','4300','4500','4800','5800','5900','6000','6100','6300','6400','6500','6600','6800','6900','7000','7100','7200','7300','7400','7500','7600','7700','7800','7900','8200','8300','8900','9100','9300','9400','9500','9800')
+        )
+
+    </select>
+    <!--存款比月初&比年初-->
+
+    <select id="getdepThan" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+         select sum(Dep_Bal_Cbm) as thanMonthBegin,sum(Dep_Bal_Cby) as thanYearBegin
+      from DLA_RPT_R_DEP_LOAN_SCL where to_char(data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
     </select>
 
-    <select id="selectBatchReportDataByMoreKeyID" resultMap="ReturnData">
-        select KPI_NAME,KPI_VALUE from Report_DataTable
-        <where>
-            ORG_ID = '9900' and
-            KPI_ID in
-            <foreach collection="list" separator="," item="id" index="i" open="(" close=")">
-                #{id}
-            </foreach>
-        </where>
+
+    <!--===================贷款===========================================================================-->
+    <!--贷款增量前五-->
+    <!--<select id="getLoanIncTopFive" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">-->
+    <!--SELECT * from (-->
+    <!--SELECT v2.sum2-v1.sum1  as dataValue,v1.bankCode1 as bankCode from-->
+    <!--(select sum(a.loan_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') GROUP BY a.LVL1_BR) v1,-->
+    <!--(select sum(b.loan_bal) as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL  b where to_char(b.dt,'yyyy-mm-dd')=to_char(sysdate,'yyyy-mm-dd') GROUP BY b.org) v2-->
+    <!--where v1.bankCode1 = v2.bankCode2  ORDER BY dataValue desc-->
+    <!--) where rownum &lt;=5-->
+    <!--</select>-->
+
+    <select id="getLoanIncTopFive" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+
+        SELECT * from (
+        SELECT v2.sum2-v1.sum1  as dataValue,v1.bankCode1 as bankCode from
+        (select sum(a.loan_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') GROUP BY a.LVL1_BR) v1,
+        (select b.loan_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where to_date(b.dt,'yyyy-MM-dd hh24:mi:ss')=
+        (select max(to_date(dt,'yyyy-MM-dd hh24:mi:ss')) from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL a where a.org = b.org) ) v2
+        where v1.bankCode1 = v2.bankCode2  ORDER BY dataValue desc
+        ) where rownum &lt;=5
     </select>
 
-    <select id="selectBatchReportDataByMoreOrgIDAndKeyID" resultMap="ReturnData">
-        select KPI_NAME,KPI_VALUE from Report_DataTable
-        <where>
-            KPI_ID = {#keyID} and
-            ORG_ID in
-            <foreach collection="list" separator="," item="id" index="i" open="(" close=")">
-                #{orgID}
-            </foreach>
-        </where>
+    <select id="getLoanIncLastFive" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+
+        SELECT * from (
+        SELECT v2.sum2-v1.sum1  as dataValue,v1.bankCode1 as bankCode from
+        (select sum(a.loan_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') GROUP BY a.LVL1_BR) v1,
+        (select b.loan_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where to_date(b.dt,'yyyy-MM-dd hh24:mi:ss')=
+        (select max(to_date(dt,'yyyy-MM-dd hh24:mi:ss')) from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL a where a.org = b.org) ) v2
+        where v1.bankCode1 = v2.bankCode2  ORDER BY dataValue asc
+        ) where rownum &lt;=5
     </select>
 
-    <select id="selectBatchDataReportAllDataByDivIDAndOrgID" resultType="com.spdb.nrpt.entity.procedure.OutData">
-        select STATIS_DT,ORG_ID,ORG_NAME,KPI_ID,CURRENCY_CD,KPI_NAME,KPI_VALUE from Report_DataTable
-        <where>
-            KPI_ID in
-            <foreach collection="list" separator="," item="id" index="i" open="(" close=")">
-                #{id}
-            </foreach>
-        </where>
+    <select id="getLoanBalTopFive" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+       select * from
+        (select b.loan_bal as dataValue,b.org as bankCode from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where to_date(b.dt,'yyyy-MM-dd hh24:mi:ss')=
+        (select max(to_date(dt,'yyyy-MM-dd hh24:mi:ss')) from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL a where a.org = b.org)
+        and b.org in('3200','3300','3400','3500','3600','3700','4300','4500','4800','5800','5900','6000','6100','6300','6400','6500','6600','6800','6900','7000','7100','7200','7300','7400','7500','7600','7700','7800','7900','8200','8300','8900','9100','9300','9400','9500','9800')
+         ORDER BY dataValue desc
+        )where rownum &lt;=5
     </select>
 
-    <select id="selectReportPastDataByDivIDAndOrgID" resultMap="ReturnData">
-        select KPI_NAME,KPI_VALUE from Report_PastDataTable
-        <where>
-            and KPI_ID = #{param1}
-            and ORG_ID = #{param2}
-        </where>
-        order by STATIS_DT desc
+    <select id="getLoanBalLastFive" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+    select * from
+        (select b.loan_bal as dataValue,b.org as bankCode from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where to_date(b.dt,'yyyy-MM-dd hh24:mi:ss')=
+        (select max(to_date(dt,'yyyy-MM-dd hh24:mi:ss')) from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL a where a.org = b.org)
+         and b.org in('3200','3300','3400','3500','3600','3700','4300','4500','4800','5800','5900','6000','6100','6300','6400','6500','6600','6800','6900','7000','7100','7200','7300','7400','7500','7600','7700','7800','7900','8200','8300','8900','9100','9300','9400','9500','9800')
+        ORDER BY dataValue asc
+        )where rownum &lt;=5
     </select>
 
-    <select id="selectReportPastDateDataByDivIDAndOrgID" resultType="com.spdb.nrpt.entity.report.ReturnData">
-        select to_char( STATIS_DT,'YYYY-MM-DD HH24:MI:SS' ) as name,KPI_VALUE as value from Report_PastDataTable
-        <where>
-            and KPI_ID = #{keyID}
-        </where>
-        order by STATIS_DT desc
+    <select id="getLoanThreeMonKline" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
+        (select data_dt,sum(loan_bal) count from DLA_RPT_R_DEP_LOAN_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -1) and  sysdate GROUP BY data_dt ) t2
+         inner join
+        (select data_dt,sum(loan_bal) count from DLA_RPT_R_DEP_LOAN_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -1) and  sysdate GROUP BY data_dt ) t1 --jintian
+        on t1.data_dt = t2.data_dt+1  order BY t1.data_dt asc
     </select>
 
-    <select id="selectReportPastDateDataByDivIDAndOrgIDAsc" resultType="com.spdb.nrpt.entity.report.ReturnData">
-        select to_char( STATIS_DT,'YYYY-MM-DD HH24:MI:SS' ) as name,KPI_VALUE as value from Report_PastDataTable
-        <where>
-            and KPI_ID = #{param1}
-            and ORG_ID = #{param2}
-        </where>
-        order by STATIS_DT
+    <select id="getLoanThreeMonTrend" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+     select sum(Loan_Y_Avg_Bal) as dataValue,data_dt as dataDate
+     from DLA_RPT_R_DEP_LOAN_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -3) and  sysdate GROUP BY data_dt
+
     </select>
 
-    <select id="selectReportMinPastDateDataByDivIDAndOrgID" resultType="com.spdb.nrpt.entity.report.ReturnData">
-        select to_char( STATIS_DT,'YYYY-MM-DD HH24:MI:SS' ) as name,KPI_VALUE as value from Report_PastDataTable
-        <where>
-            and KPI_ID = #{param1}
-            and ORG_ID = #{param2}
-        </where>
-        order by to_number(KPI_VALUE)
+    <!--当日贷款增量总和-->
+    <select id="getLoanIncSum" resultType="java.lang.Double">
+
+    select sum(dataValue)  from (SELECT v2.sum2-v1.sum1  as dataValue,v1.bankCode1 from
+        (select sum(a.loan_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') GROUP BY a.LVL1_BR) v1,
+        (select b.loan_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where to_date(b.dt,'yyyy-MM-dd hh24:mi:ss')=
+        (select max(to_date(dt,'yyyy-MM-dd hh24:mi:ss')) from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL a where a.org = b.org) ) v2
+        where v1.bankCode1 = v2.bankCode2)
+
+</select>
+
+    <!--当日贷款余额总和-->
+
+    <select id="getLoanBalSum" resultType="java.lang.Double">
+
+        select sum(sum2)  from (
+        (select b.loan_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where to_date(b.dt,'yyyy-MM-dd hh24:mi:ss')=
+        (select max(to_date(dt,'yyyy-MM-dd hh24:mi:ss')) from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL a where a.org = b.org)
+         and b.org in('3200','3300','3400','3500','3600','3700','4300','4500','4800','5800','5900','6000','6100','6300','6400','6500','6600','6800','6900','7000','7100','7200','7300','7400','7500','7600','7700','7800','7900','8200','8300','8900','9100','9300','9400','9500','9800')
+)
+        )
+    </select>
+    <!--贷款比月初&比年初-->
+
+    <select id="getLoanThan" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+         select sum(Loan_Bal_Cbm) as thanMonthBegin,sum(Loan_Bal_Cby) as thanYearBegin
+      from DLA_RPT_R_DEP_LOAN_SCL where to_char(data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
     </select>
 
-    <select id="selectOptionByID" resultType="com.spdb.nrpt.entity.report.ReportEchartsEntity">
-        select divID,divName,divEchartsJson,divEchartsType
-        from Report_EchartsTable
-        where divID = #{divID}
+
+    <!--=================金融资产=================-->
+
+    <!--金融资产增量排名前五-->
+    <select id="getFinAssIncTopFive" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+        select *from
+        (select SUM(a.FNC_AST_BAL_TD_INCR) as dataValue,a.LVL1_BR as bankCode,MAX(b.LVL1_NAME) as bankName
+        from DLA_RPT_R_AST_SCL a, LVL1_BR_NAME_CODE b
+        where b.LVL1_CODE=a.LVL1_BR and to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+         GROUP BY a.LVL1_BR ORDER BY dataValue desc
+        ) where rownum &lt;=5
     </select>
 
-    <select id="selectKeyIDByDivID" resultType="string">
-        select KEYID from REPORT_DIV_KEYTABLE where DIVID = #{divID} order by id
+    <select id="getFinAssIncLastFive" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+        select *from
+        (select SUM(a.FNC_AST_BAL_TD_INCR) as dataValue,a.LVL1_BR as bankCode,MAX(b.LVL1_NAME) as bankName
+        from DLA_RPT_R_AST_SCL a, LVL1_BR_NAME_CODE b
+        where b.LVL1_CODE=a.LVL1_BR and to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+         GROUP BY a.LVL1_BR ORDER BY dataValue asc
+        ) where rownum &lt;=5
     </select>
 
-    <select id="selectReportOrgDataTableByParentID" resultType="string">
-        select orgID from Report_OrgDataTable where parentOrgID = #{parentOrgID}
-    </select>
-    
-     <select id="selectReportOrgDataTableByOrgName" resultType="string">
-        select orgID from Report_OrgDataTable where orgName = #{orgName}
-    </select>
-    
-    <select id="selectReportOrgDataTableByName" resultType="string">
-        select orgID from Report_OrgDataTable where parentOrgID = #{parentOrgID}
+    <select id="getFinAssBalTopFive" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+        select *from
+        (select SUM(a.Fnc_Ast_Bal) as dataValue,a.LVL1_BR as bankCode,MAX(b.LVL1_NAME) as bankName
+        from DLA_RPT_R_AST_SCL a, LVL1_BR_NAME_CODE b
+        where b.LVL1_CODE=a.LVL1_BR and to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+         GROUP BY a.LVL1_BR ORDER BY dataValue desc
+        ) where rownum &lt;=5
     </select>
 
-    <select id="selectCustomerNumberByCust_Type_Cd" resultType="com.spdb.nrpt.entity.report.ReturnData">
-        select to_char( Statis_Dt,'YYYYMMDD' ) as name , Cust_Cnt as value from BD_All_Cust_Statis_M
-        where Cust_Type_Cd = #{param1} and Org_id_1_lev = #{param2}
-        order by Statis_Dt
+    <select id="getFinAssBalLastFive" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+        select *from
+        (select SUM(a.Fnc_Ast_Bal) as dataValue,a.LVL1_BR as bankCode,MAX(b.LVL1_NAME) as bankName
+        from DLA_RPT_R_AST_SCL a, LVL1_BR_NAME_CODE b
+        where b.LVL1_CODE=a.LVL1_BR and to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+         GROUP BY a.LVL1_BR ORDER BY dataValue asc
+        ) where rownum &lt;=5
     </select>
 
-    <select id="selectReportUnitByOrgID" resultType="com.spdb.nrpt.entity.Unit.ReportUnit">
-        select divID,orgID,unitValue from Report_UnitTable
-        <where>
-            and divID = #{param1}
-            and orgID = #{param2}
-        </where>
+    <select id="getFinAssThreeMonKline" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
+        (select data_dt,sum(Fnc_Ast_Bal) count from DLA_RPT_R_AST_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -1) and  sysdate GROUP BY data_dt ) t2
+         inner join
+        (select data_dt,sum(Fnc_Ast_Bal) count from DLA_RPT_R_AST_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -1) and  sysdate GROUP BY data_dt ) t1 --jintian
+        on t1.data_dt = t2.data_dt+1  order BY t1.data_dt asc
     </select>
 
-    <select id="selectDescReportBranchByParentIDAndKPIID" resultType="com.spdb.nrpt.entity.report.ReturnData">
-        <!-- select ORG_ID as name , KPI_VALUE as value from Report_BranchDataTable -->
-        select ORG_ID as orgid,ORG_NAME as name , KPI_VALUE as value from Report_BranchDataTable
-        <where>
-            and KPI_ID = #{param1}
-            and ParentID = #{param2}
-        </where>
-        order by to_number(KPI_VALUE) desc
-    </select>
-    
-     <select id="selectDescReportBranchByOrgIDAndKPIID" resultType="com.spdb.nrpt.entity.report.ReturnData">
-        <!-- select ORG_ID as name , KPI_VALUE as value from Report_BranchDataTable -->
-        select ORG_NAME as name , KPI_VALUE as value from Report_BranchDataTable
-        <where>
-            and KPI_ID = #{param1}
-            and ORG_ID = #{param2}
-        </where>
-        order by to_number(KPI_VALUE) desc
+    <select id="getFinAssThreeMonTrend" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+     select sum(Fnc_Ast_Bal_Y_Avg) as dataValue,data_dt as dataDate from DLA_RPT_R_AST_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -3) and  sysdate GROUP BY data_dt
+
     </select>
 
-    <select id="selectAscReportBranchByParentIDAndKPIIDNotNull" resultType="com.spdb.nrpt.entity.report.ReturnData">
-        <!-- select ORG_ID as name , KPI_VALUE as value from Report_BranchDataTable -->
-        select ORG_NAME as name , KPI_VALUE as value from Report_BranchDataTable
-        <where>
-            and KPI_ID = #{param1}
-            and ParentID = #{param2}
-            and KPI_VALUE != 0
-        </where>
-        order by to_number(KPI_VALUE) asc
-    </select>
-    
-    <select id="selectAscReportBranchByParentIDAndKPIID" resultType="com.spdb.nrpt.entity.report.ReturnData">
-        select ORG_ID as name , KPI_VALUE as value from Report_BranchDataTable
-        <where>
-            and KPI_ID = #{param1}
-            and ParentID = #{param2}
-        </where>
-        order by to_number(KPI_VALUE) asc
+
+    <select id="getFinAssSumData" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+      select sum(Fnc_Ast_Bal) as balance,sum(Fnc_Ast_Bal_Cbm) as thanMonthBegin,sum(Fnc_Ast_Bal_Cby) as thanYearBegin
+      from DLA_RPT_R_AST_SCL where to_char(data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+
+
     </select>
 
-    <insert id ="insertBatchReportBranchDataTable" parameterType="java.util.List" useGeneratedKeys="false">
-        insert  into Report_BranchDataTable
-        (KPI_ID, KPI_NAME, STATIS_DT,ORG_ID,ORG_NAME,CURRENCY_CD,KPI_VALUE,ParentID)
-        <foreach collection ="list" item="item" index= "index" separator="union all">
-            (
-            SELECT
-            #{item.KPI_ID},
-            #{item.KPI_NAME},
-            to_date ( #{item.STATIS_DT},'YYYY-MM-DD HH24:MI:SS' ),
-            #{item.ORG_ID},
-            #{item.ORG_NAME},
-            #{item.CURRENCY_CD},
-            #{item.KPI_VALUE},
-            #{item.ParentID}
-            FROM DUAL
-            )
-        </foreach >
-    </insert>
+    <!--===========================非存资产====================-->
+    <select id="getNonDepIncTopFive" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+        select *from
+        (select SUM(a.NON_DEP_AST_TD_INCR) as dataValue,a.LVL1_BR as bankCode,MAX(b.LVL1_NAME) as bankName
+        from DLA_RPT_R_AST_SCL a, LVL1_BR_NAME_CODE b
+        where b.LVL1_CODE=a.LVL1_BR and to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+         GROUP BY a.LVL1_BR ORDER BY dataValue desc
+        ) where rownum &lt;=5
+    </select>
 
-    <insert id ="insertBatchReportAllData" parameterType="java.util.List" useGeneratedKeys="false">
-        insert  into Report_DataTable
-        (KPI_ID, KPI_NAME, STATIS_DT,ORG_ID,ORG_NAME,CURRENCY_CD,KPI_VALUE)
-        <foreach collection ="list" item="item" index= "index" separator="union all">
-            (
-            SELECT
-            #{item.KPI_ID},
-            #{item.KPI_NAME},
-            to_date ( #{item.STATIS_DT},'YYYY-MM-DD HH24:MI:SS' ),
-            #{item.ORG_ID},
-            #{item.ORG_NAME},
-            #{item.CURRENCY_CD},
-            #{item.KPI_VALUE}
-            FROM DUAL
-            )
-        </foreach >
-    </insert>
+    <select id="getNonDepIncLastFive" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+        select *from
+        (select SUM(a.NON_DEP_AST_TD_INCR) as dataValue,a.LVL1_BR as bankCode,MAX(b.LVL1_NAME) as bankName
+        from DLA_RPT_R_AST_SCL a, LVL1_BR_NAME_CODE b
+        where b.LVL1_CODE=a.LVL1_BR and to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+         GROUP BY a.LVL1_BR ORDER BY dataValue asc
+        ) where rownum &lt;=5
+    </select>
 
-    <insert id ="insertBatchReportPastData" parameterType="java.util.List" useGeneratedKeys="false">
-        insert  into Report_PastDataTable
-        (KPI_ID, KPI_NAME, STATIS_DT,ORG_ID,ORG_NAME,CURRENCY_CD,KPI_VALUE)
-        <foreach collection ="list" item="item" index= "index" separator="union all">
-            (
-            SELECT
-            #{item.KPI_ID},
-            #{item.KPI_NAME},
-            to_date ( #{item.STATIS_DT},'YYYY-MM-DD HH24:MI:SS' ),
-            #{item.ORG_ID},
-            #{item.ORG_NAME},
-            #{item.CURRENCY_CD},
-            #{item.KPI_VALUE}
-            FROM DUAL
-            )
-        </foreach >
-    </insert>
+    <select id="getNonDepBalTopFive" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+        select *from
+        (select SUM(a.NON_DEP_AST_BAL) as dataValue,a.LVL1_BR as bankCode,MAX(b.LVL1_NAME) as bankName
+        from DLA_RPT_R_AST_SCL a, LVL1_BR_NAME_CODE b
+        where b.LVL1_CODE=a.LVL1_BR and to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+         GROUP BY a.LVL1_BR ORDER BY dataValue desc
+        ) where rownum &lt;=5
 
-    <insert id ="insertReportPastData" parameterType="com.spdb.nrpt.entity.procedure.OutData">
-        insert  into Report_PastDataTable
-        (KPI_ID, KPI_NAME, STATIS_DT,ORG_ID,ORG_NAME,CURRENCY_CD,KPI_VALUE)
-        values ( #{KPI_ID},#{KPI_NAME},to_date ( #{STATIS_DT},'YYYY-MM-DD HH24:MI:SS' ),#{ORG_ID},#{ORG_NAME},#{CURRENCY_CD},#{KPI_VALUE})
-    </insert>
+    </select>
+
+    <select id="getNonDepBalLastFive" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+       select *from
+        (select SUM(a.NON_DEP_AST_BAL) as dataValue,a.LVL1_BR as bankCode,MAX(b.LVL1_NAME) as bankName
+        from DLA_RPT_R_AST_SCL a, LVL1_BR_NAME_CODE b
+        where b.LVL1_CODE=a.LVL1_BR and to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+         GROUP BY a.LVL1_BR ORDER BY dataValue asc
+        ) where rownum &lt;=5
+    </select>
+
+    <select id="getNonDepThreeMonKline" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+	    select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
+        (select data_dt,sum(Non_Dep_Ast_Bal) count from DLA_RPT_R_AST_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -1) and  sysdate GROUP BY data_dt ) t2
+         inner join
+        (select data_dt,sum(Non_Dep_Ast_Bal) count from DLA_RPT_R_AST_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -1) and  sysdate GROUP BY data_dt ) t1 --jintian
+        on t1.data_dt = t2.data_dt+1  order BY t1.data_dt asc
+    </select>
+
+    <select id="getNonDepThreeMonTrend" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+     select sum(Non_Dep_Ast_Y_Avg) as dataValue,
+     data_dt as dataDate from DLA_RPT_R_AST_SCL
+     where data_dt BETWEEN ADD_MONTHS(sysdate, -3) and  sysdate
+     GROUP BY data_dt
+    </select>
+
+    <!--非存资产余额、比月初、比年初-->
+    <select id="getNonDepSumData" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+      select sum(Non_Dep_Ast_Bal) as balance,
+      sum(Non_Dep_Ast_Bal_Cbm) as thanMonthBegin,
+      sum(Non_Dep_Ast_Bal_Cby) as thanYearBegin
+      from DLA_RPT_R_AST_SCL
+      where to_char(data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+
+    </select>
 
 
-    <insert id ="insertBatchReportBridge" parameterType="java.util.List" useGeneratedKeys="false">
-        insert  into REPORT_DIV_KEYTABLE
-        (ID, DIVID, KEYID)
-        <foreach collection ="list" item="item" index= "index" separator="union all">
-            (
-            SELECT
-            #{item.id},
-            #{item.divID},
-            #{item.keyID}
-            FROM DUAL
-            )
-        </foreach >
-    </insert>
+    <select id="getdepInAndOut" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
 
-    <insert id="insertEcharts" parameterType="com.spdb.nrpt.entity.report.ReportEchartsEntity">
-        insert into Report_EchartsTable(DIVID, DIVNAME, DIVECHARTSJSON, DIVECHARTSTYPE) values (#{divID},#{divName},#{divEchartsJson},#{divEchartsType})
-    </insert>
+        select
+        sum(BCP_INCOME+   BAK_FIN_IN  +TRI_AGENT_IN +TRI_AGENT_IN  +THIRD_DEP_IN+REMIT_IN+LOAN_IN+CASH_ACCESS_IN+
+        INTEREST_IN+CREDIT_CARD_IN+ACCEPT_IN+RECEIPT_PAY_IN+FOR_EXCH_SALE_IN+SECUR_DEP_IN+ELSE_ADAP_IN)  as depIn,
+        sum(BAK_FIN_OUT+TRI_AGENT_OUT+THIRD_DEP_OUT+REMIT_OUT+LOAN_OUT+CASH_ACCESS_OUT+INTEREST_OUT+CREDIT_CARD_OUT+RECEIPT_PAY_OUT+
+        FOR_EXCH_SALE_OUT) as depOut,
+        Lvl1_Br as bankCode
+        from DLA_RPT_DEP_FUND_INCOME_PAY
+        where date_dt=sysdate-1
+        GROUP by lvl1_br
 
-    <insert id="insetBatchCustomData" parameterType="java.util.List" useGeneratedKeys="false">
-        insert  into BD_All_Cust_Statis_M
-        (Statis_Dt, Cust_Type_Cd, Org_id_1_lev,Org_name_1_lev,Cust_Cnt)
-        <foreach collection ="list" item="item" index= "index" separator="union all">
-            (
-            SELECT
-            to_date ( #{item.Statis_Dt},'YYYY-MM-DD HH24:MI:SS' ),
-            #{item.Cust_Type_Cd},
-            #{item.Org_id_1_lev},
-            #{item.Org_name_1_lev},
-            to_number(#{item.Cust_Cnt})
-            FROM DUAL
-            )
-        </foreach >
-    </insert>
+    </select>
 
-    <update id="truncateReportDataTable">
-        truncate table Report_DataTable
-    </update>
-    
-    <update id="dropRepeatReportDataTable1">
-        CREATE TABLE temporaryReport_DataTable AS (select distinct * from Report_DataTable)
-    </update>
 
-    <update id="dropRepeatReportDataTable2">
-        truncate table Report_DataTable
-    </update>
 
-    <update id="dropRepeatReportDataTable3">
-        insert into Report_DataTable (select * from temporaryReport_DataTable)
-    </update>
 
-    <update id="dropRepeatReportDataTable4">
-        drop table temporaryReport_DataTable
-    </update>
 
-    <delete id="deleteReportPastDataTableByKeyIDAndDate">
-        delete from Report_PastDataTable
-        where KPI_ID = #{param1}
-        and STATIS_DT &lt;= to_date ( #{param2},'YYYY-MM-DD HH24:MI:SS' )
-    </delete>
-
-    <delete id="deleteReportPastDataTableByKeyDate">
-        delete from Report_PastDataTable
-        where STATIS_DT = to_date ( #{Date},'YYYY-MM-DD HH24:MI:SS' )
-    </delete>
-
-    <delete id="deleteReportPastDataTableByDateInSomeKey">
-        delete from Report_PastDataTable
-        where KPI_ID in ('YS01','YS01010101','YS01010102')
-        and STATIS_DT &lt; to_date ( #{Date},'YYYY-MM-DD HH24:MI:SS' )
-    </delete>
-
-    <delete id="deleteEchartsTableByID">
-        delete from REPORT_ECHARTSTABLE where DIVID like #{divID}
-    </delete>
-
-    <delete id="deleteDivKeyTable">
-        delete from Report_Div_KeyTable
-    </delete>
-
-    <delete id="deleteReportBranchDataTableByParentID">
-        delete from Report_BranchDataTable
-        where ParentID = #{ParentID}
-    </delete>
 </mapper>
