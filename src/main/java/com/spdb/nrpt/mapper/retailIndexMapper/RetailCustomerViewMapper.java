@@ -1,9 +1,9 @@
 package com.spdb.nrpt.mapper.retailIndexMapper;
 
-import com.spdb.nrpt.entity.report.Retail.ResponseData;
+
 import com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomResponseData;
 import com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO;
-import com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerViewVO;
+
 import com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;

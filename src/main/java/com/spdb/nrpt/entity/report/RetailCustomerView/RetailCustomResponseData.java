@@ -1,6 +1,5 @@
 package com.spdb.nrpt.entity.report.RetailCustomerView;
 
-import com.spdb.nrpt.entity.report.Retail.ResponseData;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

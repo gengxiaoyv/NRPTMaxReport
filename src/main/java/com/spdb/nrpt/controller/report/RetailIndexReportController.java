@@ -1,9 +1,7 @@
 package com.spdb.nrpt.controller.report;
 
 import com.spdb.nrpt.entity.report.Retail.PageDataEntity;
-import com.spdb.nrpt.entity.report.Retail.ResponseData;
 import com.spdb.nrpt.entity.report.Retail.RetailReport2PO;
-import com.spdb.nrpt.service.report.retailreport.RetailIndexReport1Service;
 import com.spdb.nrpt.service.report.retailreport.RetailIndexReport2Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,8 +13,6 @@ import java.util.List;
 @Controller
 public class RetailIndexReportController {
 
-    @Autowired
-    private RetailIndexReport1Service retailIndexReport1Service;
 
     @Autowired
     private RetailIndexReport2Service retailIndexReport2Service;

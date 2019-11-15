@@ -1,6 +1,6 @@
 package com.spdb.nrpt.controller.report;
 
-import com.spdb.nrpt.entity.report.Retail.ResponseData;
+
 import com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomResponseData;
 import com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData;
 import com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerViewVO;
