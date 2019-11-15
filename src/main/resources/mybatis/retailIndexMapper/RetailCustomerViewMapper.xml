@@ -158,6 +158,7 @@
                 and data_date between add_months(#{data_date},-1) and #{data_date}
             </if>
         </where>
+        order by data_date asc
     </select>
 
     <!--三十天趋势中客户占比-->
@@ -189,7 +190,7 @@
 
 <!--较上月/上年末净增-->
     <select id="getincrthan" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="java.lang.Long">
-        select amt from S_RT_CST_ECHARTS
+        select sum(amt) from S_RT_CST_ECHARTS
         <where>
             <if test="index_name != null and index_name != ''">
                 and index_name = #{index_name}
@@ -216,7 +217,7 @@
 
     <!--年初私行基准线-->
     <select id="getYearBeginLine" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="java.lang.Long">
-        select amt from S_RT_CST_ECHARTS
+        select sum(amt) from S_RT_CST_ECHARTS
         <where>
             <if test="index_name != null and index_name != ''">
                 and index_name = #{index_name}
@@ -291,6 +292,7 @@
                 and data_date between add_months(#{data_date},-12) and #{data_date}
             </if>
         </where>
+        order by data_date asc
     </select>
 
     <!--非0基客客户数-->

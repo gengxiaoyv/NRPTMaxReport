@@ -518,18 +518,27 @@ public class RetailCustomerViewService {
         for (RetailCustomerBaseData headData:headPercent){
             headPerMap.put(headData.getDims4(),headData.getAmt_zb());
         }
-        for (int i = 1; i <= 6; i++) {
-            requestVO.setDims4(i + "");
-            //非0基客客户数
+//        for (int i = 1; i <= custCount.size()+1; i++) {
+//            requestVO.setDims4(i + "");
+//            //非0基客客户数
+//
+//            RetailCustomerBaseData retailCustomerBaseData = new RetailCustomerBaseData();
+//            retailCustomerBaseData.setAmt(custcountMap.get(i+""));
+//            retailCustomerBaseData.setBranPercent(branPerMap.get(i+""));
+//            retailCustomerBaseData.setHeadPercent(headPerMap.get(i+""));
+//            retailCustomerBaseData.setDims4(RetailCustomerViewContext.CustSlice.get(i + ""));
+//            returnList.add(retailCustomerBaseData);
+//
+//        }
 
-
+        for (RetailCustomerBaseData fordata:custCount){
+            String dims4 = fordata.getDims4();
             RetailCustomerBaseData retailCustomerBaseData = new RetailCustomerBaseData();
-            retailCustomerBaseData.setAmt(custcountMap.get(i+""));
-            retailCustomerBaseData.setBranPercent(branPerMap.get(i+""));
-            retailCustomerBaseData.setHeadPercent(headPerMap.get(i+""));
-            retailCustomerBaseData.setDims4(RetailCustomerViewContext.CustSlice.get(i + ""));
+            retailCustomerBaseData.setAmt(custcountMap.get(dims4));
+            retailCustomerBaseData.setBranPercent(branPerMap.get(dims4));
+            retailCustomerBaseData.setHeadPercent(headPerMap.get(dims4));
+            retailCustomerBaseData.setDims4(RetailCustomerViewContext.CustSlice.get(dims4));
             returnList.add(retailCustomerBaseData);
-
         }
         return returnList;
 

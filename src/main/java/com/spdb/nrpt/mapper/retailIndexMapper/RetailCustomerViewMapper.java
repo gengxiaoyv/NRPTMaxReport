@@ -39,9 +39,9 @@ public interface RetailCustomerViewMapper {
 
     List<RetailCustomerBaseData> selectOneYearTrend(RetailCustomerRequestVO requestVO);
 
-    Long selectCustSliceCount(RetailCustomerRequestVO requestVO);
+    List<RetailCustomerBaseData> selectCustSliceCount(RetailCustomerRequestVO requestVO);
 
-    Double selectCustSlicePercent(RetailCustomerRequestVO requestVO);
+    List<RetailCustomerBaseData> selectCustSlicePercent(RetailCustomerRequestVO requestVO);
 
     List<RetailCustomResponseData> selectCardSlice(RetailCustomerRequestVO requestVO);
 
