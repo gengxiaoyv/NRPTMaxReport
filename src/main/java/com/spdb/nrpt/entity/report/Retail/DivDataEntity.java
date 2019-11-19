@@ -24,13 +24,15 @@ public class DivDataEntity {
 
     private Double balance;//存款余额
 
-    private Double depOrLoanIncr;//存款增量
+    private Double depOrLoanIncr;//存款/贷款增量
 
     private Double thanMonthBegin;//较月初
 
     private Double thanYearBegin;//较年初
 
-    private List<RetailReport2PO> mapData;//地图数据
+    private List<RetailReport2PO> balMapData;//余额地图数据
+
+    private List<RetailReport2PO> incMapData;//增量地图数据   只有个人存款跟个人贷款有
 
 
 

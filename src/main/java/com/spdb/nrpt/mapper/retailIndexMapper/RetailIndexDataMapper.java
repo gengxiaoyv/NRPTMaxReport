@@ -121,4 +121,18 @@ public interface RetailIndexDataMapper {
 
     List<RetailReport2PO> getNonDepSumData();
 
+
+
+    List<RetailReport2PO> getdepInc();
+
+    List<RetailReport2PO> getDepBal();
+
+    List<RetailReport2PO> getLoanInc();
+
+    List<RetailReport2PO> getLoanBal();
+
+    List<RetailReport2PO> getFinAssBal();
+
+    List<RetailReport2PO> getNonDepBal();
+
 }

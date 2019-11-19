@@ -1,5 +1,6 @@
 package com.spdb.nrpt.entity.report.Retail;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+//@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class RetailReport2PO {
 
     private Double dataValue;
@@ -31,6 +33,8 @@ public class RetailReport2PO {
 
     private Double yestdata;
     private Double todaydata;
+
+    private String provinceName;//省份名
 
 
 

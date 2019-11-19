@@ -31,8 +31,8 @@ public class RetailIndexReportController {
     //大屏二左侧根据页签（个人存款、个人贷款等）切换展示数据
     @ResponseBody
     @RequestMapping("/getScreen2Data")
-    public PageDataEntity getScreen2Data(){
-        PageDataEntity screen2Data = retailIndexReport2Service.getScreen2Data();
+    public List<PageDataEntity> getScreen2Data(){
+        List<PageDataEntity> screen2Data = retailIndexReport2Service.getScreen2Data();
         return screen2Data;
     }
 
