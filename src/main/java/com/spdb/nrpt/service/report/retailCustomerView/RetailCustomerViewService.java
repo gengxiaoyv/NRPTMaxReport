@@ -1,21 +1,21 @@
 package com.spdb.nrpt.service.report.retailCustomerView;
 
 import com.spdb.nrpt.config.RetailCustomerViewContext;
-import com.spdb.nrpt.entity.report.Retail.ResponseData;
+
 import com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomResponseData;
 import com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData;
 import com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO;
 import com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerViewVO;
 import com.spdb.nrpt.mapper.retailIndexMapper.RetailCustomerViewMapper;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.DecimalFormat;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -257,6 +257,8 @@ public class RetailCustomerViewService {
         for (int i = 1; i <= 5; i++) {
             //查询不同客户的趋势图及数据
             requestVO.setDims4(i + "");
+            //requestVO.setData_date(retailCustomerViewVO.getDate());// todo 是否三十天趋势一定是最近的三十天，不会改变
+
             retailCustomResponseData = getDifCustTrendData(requestVO);
             retailCustomResponseData.setDims4(RetailCustomerViewContext.CustSlice.get(i + ""));
             if(retailCustomResponseData.getRetailCustomerBaseDataList().size()!=0){
@@ -381,7 +383,7 @@ public class RetailCustomerViewService {
             //该月该分层客户流失率
             requestVO.setIndex_name("流失率");
             Double lossPercent = retailCustomerViewMapper.selectCustLossPercent(requestVO);
-            retailCustomerBaseData.setLossPercent(lossPercent);
+            retailCustomerBaseData.setLossPercent(lossPercent);//todo
 
 
         }
@@ -455,7 +457,7 @@ public class RetailCustomerViewService {
             for (RetailCustomerBaseData data2:returnList2){
                 String province2 = data2.getProvinceName();
                 String cityName2 = data2.getCityName();
-                Long amt2 = data.getAmt();
+                Long amt2 = data2.getAmt();
                 if ((province2.equals(provinceName1)&&!cityName1.equals(cityName2))){
                     Long returnamt = amt1+amt2;
                     data.setAmt(returnamt);

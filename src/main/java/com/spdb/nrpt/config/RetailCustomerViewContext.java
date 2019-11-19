@@ -143,6 +143,46 @@ public class RetailCustomerViewContext {
         OrgsCity.put("9900","全行");
         //Orgs.put("9940","总行本部");
     }
+    public static Map<String,String> codeAndprovinceName = new HashMap<>();
+    static {
+        codeAndprovinceName.put("9800","上海");
+        codeAndprovinceName.put("9100","北京");
+        codeAndprovinceName.put("7200","陕西");
+        codeAndprovinceName.put("9400","浙江");
+        codeAndprovinceName.put("9300","江苏");
+        codeAndprovinceName.put("4300","福建");
+        codeAndprovinceName.put("6400","江西");
+        codeAndprovinceName.put("3600","福建");
+        codeAndprovinceName.put("3500","青海");
+        codeAndprovinceName.put("3400","海南");
+        codeAndprovinceName.put("3300","宁夏");
+        codeAndprovinceName.put("7800","云南");
+        codeAndprovinceName.put("7700","天津");
+        codeAndprovinceName.put("5800","安徽");
+        codeAndprovinceName.put("7900","广东");
+        codeAndprovinceName.put("3700","贵州");
+        codeAndprovinceName.put("5900","内蒙古");
+        codeAndprovinceName.put("7100","辽宁");
+        codeAndprovinceName.put("7400","山东");
+        codeAndprovinceName.put("7300","四川");
+        codeAndprovinceName.put("7600","河南");
+        codeAndprovinceName.put("9500","浙江");
+        codeAndprovinceName.put("7500","辽宁");
+        codeAndprovinceName.put("3200","西藏");
+        codeAndprovinceName.put("4500","河北");
+        codeAndprovinceName.put("6600","湖南");
+        codeAndprovinceName.put("6900","山东");
+        codeAndprovinceName.put("6800","山西");
+        codeAndprovinceName.put("8900","江苏");
+        codeAndprovinceName.put("4800","甘肃");
+        codeAndprovinceName.put("8200","广东");
+        codeAndprovinceName.put("6500","黑龙江");
+        codeAndprovinceName.put("6300","广西");
+        codeAndprovinceName.put("6000","新疆");
+        codeAndprovinceName.put("8300","重庆");
+        codeAndprovinceName.put("7000","湖北");
+        codeAndprovinceName.put("6100","吉林");
+    }
 
 
 
@@ -186,5 +226,6 @@ public class RetailCustomerViewContext {
         provinceName.put("武汉","湖北");
         provinceName.put("长春","吉林");
     }
+
 
 }

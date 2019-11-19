@@ -53,7 +53,7 @@
             <if test="data_date != null">
                 and data_date = #{data_date}
             </if>
-            <if test="dims4 != null and dims3 != ''">
+            <if test="dims4 != null and dims4 != ''">
                 and dims4 != #{dims4}
             </if>
         </where>
