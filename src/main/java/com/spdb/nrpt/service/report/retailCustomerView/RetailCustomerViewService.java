@@ -41,7 +41,7 @@ public class RetailCustomerViewService {
 
     }
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         System.out.println(onlyGetDay(getLastDay(new Date())));
     }
 
@@ -105,7 +105,27 @@ public class RetailCustomerViewService {
             retailCustomerRequestVO.setData_date(getThisMonthLastDay(retailCustomerViewVO.getDate()));
         }
         List<RetailCustomerBaseData> retailCustomerBaseDataList = retailCustomerViewMapper.selectTileDataByDayOrgTypeAndIndex(retailCustomerRequestVO);
-        return retailCustomerBaseDataList;
+
+
+
+        List<RetailCustomerBaseData> returnList = new ArrayList<>();
+
+        if (retailCustomerBaseDataList!=null&&retailCustomerBaseDataList.size()!=0){
+            Map<String,RetailCustomerBaseData> map = new HashMap<>();
+            for (RetailCustomerBaseData data:retailCustomerBaseDataList){
+                map.put(data.getIndex_name(),data);
+            }
+            for (int i= 0;i<retailCustomerBaseDataList.size();i++){
+                returnList.add(map.get(RetailCustomerViewContext.tileName.get(i)));
+            }
+
+        }
+
+
+
+
+
+        return returnList;
 
     }
 
@@ -158,88 +178,88 @@ public class RetailCustomerViewService {
     }
 
 
-    //获取分行地图数据
-    public RetailCustomResponseData getBranchMapData(RetailCustomerViewVO retailCustomerViewVO) {
-
-        log.info("获取分行地图数据开始===============================");
-        //DecimalFormat df = new DecimalFormat("0%");
-        RetailCustomerRequestVO requestVO = new RetailCustomerRequestVO();
-        requestVO.setData_date(retailCustomerViewVO.getDate());
-
-        requestVO.setDims2(retailCustomerViewVO.getByDayOrMonth());
-        requestVO.setDims3(retailCustomerViewVO.getCustomerType());
-        if (retailCustomerViewVO.getByDayOrMonth().equals("02")) {
-            requestVO.setData_date(getThisMonthLastDay(retailCustomerViewVO.getDate()));
-        }
-
-        RetailCustomResponseData responseData = new RetailCustomResponseData();
-        //分行总客户数
-        requestVO.setOrg_id(retailCustomerViewVO.getOrgId());
-        requestVO.setIndex_name("客户数");
-        Long branCustomerCount = retailCustomerViewMapper.getMapDataCount(requestVO);
-        responseData.setBranCustomerCount(branCustomerCount);
-
-        //全行总客户数
-        requestVO.setOrg_id("9900");
-        Long headCustomerCount = retailCustomerViewMapper.getMapDataCount(requestVO);
-        responseData.setHeadBankCustomerCount(headCustomerCount);
-
-        // 分行非零客户数
-        requestVO.setIndex_name("非0客户数");
-        requestVO.setOrg_id(retailCustomerViewVO.getOrgId());
-        Long branNoZeroCustomerCount = retailCustomerViewMapper.getMapDataCount(requestVO);
-        responseData.setBranNoZeroCustomer(branNoZeroCustomerCount);
-
-        //全行非零客户数
-        requestVO.setIndex_name("非0客户数");
-        requestVO.setOrg_id("9900");
-        Long headNoZeroCustomerCount = retailCustomerViewMapper.getMapDataCount(requestVO);
-        responseData.setHeadBankNoZeroCustomer(headNoZeroCustomerCount);
-        //分行非零客户数占比
-        requestVO.setIndex_name("非0客户数占比");
-        requestVO.setOrg_id(retailCustomerViewVO.getOrgId());
-        Double branNoZeroCustomerPercent = retailCustomerViewMapper.getMapDataPercent(requestVO);
-        responseData.setBranNoZeroCustomerPercent(branNoZeroCustomerPercent);
-
-
-        //全行非零客户数占比
-        requestVO.setIndex_name("非0客户数占比");
-        requestVO.setOrg_id("9900");
-        Double headNoZeroCustomerPercent = retailCustomerViewMapper.getMapDataPercent(requestVO);
-        responseData.setHeadBankNoZeroCustomerPercent(headNoZeroCustomerPercent);
-
-
-        //分行AUM资产规模
-        requestVO.setIndex_name("资产规模");
-        requestVO.setOrg_id(retailCustomerViewVO.getOrgId());
-        Long branAum = retailCustomerViewMapper.getMapDataCount(requestVO);
-        responseData.setBranAUMAsset(branAum);
-
-        //分行AUM资产规模占比
-        requestVO.setIndex_name("AUM规模占比");
-        requestVO.setOrg_id(retailCustomerViewVO.getOrgId());
-        Double AUMPercent = retailCustomerViewMapper.getMapDataPercent(requestVO);
-        responseData.setBranAUMAssetsPercent(AUMPercent);
-        String orgName = RetailCustomerViewContext.Orgs.get(retailCustomerViewVO.getOrgId());
-        responseData.setOrgName(orgName);
-        if (orgName != null) {
-
-            System.out.println(orgName);
-            if (orgName.contains("分行")) {
-                if (orgName.startsWith("浦发银行")) {
-                    orgName = orgName.substring(4);
-                }
-                String orgNameSub = orgName.substring(0, orgName.indexOf("分"));
-                responseData.setProvinceName(RetailCustomerViewContext.provinceName.get(orgNameSub));
-            } else {
-                responseData.setProvinceName(RetailCustomerViewContext.provinceName.get("上海"));
-            }
-        }
-
-
-        return responseData;
-
-    }
+//    //获取分行地图数据
+//    public RetailCustomResponseData getBranchMapData(RetailCustomerViewVO retailCustomerViewVO) {
+//
+//        log.info("获取分行地图数据开始===============================");
+//        //DecimalFormat df = new DecimalFormat("0%");
+//        RetailCustomerRequestVO requestVO = new RetailCustomerRequestVO();
+//        requestVO.setData_date(retailCustomerViewVO.getDate());
+//
+//        requestVO.setDims2(retailCustomerViewVO.getByDayOrMonth());
+//        requestVO.setDims3(retailCustomerViewVO.getCustomerType());
+//        if (retailCustomerViewVO.getByDayOrMonth().equals("02")) {
+//            requestVO.setData_date(getThisMonthLastDay(retailCustomerViewVO.getDate()));
+//        }
+//
+//        RetailCustomResponseData responseData = new RetailCustomResponseData();
+//        //分行总客户数
+//        requestVO.setOrg_id(retailCustomerViewVO.getOrgId());
+//        requestVO.setIndex_name("客户数");
+//        Long branCustomerCount = retailCustomerViewMapper.getMapDataCount(requestVO);
+//        responseData.setBranCustomerCount(branCustomerCount);
+//
+//        //全行总客户数
+//        requestVO.setOrg_id("9900");
+//        Long headCustomerCount = retailCustomerViewMapper.getMapDataCount(requestVO);
+//        responseData.setHeadBankCustomerCount(headCustomerCount);
+//
+//        // 分行非零客户数
+//        requestVO.setIndex_name("非0客户数");
+//        requestVO.setOrg_id(retailCustomerViewVO.getOrgId());
+//        Long branNoZeroCustomerCount = retailCustomerViewMapper.getMapDataCount(requestVO);
+//        responseData.setBranNoZeroCustomer(branNoZeroCustomerCount);
+//
+//        //全行非零客户数
+//        requestVO.setIndex_name("非0客户数");
+//        requestVO.setOrg_id("9900");
+//        Long headNoZeroCustomerCount = retailCustomerViewMapper.getMapDataCount(requestVO);
+//        responseData.setHeadBankNoZeroCustomer(headNoZeroCustomerCount);
+//        //分行非零客户数占比
+//        requestVO.setIndex_name("非0客户数占比");
+//        requestVO.setOrg_id(retailCustomerViewVO.getOrgId());
+//        Double branNoZeroCustomerPercent = retailCustomerViewMapper.getMapDataPercent(requestVO);
+//        responseData.setBranNoZeroCustomerPercent(branNoZeroCustomerPercent);
+//
+//
+//        //全行非零客户数占比
+//        requestVO.setIndex_name("非0客户数占比");
+//        requestVO.setOrg_id("9900");
+//        Double headNoZeroCustomerPercent = retailCustomerViewMapper.getMapDataPercent(requestVO);
+//        responseData.setHeadBankNoZeroCustomerPercent(headNoZeroCustomerPercent);
+//
+//
+//        //分行AUM资产规模
+//        requestVO.setIndex_name("资产规模");
+//        requestVO.setOrg_id(retailCustomerViewVO.getOrgId());
+//        Long branAum = retailCustomerViewMapper.getMapDataCount(requestVO);
+//        responseData.setBranAUMAsset(branAum);
+//
+//        //分行AUM资产规模占比
+//        requestVO.setIndex_name("AUM规模占比");
+//        requestVO.setOrg_id(retailCustomerViewVO.getOrgId());
+//        Double AUMPercent = retailCustomerViewMapper.getMapDataPercent(requestVO);
+//        responseData.setBranAUMAssetsPercent(AUMPercent);
+//        String orgName = RetailCustomerViewContext.Orgs.get(retailCustomerViewVO.getOrgId());
+//        responseData.setOrgName(orgName);
+//        if (orgName != null) {
+//
+//            System.out.println(orgName);
+//            if (orgName.contains("分行")) {
+//                if (orgName.startsWith("浦发银行")) {
+//                    orgName = orgName.substring(4);
+//                }
+//                String orgNameSub = orgName.substring(0, orgName.indexOf("分"));
+//                responseData.setProvinceName(RetailCustomerViewContext.provinceName.get(orgNameSub));
+//            } else {
+//                responseData.setProvinceName(RetailCustomerViewContext.provinceName.get("上海"));
+//            }
+//        }
+//
+//
+//        return responseData;
+//
+//    }
 
 
     //获取近三十天趋势   此处所有时间均为当前时间加加减减，不由前端传值
@@ -257,11 +277,11 @@ public class RetailCustomerViewService {
         for (int i = 1; i <= 5; i++) {
             //查询不同客户的趋势图及数据
             requestVO.setDims4(i + "");
-            //requestVO.setData_date(retailCustomerViewVO.getDate());// todo 是否三十天趋势一定是最近的三十天，不会改变
+            requestVO.setData_date(retailCustomerViewVO.getDate());// todo 是否三十天趋势一定是最近的三十天，不会改变
 
             retailCustomResponseData = getDifCustTrendData(requestVO);
             retailCustomResponseData.setDims4(RetailCustomerViewContext.CustSlice.get(i + ""));
-            if(retailCustomResponseData.getRetailCustomerBaseDataList().size()!=0){
+            if (retailCustomResponseData.getRetailCustomerBaseDataList().size() != 0) {
                 retailCustomResponseDataList.add(retailCustomResponseData);
             }
 
@@ -275,7 +295,7 @@ public class RetailCustomerViewService {
     //查询不同客户的趋势图及数据
     public RetailCustomResponseData getDifCustTrendData(RetailCustomerRequestVO requestVO) throws Exception {
         //DecimalFormat df = new DecimalFormat("0%");
-        requestVO.setData_date(onlyGetDay(getLastDay(new Date())));
+        //requestVO.setData_date(onlyGetDay(getLastDay(new Date())));
         RetailCustomResponseData retailCustomResponseData = new RetailCustomResponseData();
         //查询趋势图基础数据
         requestVO.setIndex_name("客户情况及趋势_客户数");
@@ -338,7 +358,7 @@ public class RetailCustomerViewService {
             requestVO.setDims4(i + "");
             retailCustomResponseData = getDifCustYearTrendData(requestVO);
             retailCustomResponseData.setDims4(RetailCustomerViewContext.CustSlice.get(i + ""));
-            if(retailCustomResponseData.getRetailCustomerBaseDataList().size()!=0){
+            if (retailCustomResponseData.getRetailCustomerBaseDataList().size() != 0) {
                 retailCustomResponseDataList.add(retailCustomResponseData);
             }
 
@@ -380,10 +400,10 @@ public class RetailCustomerViewService {
             Long increThanYearBegin = retailCustomerViewMapper.getincrthan(requestVO);
             retailCustomerBaseData.setIncrThanYearBegin(increThanYearBegin);
 
-            //该月该分层客户流失率
-            requestVO.setIndex_name("流失率");
-            Double lossPercent = retailCustomerViewMapper.selectCustLossPercent(requestVO);
-            retailCustomerBaseData.setLossPercent(lossPercent);//todo
+//            //该月该分层客户流失率
+//            requestVO.setIndex_name("流失率");
+//            Double lossPercent = retailCustomerViewMapper.selectCustLossPercent(requestVO);
+            retailCustomerBaseData.setLossPercent(0.12);//todo
 
 
         }
@@ -408,80 +428,79 @@ public class RetailCustomerViewService {
     }
 
 
-    //总行地图信息
-    public List<RetailCustomerBaseData> getHeadMapInfo(RetailCustomerViewVO retailCustomerViewVO) {
-
-        log.info("总行获取地图信息开始======================================");
-        List<RetailCustomResponseData> retailCustomResponseDataList = new ArrayList<>();
-        RetailCustomerRequestVO requestVO = new RetailCustomerRequestVO();
-        requestVO.setData_date(retailCustomerViewVO.getDate());
-        requestVO.setDims2(retailCustomerViewVO.getByDayOrMonth());
-        requestVO.setDims3(retailCustomerViewVO.getCustomerType());
-        requestVO.setIndex_name("客户数");
-        requestVO.setOrg_idList(RetailCustomerViewContext.orgidList);
-        if (retailCustomerViewVO.getByDayOrMonth().equals("02")) {
-            requestVO.setData_date(getThisMonthLastDay(retailCustomerViewVO.getDate()));
-        }
-
-
-        List<RetailCustomerBaseData> dataList = retailCustomerViewMapper.getHeadMapData(requestVO);
-        List<RetailCustomerBaseData> returnList = new ArrayList<>();
-        //循环放入城市名与省份名
-        for (int i = 0; i < dataList.size(); i++) {
-            RetailCustomerBaseData retailCustomerBaseData = dataList.get(i);
-            String name = retailCustomerBaseData.getOrg_name();
-            if (name.contains("分行")) {
-                if (name.startsWith("浦发银行")) {
-                    name = name.substring(4);
-                }
-                String cityName = name.substring(0, name.indexOf("分"));
-                retailCustomerBaseData.setProvinceName(RetailCustomerViewContext.provinceName.get(cityName));
-                retailCustomerBaseData.setCityName(cityName);
-                //todo 同一省份中有两个分行  相加
-                returnList.add(retailCustomerBaseData);
-            }
-
-        }
-        List<RetailCustomerBaseData> returnList2 = new ArrayList<>();
-
-        for (RetailCustomerBaseData datasource:returnList) {
-            RetailCustomerBaseData add = new RetailCustomerBaseData();
-            BeanUtils.copyProperties(datasource,add);
-            returnList2.add(add);
-        }
-        //双层循环数据相加
-        for (RetailCustomerBaseData data:returnList){
-            String provinceName1 = data.getProvinceName();
-            String cityName1 = data.getCityName();
-            Long amt1 = data.getAmt();
-            for (RetailCustomerBaseData data2:returnList2){
-                String province2 = data2.getProvinceName();
-                String cityName2 = data2.getCityName();
-                Long amt2 = data2.getAmt();
-                if ((province2.equals(provinceName1)&&!cityName1.equals(cityName2))){
-                    Long returnamt = amt1+amt2;
-                    data.setAmt(returnamt);
-                    data.setCityName(data.getCityName()+","+data2.getCityName());
-                    data.setOrg_id(data.getOrg_id()+","+data2.getOrg_id());
-                    data.setOrg_name(data.getOrg_name()+","+data2.getOrg_name());
-                }
-
-            }
-        }
-
-        Set<RetailCustomerBaseData> set = new TreeSet<RetailCustomerBaseData>(new Comparator<RetailCustomerBaseData>() {
-            @Override
-            public int compare(RetailCustomerBaseData a, RetailCustomerBaseData b) {
-                // 字符串则按照asicc码升序排列
-                return a.getProvinceName().compareTo(b.getProvinceName());
-            }
-        });
-
-        set.addAll(returnList);
-        return new ArrayList<RetailCustomerBaseData>(set);
-       // return returnList;
-
-    }
+//    //总行地图信息
+//    public List<RetailCustomerBaseData> getHeadMapInfo(RetailCustomerViewVO retailCustomerViewVO) {
+//
+//        log.info("总行获取地图信息开始======================================");
+//        RetailCustomerRequestVO requestVO = new RetailCustomerRequestVO();
+//        requestVO.setData_date(retailCustomerViewVO.getDate());
+//        requestVO.setDims2(retailCustomerViewVO.getByDayOrMonth());
+//        requestVO.setDims3(retailCustomerViewVO.getCustomerType());
+//        requestVO.setIndex_name("客户数");
+//        requestVO.setOrg_idList(RetailCustomerViewContext.orgidList);
+//        if (retailCustomerViewVO.getByDayOrMonth().equals("02")) {
+//            requestVO.setData_date(getThisMonthLastDay(retailCustomerViewVO.getDate()));
+//        }
+//
+//
+//        List<RetailCustomerBaseData> dataList = retailCustomerViewMapper.getHeadMapData(requestVO);
+//        List<RetailCustomerBaseData> returnList = new ArrayList<>();
+//        //循环放入城市名与省份名
+//        for (int i = 0; i < dataList.size(); i++) {
+//            RetailCustomerBaseData retailCustomerBaseData = dataList.get(i);
+//            String name = retailCustomerBaseData.getOrg_name();
+//            if (name.contains("分行")) {
+//                if (name.startsWith("浦发银行")) {
+//                    name = name.substring(4);
+//                }
+//                String cityName = name.substring(0, name.indexOf("分"));
+//                retailCustomerBaseData.setProvinceName(RetailCustomerViewContext.provinceName.get(cityName));
+//                retailCustomerBaseData.setCityName(cityName);
+//                //todo 同一省份中有两个分行  相加
+//                returnList.add(retailCustomerBaseData);
+//            }
+//
+//        }
+//        List<RetailCustomerBaseData> returnList2 = new ArrayList<>();
+//
+//        for (RetailCustomerBaseData datasource : returnList) {
+//            RetailCustomerBaseData add = new RetailCustomerBaseData();
+//            BeanUtils.copyProperties(datasource, add);
+//            returnList2.add(add);
+//        }
+//        //双层循环数据相加
+//        for (RetailCustomerBaseData data : returnList) {
+//            String provinceName1 = data.getProvinceName();
+//            String cityName1 = data.getCityName();
+//            Long amt1 = data.getAmt();
+//            for (RetailCustomerBaseData data2 : returnList2) {
+//                String province2 = data2.getProvinceName();
+//                String cityName2 = data2.getCityName();
+//                Long amt2 = data2.getAmt();
+//                if ((province2.equals(provinceName1) && !cityName1.equals(cityName2))) {
+//                    Long returnamt = amt1 + amt2;
+//                    data.setAmt(returnamt);
+//                    data.setCityName(data.getCityName() + "," + data2.getCityName());
+//                    data.setOrg_id(data.getOrg_id() + "," + data2.getOrg_id());
+//                    data.setOrg_name(data.getOrg_name() + "," + data2.getOrg_name());
+//                }
+//
+//            }
+//        }
+//
+//        Set<RetailCustomerBaseData> set = new TreeSet<RetailCustomerBaseData>(new Comparator<RetailCustomerBaseData>() {
+//            @Override
+//            public int compare(RetailCustomerBaseData a, RetailCustomerBaseData b) {
+//                // 字符串则按照asicc码升序排列
+//                return a.getProvinceName().compareTo(b.getProvinceName());
+//            }
+//        });
+//
+//        set.addAll(returnList);
+//        return new ArrayList<RetailCustomerBaseData>(set);
+//        // return returnList;
+//
+//    }
 
     //分层客户
     public List<RetailCustomerBaseData> getCustSlice(RetailCustomerViewVO retailCustomerViewVO) {
@@ -501,24 +520,24 @@ public class RetailCustomerViewService {
 
         requestVO.setOrg_id(retailCustomerViewVO.getOrgId());
         List<RetailCustomerBaseData> custCount = retailCustomerViewMapper.selectCustSliceCount(requestVO);
-        Map<String,Long> custcountMap = new HashMap<>();
-        for (RetailCustomerBaseData custcountdata:custCount){
+        Map<String, Long> custcountMap = new HashMap<>();
+        for (RetailCustomerBaseData custcountdata : custCount) {
 
-            custcountMap.put(custcountdata.getDims4(),custcountdata.getAmt());
+            custcountMap.put(custcountdata.getDims4(), custcountdata.getAmt());
         }
 
         List<RetailCustomerBaseData> branPercent = retailCustomerViewMapper.selectCustSlicePercent(requestVO);
-        Map<String,Double> branPerMap = new HashMap<>();
+        Map<String, Double> branPerMap = new HashMap<>();
 
-        for (RetailCustomerBaseData branPerData:branPercent){
-            branPerMap.put(branPerData.getDims4(),branPerData.getAmt_zb());
+        for (RetailCustomerBaseData branPerData : branPercent) {
+            branPerMap.put(branPerData.getDims4(), branPerData.getAmt_zb());
         }
         requestVO.setOrg_id("9900");
         List<RetailCustomerBaseData> headPercent = retailCustomerViewMapper.selectCustSlicePercent(requestVO);
 
-        Map<String,Double> headPerMap = new HashMap<>();
-        for (RetailCustomerBaseData headData:headPercent){
-            headPerMap.put(headData.getDims4(),headData.getAmt_zb());
+        Map<String, Double> headPerMap = new HashMap<>();
+        for (RetailCustomerBaseData headData : headPercent) {
+            headPerMap.put(headData.getDims4(), headData.getAmt_zb());
         }
 //        for (int i = 1; i <= custCount.size()+1; i++) {
 //            requestVO.setDims4(i + "");
@@ -533,7 +552,7 @@ public class RetailCustomerViewService {
 //
 //        }
 
-        for (RetailCustomerBaseData fordata:custCount){
+        for (RetailCustomerBaseData fordata : custCount) {
             String dims4 = fordata.getDims4();
             RetailCustomerBaseData retailCustomerBaseData = new RetailCustomerBaseData();
             retailCustomerBaseData.setAmt(custcountMap.get(dims4));
@@ -622,4 +641,110 @@ public class RetailCustomerViewService {
 
         return returnList;
     }
+
+
+    //总行地图信息
+    public List<RetailCustomerBaseData> getMapInfo(RetailCustomerViewVO retailCustomerViewVO) {
+
+
+        log.info("总行获取地图信息开始======================================");
+        RetailCustomerRequestVO requestVO = new RetailCustomerRequestVO();
+        requestVO.setData_date(retailCustomerViewVO.getDate());
+        requestVO.setDims2(retailCustomerViewVO.getByDayOrMonth());
+        requestVO.setDims3(retailCustomerViewVO.getCustomerType());
+        requestVO.setOrg_idList(RetailCustomerViewContext.orgidList);
+        if (retailCustomerViewVO.getByDayOrMonth().equals("02")) {
+            requestVO.setData_date(getThisMonthLastDay(retailCustomerViewVO.getDate()));
+        }
+
+        //获取总行的总客户数、非0客户数、全行非0客户数占比
+        List<RetailCustomerBaseData> headDataList = retailCustomerViewMapper.selectMapHead(requestVO);
+        RetailCustomerBaseData headData = new RetailCustomerBaseData();
+        if (headDataList.size() != 0 && headDataList != null) {
+            headData = headDataList.get(0);
+        }
+
+        //获取分行的所有悬浮框
+        List<RetailCustomerBaseData> dataList;
+        if (retailCustomerViewVO.getOrgId() == "9900" || retailCustomerViewVO.getOrgId().equals("9900")) {
+            dataList = retailCustomerViewMapper.selectMapBranch(requestVO);
+        } else {
+            requestVO.setOrg_id(retailCustomerViewVO.getOrgId());
+            dataList = retailCustomerViewMapper.selectMapBranchOne(requestVO);
+
+        }
+
+
+        List<RetailCustomerBaseData> returnList = new ArrayList<>();
+        //循环放入城市名与省份名
+        for (int i = 0; i < dataList.size(); i++) {
+            RetailCustomerBaseData retailCustomerBaseData = dataList.get(i);
+            String name = retailCustomerBaseData.getOrg_name();
+            String id = retailCustomerBaseData.getOrg_id();
+            if (name.contains("分行")) {
+                if (name.startsWith("浦发银行")) {
+                    name = name.substring(4);
+                }
+                String cityName = name.substring(0, name.indexOf("分"));
+                retailCustomerBaseData.setProvinceName(RetailCustomerViewContext.provinceName.get(cityName));
+                retailCustomerBaseData.setCityName(cityName);
+
+
+                returnList.add(retailCustomerBaseData);
+            }
+
+        }
+        List<RetailCustomerBaseData> returnList2 = new ArrayList<>();
+
+        for (RetailCustomerBaseData datasource : returnList) {
+            RetailCustomerBaseData add = new RetailCustomerBaseData();
+            BeanUtils.copyProperties(datasource, add);
+            returnList2.add(add);
+        }
+        //双层循环数据相加
+        for (RetailCustomerBaseData data : returnList) {
+            String provinceName1 = data.getProvinceName();
+            String cityName1 = data.getCityName();
+            Long amt1 = data.getAmt();
+            for (RetailCustomerBaseData data2 : returnList2) {
+                String province2 = data2.getProvinceName();
+                String cityName2 = data2.getCityName();
+                Long amt2 = data2.getAmt();
+                if ((province2.equals(provinceName1) && !cityName1.equals(cityName2))) {
+//                    Long returnamt = (amt1 == null ? 0 : amt1) + (amt2 == null ? 0 : amt2);
+//                    data.setAmt(returnamt);
+                    data.setCityName((data.getCityName()==null?"":data.getCityName()) + "," + (data2.getCityName()==null?"":data2.getCityName()));
+                    data.setOrg_id((data.getOrg_id()==null?"":data.getOrg_id() )+ "," + (data2.getOrg_id()==null?"":data2.getOrg_id()));
+                    data.setOrg_name((data.getOrg_name()==null?"":data.getOrg_name()) + "," + (data2.getOrg_name()==null?"":data2.getOrg_name()));
+                    data.setBranAUMAsset((data.getBranAUMAsset()==null?0:data.getBranAUMAsset()) + (data2.getBranAUMAsset()==null?0:data2.getBranAUMAsset()));
+                    data.setBranAUMAssetsPercent((data.getBranAUMAssetsPercent()==null?0:data.getBranAUMAssetsPercent()) + (data2.getBranAUMAssetsPercent()==null?0:data2.getBranAUMAssetsPercent()));
+                    data.setBranCustomerCount((data.getBranCustomerCount()==null?0:data.getBranCustomerCount()) + (data2.getBranCustomerCount()==null?0:data2.getBranCustomerCount()));
+                    data.setBranNoZeroCustomer((data.getBranNoZeroCustomer()==null?0:data.getBranNoZeroCustomer()) + (data2.getBranNoZeroCustomer()==null?0:data2.getBranNoZeroCustomer()));
+                    data.setBranNoZeroCustomerPercent((data.getBranNoZeroCustomerPercent()==null?0:data.getBranNoZeroCustomerPercent() )+ (data2.getBranNoZeroCustomerPercent()==null?0:data2.getBranNoZeroCustomerPercent()));
+                }
+
+            }
+            data.setHeadBankCustomerCount(headData.getHeadBankCustomerCount());
+            data.setHeadBankNoZeroCustomer(headData.getHeadBankNoZeroCustomer());
+            data.setHeadBankNoZeroCustomerPercent(headData.getHeadBankNoZeroCustomerPercent());
+        }
+
+        Set<RetailCustomerBaseData> set = new TreeSet<RetailCustomerBaseData>(new Comparator<RetailCustomerBaseData>() {
+            @Override
+            public int compare(RetailCustomerBaseData a, RetailCustomerBaseData b) {
+                // 字符串则按照asicc码升序排列
+                return a.getProvinceName().compareTo(b.getProvinceName());
+            }
+        });
+
+        set.addAll(returnList);
+
+        return new ArrayList<RetailCustomerBaseData>(set);
+
+    }
+
+
+
 }
+
+

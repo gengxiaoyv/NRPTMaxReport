@@ -7,9 +7,9 @@ import java.util.Map;
 
 public class RetailCustomerViewContext {
 
-    public static final List<String> tileName = Arrays.asList("客户数","资产规模","非0客户数","当年基础及以上客户净增","当年中高端客户净增","当年四绑客户净增","当年三方代理基础及以上客户净增","网均总客户数","网均非0客户数","网均金融资产","网均当年基础及以上客户净增","网均当年中高端客户净增","网均当年四绑客户净增","网均当年三方代理基础及以上客户净增");
+    public static final List<String> tileName = Arrays.asList("客户数","非0客户数","资产规模","当年基础及以上客户净增","当年中高端客户净增","当年四绑客户净增","当年三方代理基础及以上客户净增","网均总客户数","网均非0客户数","网均金融资产","网均当年基础及以上客户净增","网均当年中高端客户净增","网均当年四绑客户净增","网均当年三方代理基础及以上客户净增");
 
-    public static final List<String> orgidList = Arrays.asList("6908","9403","3200","3300","3400","3500","3600","3700","4300","4500","4800","5800","5900","6000","6100","6300","6400","6500","6600","6800","6900","7000","7100","7200","7300","7400","7500","7600","7700","7800","7900","8200","8300","8900","9100","9300","9400","9500","9800");
+    public static final List<String> orgidList = Arrays.asList("3200","3300","3400","3500","3600","3700","4300","4500","4800","5800","5900","6000","6100","6300","6400","6500","6600","6800","6900","7000","7100","7200","7300","7400","7500","7600","7700","7800","7900","8200","8300","8900","9100","9300","9400","9500","9800");
 
     public static Map<String,String> CustSlice = new HashMap<>();
     static {
@@ -47,9 +47,9 @@ public class RetailCustomerViewContext {
     public static Map<String,String> account = new HashMap<>();
 
     static {
-        account.put("1","I类账户");
-        account.put("2","II类账户");
-        account.put("3","III类账户");
+        account.put("1","I类卡");
+        account.put("2","II类卡");
+        account.put("3","III类卡");
     }
 
 

@@ -70,22 +70,13 @@ public class RetailCustomerViewController {
         return baseinfo;
     }
 
-    //分行地图信息
-    @RequestMapping("/getbranMapInfo")
-    public RetailCustomResponseData getMapInfo(RetailCustomerViewVO retailCustomerViewVO)throws Exception{
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        retailCustomerViewVO.setDate(simpleDateFormat.parse(retailCustomerViewVO.getDateString()));
-        return retailCustomerViewService.getBranchMapData(retailCustomerViewVO);
-
-    }
 
     //总行地图信息
-    @RequestMapping("/getHeadMapInfo")
+    @RequestMapping("/getMapInfo")
     public List<RetailCustomerBaseData> getHeadMapInfo(RetailCustomerViewVO retailCustomerViewVO)throws Exception{
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         retailCustomerViewVO.setDate(simpleDateFormat.parse(retailCustomerViewVO.getDateString()));
-        return retailCustomerViewService.getHeadMapInfo(retailCustomerViewVO);
+        return retailCustomerViewService.getMapInfo(retailCustomerViewVO);
 
     }
 
@@ -143,6 +134,15 @@ public class RetailCustomerViewController {
     public List<Student> test(){
         return demoMapper.getStudent();
     }
+//    //分行地图信息
+//    @RequestMapping("/getbranMapInfo")
+//    public RetailCustomResponseData getMapInfo(RetailCustomerViewVO retailCustomerViewVO)throws Exception{
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//
+//        retailCustomerViewVO.setDate(simpleDateFormat.parse(retailCustomerViewVO.getDateString()));
+//        return retailCustomerViewService.getBranchMapData(retailCustomerViewVO);
+//
+//    }
 
 
 }

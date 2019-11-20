@@ -51,6 +51,10 @@ public interface RetailCustomerViewMapper {
 
     Double selectCustLossPercent(RetailCustomerRequestVO requestVO);
 
+    List<RetailCustomerBaseData> selectMapBranch(RetailCustomerRequestVO requestVO);
 
+    List<RetailCustomerBaseData> selectMapHead(RetailCustomerRequestVO requestVO);
+
+    List<RetailCustomerBaseData> selectMapBranchOne(RetailCustomerRequestVO requestVO);
     //public List<> todo
 }

@@ -61,76 +61,76 @@
     </select>
 
 
-    <select id="getMapDataCount" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="java.lang.Long">
-        select sum(amt) from S_RT_CST_ECHARTS
-        <where>
-            <if test="index_name != null and index_name != ''">
-                and index_name = #{index_name}
-            </if>
-            <if test="dims2 != null and dims2 != ''">
-                and dims2 = #{dims2}
-            </if>
-            <if test="dims3 != null and dims3 != ''">
-                and dims3 = #{dims3}
-            </if>
-            <if test="org_id != null and org_id != ''">
-                and org_id = #{org_id}
-            </if>
-            <if test="data_date != null">
-                and data_date = #{data_date}
-            </if>
-        </where>
+    <!--<select id="getMapDataCount" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="java.lang.Long">-->
+        <!--select sum(amt) from S_RT_CST_ECHARTS-->
+        <!--<where>-->
+            <!--<if test="index_name != null and index_name != ''">-->
+                <!--and index_name = #{index_name}-->
+            <!--</if>-->
+            <!--<if test="dims2 != null and dims2 != ''">-->
+                <!--and dims2 = #{dims2}-->
+            <!--</if>-->
+            <!--<if test="dims3 != null and dims3 != ''">-->
+                <!--and dims3 = #{dims3}-->
+            <!--</if>-->
+            <!--<if test="org_id != null and org_id != ''">-->
+                <!--and org_id = #{org_id}-->
+            <!--</if>-->
+            <!--<if test="data_date != null">-->
+                <!--and data_date = #{data_date}-->
+            <!--</if>-->
+        <!--</where>-->
 
 
-    </select>
+    <!--</select>-->
 
 
 
-    <select id="getMapDataPercent" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="java.lang.Double">
-    select sum(amt) from S_RT_CST_ECHARTS
-    <where>
-        <if test="index_name != null and index_name != ''">
-            and index_name = #{index_name}
-        </if>
-        <if test="dims2 != null and dims2 != ''">
-            and dims2 = #{dims2}
-        </if>
-        <if test="dims3 != null and dims3 != ''">
-            and dims3 = #{dims3}
-        </if>
-        <if test="org_id != null and org_id != ''">
-            and org_id = #{org_id}
-        </if>
-        <if test="data_date != null">
-            and data_date = #{data_date}
-        </if>
-    </where>
-    </select>
+    <!--<select id="getMapDataPercent" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="java.lang.Double">-->
+    <!--select sum(amt) from S_RT_CST_ECHARTS-->
+    <!--<where>-->
+        <!--<if test="index_name != null and index_name != ''">-->
+            <!--and index_name = #{index_name}-->
+        <!--</if>-->
+        <!--<if test="dims2 != null and dims2 != ''">-->
+            <!--and dims2 = #{dims2}-->
+        <!--</if>-->
+        <!--<if test="dims3 != null and dims3 != ''">-->
+            <!--and dims3 = #{dims3}-->
+        <!--</if>-->
+        <!--<if test="org_id != null and org_id != ''">-->
+            <!--and org_id = #{org_id}-->
+        <!--</if>-->
+        <!--<if test="data_date != null">-->
+            <!--and data_date = #{data_date}-->
+        <!--</if>-->
+    <!--</where>-->
+    <!--</select>-->
 
 
-    <select id="getHeadMapData" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData">
-        select amt,org_name,org_id from S_RT_CST_ECHARTS
-        <where>
-            <if test="index_name != null and index_name != ''">
-                and index_name = #{index_name}
-            </if>
-            <if test="dims2 != null and dims2 != ''">
-                and dims2 = #{dims2}
-            </if>
-            <if test="dims3 != null and dims3 != ''">
-                and dims3 = #{dims3}
-            </if>
-            <if test="data_date != null">
-                and data_date = #{data_date}
-            </if>
-            <if test="org_idList != null">
-                and org_id in
-                <foreach collection="org_idList" item="org_id" separator=","  open="(" close=")">
-                    #{org_id}
-                </foreach>
-            </if>
-        </where>
-    </select>
+    <!--<select id="getHeadMapData" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData">-->
+        <!--select amt,org_name,org_id from S_RT_CST_ECHARTS-->
+        <!--<where>-->
+            <!--<if test="index_name != null and index_name != ''">-->
+                <!--and index_name = #{index_name}-->
+            <!--</if>-->
+            <!--<if test="dims2 != null and dims2 != ''">-->
+                <!--and dims2 = #{dims2}-->
+            <!--</if>-->
+            <!--<if test="dims3 != null and dims3 != ''">-->
+                <!--and dims3 = #{dims3}-->
+            <!--</if>-->
+            <!--<if test="data_date != null">-->
+                <!--and data_date = #{data_date}-->
+            <!--</if>-->
+            <!--<if test="org_idList != null">-->
+                <!--and org_id in-->
+                <!--<foreach collection="org_idList" item="org_id" separator=","  open="(" close=")">-->
+                    <!--#{org_id}-->
+                <!--</foreach>-->
+            <!--</if>-->
+        <!--</where>-->
+    <!--</select>-->
 
 
 
@@ -463,5 +463,110 @@
 
     </select>
 
+    <!--//获取分行地图数据-->
+
+    <select id="selectMapBranch" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData">
+        select org_id,org_name,
+        sum(branNoZeroCustomer) branNoZeroCustomer,
+        sum(branNoZeroCustomerPercent) branNoZeroCustomerPercent,
+        sum(branAUMAsset) branAUMAsset ,
+        sum(branAUMAssetsPercent) branAUMAssetsPercent,
+        sum(branCustomerCount) branCustomerCount from
+        (select  org_id,org_name,case when index_name = '非0客户数' then sum(amt) end branNoZeroCustomer,
+        case when index_name = '非0客户数占比' then sum(amt) end branNoZeroCustomerPercent,
+        case when index_name = '资产规模' then sum(amt) end branAUMAsset,
+        case when index_name = 'AUM规模占比' then sum(amt) end branAUMAssetsPercent,
+        case when index_name = '客户数' then sum(amt) end branCustomerCount
+        from S_RT_CST_ECHARTS
+
+        <where>
+            <if test="data_date != null">
+                and data_date = #{data_date}
+            </if>
+
+            <if test="dims2 != null and dims2 != ''">
+                and dims2  = #{dims2}
+            </if>
+            <if test="dims3 != null and dims3 != ''">
+                and dims3=#{dims3}
+            </if>
+            <if test="org_idList != null">
+                and org_id in
+                <foreach collection="org_idList" item="org_id" separator=","  open="(" close=")">
+                    #{org_id}
+                </foreach>
+            </if>
+        </where>
+        and  index_name in ('非0客户数','非0客户数占比','资产规模','AUM规模占比','客户数')
+        GROUP BY org_id,org_name,index_name
+        ORDER BY org_id)
+        group by org_id,org_name
+
+    </select>
+
+    <!--获取总行的总客户数、非0客户数、全行非0客户数占比-->
+    <select id="selectMapHead" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData">
+        select sum(headBankNoZeroCustomer) headBankNoZeroCustomer,
+        sum(headBankNoZeroCustomerPercent) headBankNoZeroCustomerPercent,
+        sum(headBankCustomerCount) headBankCustomerCount from (
+        select case when index_name = '非0客户数' then sum(amt) end headBankNoZeroCustomer,
+        case when index_name = '非0客户数占比' then sum(amt) end headBankNoZeroCustomerPercent,
+        case when index_name = '客户数' then sum(amt) end headBankCustomerCount  from S_RT_CST_ECHARTS
+
+        <where>
+            <if test="data_date != null">
+                and data_date = #{data_date}
+            </if>
+
+            <if test="dims2 != null and dims2 != ''">
+                and dims2  = #{dims2}
+            </if>
+            <if test="dims3 != null and dims3 != ''">
+                and dims3=#{dims3}
+            </if>
+
+        </where>
+
+        and index_name in('非0客户数','客户数','非0客户数占比')  and org_id='9900'
+        GROUP BY index_name,org_id
+        )
+    </select>
+
+
+    <select id="selectMapBranchOne" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData">
+        select org_id,org_name,
+        sum(branNoZeroCustomer) branNoZeroCustomer,
+        sum(branNoZeroCustomerPercent) branNoZeroCustomerPercent,
+        sum(branAUMAsset) branAUMAsset ,
+        sum(branAUMAssetsPercent) branAUMAssetsPercent,
+        sum(branCustomerCount) branCustomerCount from
+        (select  org_id,org_name,case when index_name = '非0客户数' then sum(amt) end branNoZeroCustomer,
+        case when index_name = '非0客户数占比' then sum(amt) end branNoZeroCustomerPercent,
+        case when index_name = '资产规模' then sum(amt) end branAUMAsset,
+        case when index_name = 'AUM规模占比' then sum(amt) end branAUMAssetsPercent,
+        case when index_name = '客户数' then sum(amt) end branCustomerCount
+        from S_RT_CST_ECHARTS
+
+        <where>
+            <if test="data_date != null">
+                and data_date = #{data_date}
+            </if>
+
+            <if test="dims2 != null and dims2 != ''">
+                and dims2  = #{dims2}
+            </if>
+            <if test="dims3 != null and dims3 != ''">
+                and dims3=#{dims3}
+            </if>
+            <if test="org_id != null and org_id != ''">
+                and org_id = #{org_id}
+            </if>
+        </where>
+        and  index_name in ('非0客户数','非0客户数占比','资产规模','AUM规模占比','客户数')
+        GROUP BY org_id,org_name,index_name
+        ORDER BY org_id)
+        group by org_id,org_name
+
+    </select>
 
 </mapper>

@@ -26,7 +26,7 @@ public class RetailCustomerBaseData {
 
     private Double lossPercent;//流失率
 
-    private Double branPercent;//分行比
+    private Double branPercent;//分行比  卡分层 客户分层等用到
 
     private Double headPercent;//总行比
 
@@ -36,4 +36,23 @@ public class RetailCustomerBaseData {
 
     private String cityName;
 
+
+
+
+//    分行地图字段
+    private Long branCustomerCount;//分行总客户数
+
+    private Long headBankCustomerCount;//全行总客户数
+
+    private Long branNoZeroCustomer;//分行非零客户数
+
+    private Long headBankNoZeroCustomer;//全行非零客户数
+
+    private Double branNoZeroCustomerPercent;//分行非零客户数占比
+
+    private Double headBankNoZeroCustomerPercent;//全行非零客户数占比
+
+    private Long branAUMAsset;//分行AUM资产规模
+
+    private Double branAUMAssetsPercent;//分行AUM资产规模占比
 }
