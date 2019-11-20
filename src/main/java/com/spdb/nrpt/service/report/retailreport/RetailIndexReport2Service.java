@@ -79,8 +79,6 @@ public class RetailIndexReport2Service {
         divDataEntity.setIncrLastFive(addbranName(retailIndexDataMapper.getdepIncLastFive()));
         divDataEntity.setBalanceTopFive(addbranName(retailIndexDataMapper.getDepBalTopFive()));
         divDataEntity.setBalanceLastFive(addbranName(retailIndexDataMapper.getDepBalLastFive()));
-        divDataEntity.setKline(retailIndexDataMapper.getdepThreeMonKline());
-        divDataEntity.setTrendData(retailIndexDataMapper.getdepThreeMonTrend());
         divDataEntity.setBalMapData(addProvinceName(retailIndexDataMapper.getDepBal()));
         divDataEntity.setIncMapData(addProvinceName(retailIndexDataMapper.getdepInc()));
         //比月初比年初
@@ -99,10 +97,14 @@ public class RetailIndexReport2Service {
 
 
 
+        //组合K线图和趋势图
+        List<RetailReport2PO> KlineList = retailIndexDataMapper.getdepThreeMonKline();
+        List<RetailReport2PO> trendList = retailIndexDataMapper.getdepThreeMonTrend();
+
+
         //地图数据  todo
-
-
-
+        addTrendDataList(KlineList,trendList);
+        divDataEntity.setKline(KlineList);
         return divDataEntity;
     }
 
@@ -115,8 +117,6 @@ public class RetailIndexReport2Service {
         divDataEntity.setIncrLastFive(addbranName(retailIndexDataMapper.getLoanIncLastFive()));
         divDataEntity.setBalanceTopFive(addbranName(retailIndexDataMapper.getLoanBalTopFive()));
         divDataEntity.setBalanceLastFive(addbranName(retailIndexDataMapper.getLoanBalLastFive()));
-        divDataEntity.setKline(retailIndexDataMapper.getLoanThreeMonKline());
-        divDataEntity.setTrendData(retailIndexDataMapper.getLoanThreeMonTrend());
         divDataEntity.setBalMapData(addProvinceName(retailIndexDataMapper.getLoanBal()));
         divDataEntity.setIncMapData(addProvinceName(retailIndexDataMapper.getLoanInc()));
 
@@ -134,11 +134,11 @@ public class RetailIndexReport2Service {
         divDataEntity.setDepOrLoanIncr(retailIndexDataMapper.getLoanIncSum());
         divDataEntity.setBalance(retailIndexDataMapper.getLoanBalSum());
 
+        List<RetailReport2PO> KlineList = retailIndexDataMapper.getLoanThreeMonKline();
+        List<RetailReport2PO> trendList = retailIndexDataMapper.getLoanThreeMonTrend();
 
-        //地图数据  todo
-
-
-
+        addTrendDataList(KlineList,trendList);
+        divDataEntity.setKline(KlineList);
 
         return divDataEntity;
     }
@@ -152,8 +152,6 @@ public class RetailIndexReport2Service {
         divDataEntity.setIncrLastFive(addbranName(retailIndexDataMapper.getFinAssIncLastFive()));
         divDataEntity.setBalanceTopFive(addbranName(retailIndexDataMapper.getFinAssBalTopFive()));
         divDataEntity.setBalanceLastFive(addbranName(retailIndexDataMapper.getFinAssBalLastFive()));
-        divDataEntity.setKline(retailIndexDataMapper.getFinAssThreeMonKline());
-        divDataEntity.setTrendData(retailIndexDataMapper.getFinAssThreeMonTrend());
         divDataEntity.setBalMapData(addProvinceName(retailIndexDataMapper.getFinAssBal()));
 
         List<RetailReport2PO> retailReport2POS = retailIndexDataMapper.getFinAssSumData();
@@ -167,9 +165,10 @@ public class RetailIndexReport2Service {
             }
 
         }
-
-        //地图数据  todo
-
+        List<RetailReport2PO> kline = retailIndexDataMapper.getFinAssThreeMonKline();
+        List<RetailReport2PO> trendList = retailIndexDataMapper.getFinAssThreeMonTrend();
+        addTrendDataList(kline,trendList);
+        divDataEntity.setKline(kline);
         return divDataEntity;
     }
 
@@ -182,8 +181,6 @@ public class RetailIndexReport2Service {
         divDataEntity.setIncrLastFive(addbranName(retailIndexDataMapper.getNonDepIncLastFive()));
         divDataEntity.setBalanceTopFive(addbranName(retailIndexDataMapper.getNonDepBalTopFive()));
         divDataEntity.setBalanceLastFive(addbranName(retailIndexDataMapper.getNonDepBalLastFive()));
-        divDataEntity.setKline(retailIndexDataMapper.getNonDepThreeMonKline());
-        divDataEntity.setTrendData(retailIndexDataMapper.getNonDepThreeMonTrend());
         divDataEntity.setBalMapData(addProvinceName(retailIndexDataMapper.getNonDepBal()));
 
         List<RetailReport2PO> retailReport2POS = retailIndexDataMapper.getNonDepSumData();
@@ -198,10 +195,13 @@ public class RetailIndexReport2Service {
 
 
         }
+        divDataEntity.setKline(retailIndexDataMapper.getNonDepThreeMonKline());
+        divDataEntity.setTrendData(retailIndexDataMapper.getNonDepThreeMonTrend());
 
-
-        //地图数据  todo
-
+        List<RetailReport2PO> kline = retailIndexDataMapper.getNonDepThreeMonKline();
+        List<RetailReport2PO> trendList = retailIndexDataMapper.getNonDepThreeMonTrend();
+        addTrendDataList(kline,trendList);
+        divDataEntity.setKline(kline);
         return divDataEntity;
     }
 
@@ -277,14 +277,20 @@ public class RetailIndexReport2Service {
 
     }
 
+    public List<RetailReport2PO> addTrendDataList(List<RetailReport2PO> kline,List<RetailReport2PO> trendList){
 
-    public static void main(String[] args) {
-        List<RetailReport2PO> list=new ArrayList<>();
+        for (RetailReport2PO KlineData:kline){
+            Date dateKline = KlineData.getDataDate();
+            for (RetailReport2PO trendData:trendList){
+                Date dateTrend = trendData.getDataDate();
+                if (dateKline==dateTrend||dateKline.equals(dateTrend)){
+                    KlineData.setDataValue(trendData.getDataValue());
+                }
+            }
+        }
 
-        addbranName(list);
-
-        System.out.println("111");
-        System.out.println(addbranName(list));
+        return kline;
     }
+
 
 }
