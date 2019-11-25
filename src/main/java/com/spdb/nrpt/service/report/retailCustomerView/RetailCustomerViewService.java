@@ -113,10 +113,25 @@ public class RetailCustomerViewService {
         if (retailCustomerBaseDataList!=null&&retailCustomerBaseDataList.size()!=0){
             Map<String,RetailCustomerBaseData> map = new HashMap<>();
             for (RetailCustomerBaseData data:retailCustomerBaseDataList){
+                if (data.getIndex_name().equals("资产规模")||data.getIndex_name()=="资产规模"){
+                    data.setIndex_name("资产规模（百万）");
+                    if (data.getAmt()!=null&&data.getAmt()!=0){
+                        data.setAmt(data.getAmt()/1000000);
+                    }
+
+                }
+                if (data.getIndex_name().equals("网均金融资产")||data.getIndex_name()=="网均金融资产"){
+                    data.setIndex_name("网均金融资产（百万）");
+                    if (data.getAmt()!=null&&data.getAmt()!=0){
+                        data.setAmt(data.getAmt()/1000000);
+                    }
+
+                }
+
                 map.put(data.getIndex_name(),data);
             }
             for (int i= 0;i<retailCustomerBaseDataList.size();i++){
-                returnList.add(map.get(RetailCustomerViewContext.tileName.get(i)));
+                returnList.add(map.get(RetailCustomerViewContext.tileNamebill.get(i)));
             }
 
         }
@@ -277,7 +292,7 @@ public class RetailCustomerViewService {
         for (int i = 1; i <= 5; i++) {
             //查询不同客户的趋势图及数据
             requestVO.setDims4(i + "");
-            requestVO.setData_date(retailCustomerViewVO.getDate());// todo 是否三十天趋势一定是最近的三十天，不会改变
+           // requestVO.setData_date(retailCustomerViewVO.getDate());// todo 是否三十天趋势一定是最近的三十天，不会改变
 
             retailCustomResponseData = getDifCustTrendData(requestVO);
             retailCustomResponseData.setDims4(RetailCustomerViewContext.CustSlice.get(i + ""));
@@ -295,7 +310,7 @@ public class RetailCustomerViewService {
     //查询不同客户的趋势图及数据
     public RetailCustomResponseData getDifCustTrendData(RetailCustomerRequestVO requestVO) throws Exception {
         //DecimalFormat df = new DecimalFormat("0%");
-        //requestVO.setData_date(onlyGetDay(getLastDay(new Date())));
+        requestVO.setData_date(onlyGetDay(getLastDay(new Date())));
         RetailCustomResponseData retailCustomResponseData = new RetailCustomResponseData();
         //查询趋势图基础数据
         requestVO.setIndex_name("客户情况及趋势_客户数");
@@ -597,7 +612,7 @@ public class RetailCustomerViewService {
                 RetailCustomerRequestVO headRequestvo = new RetailCustomerRequestVO();
                 BeanUtils.copyProperties(requestVO, headRequestvo);
                 headRequestvo.setOrg_id("9900");
-                headPercent = retailCustomerViewMapper.getCardCustPercent(requestVO);
+                headPercent = retailCustomerViewMapper.getCardCustPercent(headRequestvo);
 
             }
 

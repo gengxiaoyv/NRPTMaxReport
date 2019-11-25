@@ -11,8 +11,8 @@
 
         SELECT * from (
         SELECT v2.sum2-v1.sum1  as dataValue,v1.bankCode1 as bankCode from
-        (select sum(a.dep_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') GROUP BY a.LVL1_BR) v1,
-        (select b.dep_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where b.dt=to_char(sysdate,'yyyymmdd')) v2
+        (select sum(a.dep_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') and a.LVL1_BR!='9940'  GROUP BY a.LVL1_BR) v1,
+        (select b.dep_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where b.dt=to_char(sysdate,'yyyymmdd') and b.org!='9900') v2
         where v1.bankCode1 = v2.bankCode2  ORDER BY dataValue desc
         ) where rownum &lt;=5
     </select>
@@ -22,8 +22,8 @@
     <select id="getdepIncLastFive" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
         SELECT * from (
         SELECT v2.sum2-v1.sum1  as dataValue,v1.bankCode1 as bankcode from
-        (select sum(a.dep_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') GROUP BY a.LVL1_BR) v1,
-        (select b.dep_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where b.dt=to_char(sysdate,'yyyymmdd')) v2
+        (select sum(a.dep_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') and a.LVL1_BR!='9940'  GROUP BY a.LVL1_BR) v1,
+        (select b.dep_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where b.dt=to_char(sysdate,'yyyymmdd') and b.org!='9900') v2
         where v1.bankCode1 = v2.bankCode2  ORDER BY dataValue asc
         ) where rownum &lt;=5
     </select>
@@ -57,9 +57,9 @@
 
     <select id="getdepThreeMonKline" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
 	select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata
-  from (select data_dt,sum(dep_bal) count from DLA_RPT_R_DEP_LOAN_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -1) and  sysdate GROUP BY data_dt ) t2
+  from (select data_dt,sum(dep_bal) count from DLA_RPT_R_DEP_LOAN_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -3) and  sysdate GROUP BY data_dt ) t2
   inner join
-  (select data_dt,sum(dep_bal) count from DLA_RPT_R_DEP_LOAN_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -1) and  sysdate GROUP BY data_dt ) t1 --jintian
+  (select data_dt,sum(dep_bal) count from DLA_RPT_R_DEP_LOAN_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -3) and  sysdate GROUP BY data_dt ) t1 --jintian
   on t1.data_dt = t2.data_dt+1  order BY t1.data_dt asc
 
     </select>
@@ -72,7 +72,7 @@
     </select>
 
     <!--当日存款增量总和-->
-    <select id="getdepIncSum" resultType="java.lang.Double">
+    <select id="getdepIncSum" resultType="java.lang.Long">
 
     select sum(dataValue)  from (SELECT v2.sum2-v1.sum1  as dataValue,v1.bankCode1 from
         (select sum(a.dep_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') GROUP BY a.LVL1_BR) v1,
@@ -83,7 +83,7 @@
 
     <!--当日存款余额总和-->
 
-    <select id="getdepBalSum" resultType="java.lang.Double">
+    <select id="getdepBalSum" resultType="java.lang.Long">
 
         select sum(sum2)  from
         (select b.dep_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where b.dt=to_char(sysdate,'yyyymmdd')
@@ -114,8 +114,8 @@
 
         SELECT * from (
         SELECT v2.sum2-v1.sum1  as dataValue,v1.bankCode1 as bankCode from
-        (select sum(a.loan_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') GROUP BY a.LVL1_BR) v1,
-        (select b.loan_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where b.dt=to_char(sysdate,'yyyymmdd') ) v2
+        (select sum(a.loan_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') and a.LVL1_BR!='9940' GROUP BY a.LVL1_BR) v1,
+        (select b.loan_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where b.dt=to_char(sysdate,'yyyymmdd') and b.org!='9940') v2
         where v1.bankCode1 = v2.bankCode2  ORDER BY dataValue desc
         ) where rownum &lt;=5
     </select>
@@ -124,8 +124,8 @@
 
         SELECT * from (
         SELECT v2.sum2-v1.sum1  as dataValue,v1.bankCode1 as bankCode from
-        (select sum(a.loan_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') GROUP BY a.LVL1_BR) v1,
-        (select b.loan_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where b.dt=to_char(sysdate,'yyyymmdd')) v2
+        (select sum(a.loan_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') and a.LVL1_BR!='9940' GROUP BY a.LVL1_BR) v1,
+        (select b.loan_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where b.dt=to_char(sysdate,'yyyymmdd') and b.org!='9940') v2
         where v1.bankCode1 = v2.bankCode2  ORDER BY dataValue asc
         ) where rownum &lt;=5
     </select>
@@ -157,9 +157,9 @@
     </select>
     <select id="getLoanThreeMonKline" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
 select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
-        (select data_dt,sum(loan_bal) count from DLA_RPT_R_DEP_LOAN_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -1) and  sysdate GROUP BY data_dt ) t2
+        (select data_dt,sum(loan_bal) count from DLA_RPT_R_DEP_LOAN_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -3) and  sysdate GROUP BY data_dt ) t2
          inner join
-        (select data_dt,sum(loan_bal) count from DLA_RPT_R_DEP_LOAN_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -1) and  sysdate GROUP BY data_dt ) t1 --jintian
+        (select data_dt,sum(loan_bal) count from DLA_RPT_R_DEP_LOAN_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -3) and  sysdate GROUP BY data_dt ) t1 --jintian
         on t1.data_dt = t2.data_dt+1  order BY t1.data_dt asc
     </select>
 
@@ -170,7 +170,7 @@ select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
     </select>
 
     <!--当日贷款增量总和-->
-    <select id="getLoanIncSum" resultType="java.lang.Double">
+    <select id="getLoanIncSum" resultType="java.lang.Long">
 
     select sum(dataValue)  from (SELECT v2.sum2-v1.sum1  as dataValue,v1.bankCode1 from
         (select sum(a.loan_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') GROUP BY a.LVL1_BR) v1,
@@ -181,7 +181,7 @@ select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
 
     <!--当日贷款余额总和-->
 
-    <select id="getLoanBalSum" resultType="java.lang.Double">
+    <select id="getLoanBalSum" resultType="java.lang.Long">
 
         select sum(sum2)  from (
         (select b.loan_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where b.dt=to_char(sysdate,'yyyymmdd')
@@ -204,7 +204,7 @@ select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
         select *from
         (select SUM(a.FNC_AST_BAL_TD_INCR) as dataValue,a.LVL1_BR as bankCode
         from DLA_RPT_R_AST_SCL a
-        where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+        where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') and a.LVL1_BR!='9940'
         GROUP BY a.LVL1_BR ORDER BY dataValue desc
         ) where rownum &lt;=5
     </select>
@@ -213,7 +213,7 @@ select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
         select *from
         (select SUM(a.FNC_AST_BAL_TD_INCR) as dataValue,a.LVL1_BR as bankCode
         from DLA_RPT_R_AST_SCL a
-        where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+        where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') and a.LVL1_BR!='9940'
         GROUP BY a.LVL1_BR ORDER BY dataValue asc
         ) where rownum &lt;=5
     </select>
@@ -222,7 +222,7 @@ select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
         select *from
         (select SUM(a.Fnc_Ast_Bal) as dataValue,a.LVL1_BR as bankCode
         from DLA_RPT_R_AST_SCL a
-        where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+        where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') and a.LVL1_BR!='9940'
         GROUP BY a.LVL1_BR ORDER BY dataValue desc
         ) where rownum &lt;=5
     </select>
@@ -231,16 +231,16 @@ select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
         select *from
         (select SUM(a.Fnc_Ast_Bal) as dataValue,a.LVL1_BR as bankCode
         from DLA_RPT_R_AST_SCL a
-        where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+        where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') and a.LVL1_BR!='9940'
         GROUP BY a.LVL1_BR ORDER BY dataValue asc
         ) where rownum &lt;=5
     </select>
 
     <select id="getFinAssThreeMonKline" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
 select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
-        (select data_dt,sum(Fnc_Ast_Bal) count from DLA_RPT_R_AST_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -1) and  sysdate GROUP BY data_dt ) t2
+        (select data_dt,sum(Fnc_Ast_Bal) count from DLA_RPT_R_AST_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -3) and  sysdate GROUP BY data_dt ) t2
          inner join
-        (select data_dt,sum(Fnc_Ast_Bal) count from DLA_RPT_R_AST_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -1) and  sysdate GROUP BY data_dt ) t1 --jintian
+        (select data_dt,sum(Fnc_Ast_Bal) count from DLA_RPT_R_AST_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -3) and  sysdate GROUP BY data_dt ) t1 --jintian
         on t1.data_dt = t2.data_dt+1  order BY t1.data_dt asc
     </select>
 
@@ -262,7 +262,7 @@ select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
         select *from
         (select SUM(a.NON_DEP_AST_TD_INCR) as dataValue,a.LVL1_BR as bankCode
         from DLA_RPT_R_AST_SCL a
-        where  to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+        where  to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') and a.LVL1_BR!='9940'
         GROUP BY a.LVL1_BR ORDER BY dataValue desc
         ) where rownum &lt;=5
     </select>
@@ -271,7 +271,7 @@ select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
         select *from
         (select SUM(a.NON_DEP_AST_TD_INCR) as dataValue,a.LVL1_BR as bankCode
         from DLA_RPT_R_AST_SCL a
-        where  to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+        where  to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') and a.LVL1_BR!='9940'
         GROUP BY a.LVL1_BR ORDER BY dataValue asc
         ) where rownum &lt;=5
     </select>
@@ -280,7 +280,7 @@ select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
         select *from
         (select SUM(a.NON_DEP_AST_BAL) as dataValue,a.LVL1_BR as bankCode
         from DLA_RPT_R_AST_SCL a
-        where  to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+        where  to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') and a.LVL1_BR!='9940'
         GROUP BY a.LVL1_BR ORDER BY dataValue desc
         ) where rownum &lt;=5
     </select>
@@ -289,16 +289,16 @@ select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
        select *from
         (select SUM(a.NON_DEP_AST_BAL) as dataValue,a.LVL1_BR as bankCode
         from DLA_RPT_R_AST_SCL a
-        where  to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+        where  to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') and a.LVL1_BR!='9940'
         GROUP BY a.LVL1_BR ORDER BY dataValue asc
         ) where rownum &lt;=5
     </select>
 
     <select id="getNonDepThreeMonKline" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
 	    select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
-        (select data_dt,sum(Non_Dep_Ast_Bal) count from DLA_RPT_R_AST_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -1) and  sysdate GROUP BY data_dt ) t2
+        (select data_dt,sum(Non_Dep_Ast_Bal) count from DLA_RPT_R_AST_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -3) and  sysdate GROUP BY data_dt ) t2
          inner join
-        (select data_dt,sum(Non_Dep_Ast_Bal) count from DLA_RPT_R_AST_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -1) and  sysdate GROUP BY data_dt ) t1 --jintian
+        (select data_dt,sum(Non_Dep_Ast_Bal) count from DLA_RPT_R_AST_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -3) and  sysdate GROUP BY data_dt ) t1 --jintian
         on t1.data_dt = t2.data_dt+1  order BY t1.data_dt asc
     </select>
 
@@ -328,7 +328,7 @@ select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
         FOR_EXCH_SALE_OUT) as depOut,
         Lvl1_Br as bankCode
         from DLA_RPT_DEP_FUND_INCOME_PAY
-        where to_char(date_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') and lvl1_br!='9900'
+        where to_char(date_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') and lvl1_br!='9900'  and LVL1_BR!='9940'
         GROUP by lvl1_br
 
     </select>
@@ -337,8 +337,8 @@ select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
     <select id="getdepInc" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
 
         SELECT v2.sum2-v1.sum1  as dataValue,v1.bankCode1 as bankCode from
-        (select sum(a.dep_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') GROUP BY a.LVL1_BR) v1,
-        (select b.dep_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where b.dt = to_char(sysdate,'yyyymmdd') ) v2
+        (select sum(a.dep_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') and a.LVL1_BR!='9940' GROUP BY a.LVL1_BR) v1,
+        (select b.dep_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where b.dt = to_char(sysdate,'yyyymmdd') and b.org!='9940') v2
         where v1.bankCode1 = v2.bankCode2  ORDER BY dataValue desc
 
     </select>
@@ -356,8 +356,8 @@ select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
     <select id="getLoanInc" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
 
         SELECT v2.sum2-v1.sum1  as dataValue,v1.bankCode1 as bankCode from
-        (select sum(a.loan_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') GROUP BY a.LVL1_BR) v1,
-        (select b.loan_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where b.dt=to_char(sysdate,'yyyymmdd') ) v2
+        (select sum(a.loan_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') and a.LVL1_BR!='9940' GROUP BY a.LVL1_BR) v1,
+        (select b.loan_bal as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where b.dt=to_char(sysdate,'yyyymmdd') and b.org!='9940') v2
         where v1.bankCode1 = v2.bankCode2  ORDER BY dataValue desc
 
     </select>
@@ -374,14 +374,14 @@ select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
     <select id="getFinAssBal" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
         select SUM(a.Fnc_Ast_Bal) as dataValue,a.LVL1_BR as bankCode
         from DLA_RPT_R_AST_SCL a
-        where  to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+        where  to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') and a.LVL1_BR!='9940'
          GROUP BY a.LVL1_BR ORDER BY dataValue desc
     </select>
 
     <select id="getNonDepBal" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
         select SUM(a.NON_DEP_AST_BAL) as dataValue,a.LVL1_BR as bankCode
         from DLA_RPT_R_AST_SCL a
-        where  to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd')
+        where  to_char(a.data_dt,'yyyy-mm-dd')=to_char(sysdate-1,'yyyy-mm-dd') and a.LVL1_BR!='9940'
          GROUP BY a.LVL1_BR ORDER BY dataValue desc
 
     </select>

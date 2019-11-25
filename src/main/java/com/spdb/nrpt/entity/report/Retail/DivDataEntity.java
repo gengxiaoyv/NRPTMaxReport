@@ -22,13 +22,13 @@ public class DivDataEntity {
 
     private List<RetailReport2PO> trendData;//趋势图
 
-    private Double balance;//存款余额
+    private Long balance;//存款余额
 
-    private Double depOrLoanIncr;//存款/贷款增量
+    private Long depOrLoanIncr;//存款/贷款增量
 
-    private Double thanMonthBegin;//较月初
+    private Long thanMonthBegin;//较月初
 
-    private Double thanYearBegin;//较年初
+    private Long thanYearBegin;//较年初
 
     private List<RetailReport2PO> balMapData;//余额地图数据
 

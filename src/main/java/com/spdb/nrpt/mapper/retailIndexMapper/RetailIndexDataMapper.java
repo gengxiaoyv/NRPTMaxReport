@@ -34,13 +34,13 @@ public interface RetailIndexDataMapper {
     //获取个人存款地图数据
 
     //个人存款增量和
-    Double getdepIncSum();
+    Long getdepIncSum();
 
     //个人存款比月初比年初
     List<RetailReport2PO> getdepThan();
 
     //个人存款余额和
-    Double getdepBalSum();
+    Long getdepBalSum();
 
 
 
@@ -65,13 +65,13 @@ public interface RetailIndexDataMapper {
 
 
     //个人贷款增量和
-    Double getLoanIncSum();
+    Long getLoanIncSum();
 
     //个人贷款比月初比年初
     List<RetailReport2PO> getLoanThan();
 
     //个人贷款余额和
-    Double getLoanBalSum();
+    Long getLoanBalSum();
 
 
     //个人金融资产增量排名前五

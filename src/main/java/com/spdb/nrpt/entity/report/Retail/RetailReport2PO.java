@@ -14,7 +14,7 @@ import java.util.Date;
 //@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class RetailReport2PO {
 
-    private Double dataValue;
+    private Long dataValue;
 
     private String bankName;
 
@@ -26,13 +26,13 @@ public class RetailReport2PO {
 
     private Date dataDate;//数据日期
 
-    private Double thanMonthBegin;//比月初
-    private Double thanYearBegin;//比年初
-    private Double incr;//增量
-    private Double balance;//余额
+    private Long thanMonthBegin;//比月初
+    private Long thanYearBegin;//比年初
+    private Long incr;//增量
+    private Long balance;//余额
 
-    private Double yestdata;
-    private Double todaydata;
+    private Long yestdata;
+    private Long todaydata;
 
     private String provinceName;//省份名
 
