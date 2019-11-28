@@ -1,5 +1,6 @@
 package com.spdb.nrpt.entity.report.RetailCustomerView;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ public class RetailCustomerBaseData {
 
     private String index_name;//指标名
     private Long amt;//数字值
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date data_date;//日期
     private String dims4;//选项名 如12-13岁  r1等级等
     private String org_id;//编号名

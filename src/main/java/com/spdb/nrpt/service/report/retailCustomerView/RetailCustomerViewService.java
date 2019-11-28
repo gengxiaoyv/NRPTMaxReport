@@ -42,7 +42,7 @@ public class RetailCustomerViewService {
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println(onlyGetDay(getLastDay(new Date())));
+        System.out.println(getMonth(new Date()));
     }
 
     public static Date getLastMonth(Date date) {
@@ -57,12 +57,14 @@ public class RetailCustomerViewService {
     }
 
 
-    public Date getLastMonthLastDay() throws Exception {
+    public static Date getLastMonthLastDay(Date date) throws Exception {
         Calendar cale = Calendar.getInstance();
+        cale.setTime(date);
         cale.set(Calendar.DAY_OF_MONTH, 0);//设置为1号,当前日期既为本月第一天
         return onlyGetDay(cale.getTime());
 
     }
+
 
     public static Date onlyGetDay(Date date) throws Exception {
 
@@ -84,6 +86,15 @@ public class RetailCustomerViewService {
 
         return cal.getTime();
     }
+
+    public static int getMonth(Date date){
+        Calendar calendar = Calendar.getInstance();
+        int month = calendar.get(Calendar.MONTH)+1;
+        System.out.println("当前月份"+month);
+        return month;
+    }
+
+
 
     //磁贴数据
 
@@ -323,7 +334,10 @@ public class RetailCustomerViewService {
         requestVO.setIndex_name("账户情况_客户数");
         Double percent = retailCustomerViewMapper.selectCustPercent(requestVO);
         retailCustomResponseData.setCustPercent(percent);
-
+        if (percent==null||percent==0){
+            requestVO.setData_date(onlyGetDay(getLastDay(getLastDay(new Date()))));
+            retailCustomResponseData.setCustPercent(retailCustomerViewMapper.selectCustPercent(requestVO));
+        }
 
         //查询较上月净增客户数
         requestVO.setIndex_name("客户趋势_较上月净增");
@@ -337,17 +351,30 @@ public class RetailCustomerViewService {
 
 
         //年初私行基准线  若传来的日期为月末，说明当天是一号，则传一号的日期 ，
-        requestVO.setData_date(onlyGetDay(new Date()));
-        System.out.println("========时间" + onlyGetDay(new Date()).toString());
-        requestVO.setIndex_name("客户情况及趋势_客户数");
-        Long yearLine = retailCustomerViewMapper.getYearBeginLine(requestVO);
-        retailCustomResponseData.setYearDatLine(yearLine);
+        if (requestVO.getDims3()=="1"||requestVO.getDims3().equals("1")){
+            retailCustomResponseData.setYearDatLine(0L);
+        }else {
+            requestVO.setData_date(onlyGetDay(new Date()));
+            System.out.println("========时间" + onlyGetDay(new Date()).toString());
+            requestVO.setIndex_name("客户情况及趋势_客户数");
+            Long yearLine = retailCustomerViewMapper.getYearBeginLine(requestVO);
+            retailCustomResponseData.setYearDatLine(yearLine);
+        }
+
 
         //月初私行基准线   直接获取到當前時間上个月最后一天
-        requestVO.setData_date(getLastMonthLastDay());
-        requestVO.setIndex_name("客户情况及趋势_客户数");
-        Long monthLine = retailCustomerViewMapper.getMonthBeginLine(requestVO);
-        retailCustomResponseData.setMonthDatLine(monthLine);
+
+        //判断是不是一月并且是新开客户   如果是一月且新开客户  则月初基准线也设为0
+        if (requestVO.getDims3().equals("1")&&getMonth(new Date())==1){
+            retailCustomResponseData.setMonthDatLine(0L);
+
+        }else {
+            requestVO.setData_date(getLastMonthLastDay(new Date()));
+            requestVO.setIndex_name("客户情况及趋势_客户数");
+            Long monthLine = retailCustomerViewMapper.getMonthBeginLine(requestVO);
+            retailCustomResponseData.setMonthDatLine(monthLine);
+        }
+
 
         return retailCustomResponseData;
 
@@ -415,25 +442,30 @@ public class RetailCustomerViewService {
             Long increThanYearBegin = retailCustomerViewMapper.getincrthan(requestVO);
             retailCustomerBaseData.setIncrThanYearBegin(increThanYearBegin);
 
-//            //该月该分层客户流失率
-//            requestVO.setIndex_name("流失率");
-//            Double lossPercent = retailCustomerViewMapper.selectCustLossPercent(requestVO);
-            retailCustomerBaseData.setLossPercent(0.12);//todo
-
+            //该月该分层客户流失率
+            requestVO.setIndex_name("流失率");
+            Double lossPercent = retailCustomerViewMapper.selectCustLossPercent(requestVO);
+//            retailCustomerBaseData.setLossPercent(0.12);//todo
+            retailCustomerBaseData.setLossPercent(lossPercent);
 
         }
         retailCustomResponseData.setRetailCustomerBaseDataList(retailCustomerBaseDataList);
 
 
-        //年初私行基准线  若传来的日期为月末，说明当天是一号，则传一号的日期 ，
-        requestVO.setData_date(onlyGetDay(new Date()));
-        System.out.println("========时间" + onlyGetDay(new Date()).toString());
-        requestVO.setIndex_name("客户情况及趋势_客户数");
-        Long yearLine = retailCustomerViewMapper.getYearBeginLine(requestVO);
-        retailCustomResponseData.setYearDatLine(yearLine);
+        if (requestVO.getDims3()=="1"||requestVO.getDims3().equals("1")){
+            retailCustomResponseData.setYearDatLine(0L);
+        }else {
+            //年初私行基准线  若传来的日期为月末，说明当天是一号，则传一号的日期 ，
+            requestVO.setData_date(onlyGetDay(new Date()));
+            System.out.println("========时间" + onlyGetDay(new Date()).toString());
+            requestVO.setIndex_name("客户情况及趋势_客户数");
+            Long yearLine = retailCustomerViewMapper.getYearBeginLine(requestVO);
+            retailCustomResponseData.setYearDatLine(yearLine);
+        }
+
 
         //月初私行基准线   直接获取到上个月最后一天
-        requestVO.setData_date(getLastMonthLastDay());
+        requestVO.setData_date(getLastMonthLastDay(getLastMonthLastDay(new Date())));
         requestVO.setIndex_name("客户情况及趋势_客户数");
         Long monthLine = retailCustomerViewMapper.getMonthBeginLine(requestVO);
         retailCustomResponseData.setMonthDatLine(monthLine);

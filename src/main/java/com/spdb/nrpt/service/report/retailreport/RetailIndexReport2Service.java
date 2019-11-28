@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -49,12 +50,15 @@ report2POList= retailIndexDataMapper.getdepInAndOut();
     //个人存款 个人贷款   个人金融资产   非存资产等
     public List<PageDataEntity> getScreen2Data(){
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM.dd");
+        String date = simpleDateFormat.format(new Date());
+        System.out.println(new Date());
         List<PageDataEntity> pageDataEntityList = new ArrayList<>();
 
         PageDataEntity pageDataEntityFin = new PageDataEntity();
         pageDataEntityFin.setDivdata(getFinancialAssetsPage());
         pageDataEntityFin.setPageName("个人金融资产");
-        pageDataEntityFin.setPageDescription("T+1");
+        pageDataEntityFin.setPageDescription(date);
         pageDataEntityList.add(pageDataEntityFin);
 
         PageDataEntity pageDataEntityDep = new PageDataEntity();
@@ -75,7 +79,7 @@ report2POList= retailIndexDataMapper.getdepInAndOut();
         PageDataEntity pageDataEntityNon = new PageDataEntity();
         pageDataEntityNon.setDivdata(getNoRetainedAssetsPage());
         pageDataEntityNon.setPageName("非存资产");
-        pageDataEntityNon.setPageDescription("（不含汇理财）T+1");
+        pageDataEntityNon.setPageDescription("（不含汇理财）"+date);
         pageDataEntityList.add(pageDataEntityNon);
 
 
@@ -85,7 +89,7 @@ report2POList= retailIndexDataMapper.getdepInAndOut();
 
 
     //获取个人存款下所有div内容
-    public DivDataEntity getDepositPage(){
+    public DivDataEntity getDepositPage1(){
 
 
         DivDataEntity divDataEntity = new DivDataEntity();
@@ -119,6 +123,66 @@ report2POList= retailIndexDataMapper.getdepInAndOut();
 
 
             //地图数据  todo
+            addTrendDataList(KlineList,trendList);
+            divDataEntity.setKline(KlineList);
+
+        }catch (Exception e){
+
+
+            log.info("获取个人存款div出错================================"+e.getMessage());
+            log.error("获取个人存款信息出错=====================",e.getMessage(),e);
+            return addnullDiv();
+
+
+        }
+
+        return divDataEntity;
+//        return new DivDataEntity();
+    }
+
+    //获取个人存款下所有div内容
+    public DivDataEntity getDepositPage(){
+
+
+        DivDataEntity divDataEntity = new DivDataEntity();
+
+        try{
+//
+//            List<RetailReport2PO> balMapData = retailIndexDataMapper.getDepBal();
+//            List<RetailReport2PO> incMapData = retailIndexDataMapper.getdepInc();
+//
+//            List<RetailReport2PO> incTopFive = incMapData.subList(0,5);
+//            List<RetailReport2PO> incLastFive = incMapData.subList(incMapData.size()-5,incMapData.size());
+//            List<RetailReport2PO> balTopFive = balMapData.subList(0,5);
+//            List<RetailReport2PO> balLastFive = balMapData.subList(balMapData.size());
+            divDataEntity.setIncrTopFive(addbranName(retailIndexDataMapper.getdepIncTopFive()));
+            divDataEntity.setIncrLastFive(addbranName(retailIndexDataMapper.getdepIncLastFive()));
+            divDataEntity.setBalanceTopFive(addbranName(retailIndexDataMapper.getDepBalTopFive()));
+            divDataEntity.setBalanceLastFive(addbranName(retailIndexDataMapper.getDepBalLastFive()));
+
+
+            divDataEntity.setBalMapData(addProvinceName(retailIndexDataMapper.getDepBal()));
+            divDataEntity.setIncMapData(addProvinceName(retailIndexDataMapper.getdepInc()));
+            //比月初比年初
+            List<RetailReport2PO> retailReport2POS = retailIndexDataMapper.getdepThan();
+
+            if (retailReport2POS.size()!=0&&retailReport2POS!=null){
+                RetailReport2PO report2POthan = retailReport2POS.get(0);
+                if (report2POthan!=null){
+                    divDataEntity.setThanMonthBegin(tobill(report2POthan.getThanMonthBegin()));
+                    divDataEntity.setThanYearBegin(tobill(report2POthan.getThanYearBegin()));
+                }
+
+            }
+            divDataEntity.setDepOrLoanIncr(tobill(retailIndexDataMapper.getdepIncSum()));
+            divDataEntity.setBalance(tobill(retailIndexDataMapper.getdepBalSum()));
+
+
+
+            //组合K线图和趋势图
+            List<RetailReport2PO> KlineList = retailIndexDataMapper.getdepThreeMonKline();
+            List<RetailReport2PO> trendList = retailIndexDataMapper.getdepThreeMonTrend();
+
             addTrendDataList(KlineList,trendList);
             divDataEntity.setKline(KlineList);
 

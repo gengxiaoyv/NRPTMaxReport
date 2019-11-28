@@ -36,7 +36,7 @@
     </select>
 
     <select id="getSexAgeRankData" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData">
-        select amt,dims4 from S_RT_CST_ECHARTS
+        select sum(amt) as amt,dims4 from S_RT_CST_ECHARTS
         <where>
             <if test="index_name != null and index_name != ''">
                 and index_name = #{index_name}
@@ -57,6 +57,7 @@
                 and dims4 != #{dims4}
             </if>
         </where>
+        group by dims4
 
     </select>
 
@@ -137,7 +138,7 @@
     <!-- 近三十天趋势-->
 
     <select id="selectOneMonthTrend" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData">
-        select amt,data_date from S_RT_CST_ECHARTS
+        select sum(amt) as amt,data_date from S_RT_CST_ECHARTS
         <where>
             <if test="index_name != null and index_name != ''">
                 and index_name = #{index_name}
@@ -158,6 +159,7 @@
                 and data_date between add_months(#{data_date},-1) and #{data_date}
             </if>
         </where>
+        group by data_date
         order by data_date asc
     </select>
 
@@ -271,7 +273,7 @@
     <!-- 近一年趋势-->
 
     <select id="selectOneYearTrend" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData">
-        select amt,data_date from S_RT_CST_ECHARTS
+        select sum(amt) as amt,data_date from S_RT_CST_ECHARTS
         <where>
             <if test="index_name != null and index_name != ''">
                 and index_name = #{index_name}
@@ -292,6 +294,7 @@
                 and data_date between add_months(#{data_date},-12) and #{data_date}
             </if>
         </where>
+        group by data_date
         order by data_date asc
     </select>
 
@@ -377,7 +380,7 @@
 
     <!--一类二类等卡账号下分层客户数信息-->
     <select id="getAssetsSlice" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerBaseData">
-        select amt,dims4 from S_RT_CST_ECHARTS
+        select sum(amt) as amt,dims4 from S_RT_CST_ECHARTS
         <where>
             <if test="index_name != null and index_name != ''">
                 and index_name = #{index_name}
@@ -400,6 +403,7 @@
             and dims5!='4' and dims4!='7'
         </where>
 
+        group by dims4
 
     </select>
 
@@ -439,7 +443,7 @@
     <!--一年趋势图中的每月的流失率-->
 
     <select id="selectCustLossPercent" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="java.lang.Double">
-        select amt/amt1 from S_ORG_OS_RBB_CST_MG_ST_MODEL
+        select sum(amt/amt1) from S_ORG_OS_RBB_CST_MG_ST_MODEL
         <where>
             <if test="index_name != null and index_name != ''">
                 and index_name = #{index_name}
@@ -460,6 +464,7 @@
                 and dims2 = #{dims4}
             </if>
         </where>
+        group by dims2
 
     </select>
 
