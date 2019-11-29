@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -21,6 +22,12 @@ public class RetailIndexReport2Service {
 
     @Autowired
     private RetailIndexDataMapper retailIndexDataMapper;
+
+
+    public static String toWestNumFormat(long number) {
+        DecimalFormat df = new DecimalFormat("#,###");
+        return df.format(number);
+    }
 
 
     //存款流入流出  todo
@@ -51,7 +58,7 @@ report2POList= retailIndexDataMapper.getdepInAndOut();
     public List<PageDataEntity> getScreen2Data(){
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM.dd");
-        String date = simpleDateFormat.format(new Date());
+        String date = simpleDateFormat.format(retailIndexDataMapper.getMaxDate());
         System.out.println(new Date());
         List<PageDataEntity> pageDataEntityList = new ArrayList<>();
 
@@ -99,11 +106,10 @@ report2POList= retailIndexDataMapper.getdepInAndOut();
             divDataEntity.setIncrLastFive(addbranName(retailIndexDataMapper.getdepIncLastFive()));
             divDataEntity.setBalanceTopFive(addbranName(retailIndexDataMapper.getDepBalTopFive()));
             divDataEntity.setBalanceLastFive(addbranName(retailIndexDataMapper.getDepBalLastFive()));
-            divDataEntity.setBalMapData(addProvinceName(retailIndexDataMapper.getDepBal()));
-            divDataEntity.setIncMapData(addProvinceName(retailIndexDataMapper.getdepInc()));
+
+
             //比月初比年初
             List<RetailReport2PO> retailReport2POS = retailIndexDataMapper.getdepThan();
-
             if (retailReport2POS.size()!=0&&retailReport2POS!=null){
                 RetailReport2PO report2POthan = retailReport2POS.get(0);
                 if (report2POthan!=null){
@@ -120,11 +126,13 @@ report2POList= retailIndexDataMapper.getdepInAndOut();
             //组合K线图和趋势图
             List<RetailReport2PO> KlineList = retailIndexDataMapper.getdepThreeMonKline();
             List<RetailReport2PO> trendList = retailIndexDataMapper.getdepThreeMonTrend();
-
-
-            //地图数据  todo
             addTrendDataList(KlineList,trendList);
             divDataEntity.setKline(KlineList);
+
+
+            //地图数据
+            divDataEntity.setBalMapData(addProvinceName(retailIndexDataMapper.getDepBal()));
+            divDataEntity.setIncMapData(addProvinceName(retailIndexDataMapper.getdepInc()));
 
         }catch (Exception e){
 

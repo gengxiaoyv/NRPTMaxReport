@@ -4,6 +4,7 @@ import com.spdb.nrpt.entity.report.Retail.RetailReport2PO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -134,5 +135,8 @@ public interface RetailIndexDataMapper {
     List<RetailReport2PO> getFinAssBal();
 
     List<RetailReport2PO> getNonDepBal();
+
+
+    Date getMaxDate();
 
 }
