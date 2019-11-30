@@ -92,12 +92,71 @@
     </select>
     <!--存款比月初&比年初-->
 
-    <select id="getdepThan" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
-         select sum(a.Dep_Bal_Cbm) as thanMonthBegin,sum(a.Dep_Bal_Cby) as thanYearBegin
-      from DLA_RPT_R_DEP_LOAN_SCL a where a.data_dt=(select max(data_dt) from DLA_RPT_R_DEP_LOAN_SCL where LVL1_BR = a.LVL1_BR) and a.LVL1_BR!='9900'  and a.LVL1_BR!='9940'
+    <!--<select id="getdepThan" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">-->
+         <!--select sum(a.Dep_Bal_Cbm) as thanMonthBegin,sum(a.Dep_Bal_Cby) as thanYearBegin-->
+      <!--from DLA_RPT_R_DEP_LOAN_SCL a where a.data_dt=(select max(data_dt) from DLA_RPT_R_DEP_LOAN_SCL where LVL1_BR = a.LVL1_BR) and a.LVL1_BR!='9900'  and a.LVL1_BR!='9940'-->
+    <!--</select>-->
+
+    <!--<select id="getdepThan" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">-->
+<!--select sum(thanMonthBegin) as thanMonthBegin,sum(thanYearBegin) as thanYearBegin FROM(-->
+<!--SELECT-->
+	<!--v2.sum2 - v1.sum1 AS thanMonthBegin,-->
+	<!--v2.sum2 - v3.sum3 AS thanYearBegin,-->
+	<!--v1.bankCode1 AS bankCode-->
+<!--FROM-->
+	<!--(SELECT b.dep_bal AS sum2,b.org AS bankCode2 FROM  DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b   WHERE-->
+	  <!--b.dt = ( SELECT max( dt ) FROM DLA_RPT_R_DEP_LOAN_SCL_RT_ANL WHERE org = b.org ) AND b.org != '9940'-->
+	<!--) v2-->
+	<!--INNER JOIN-->
+	<!--( SELECT  sum( a.dep_bal ) AS sum1,  a.LVL1_BR AS bankCode1   FROM DLA_RPT_R_DEP_LOAN_SCL a  WHERE  a.data_dt = LAST_DAY( ADD_MONTHS ( ( SELECT max( data_dt ) FROM DLA_RPT_R_DEP_LOAN_SCL ),- 1 ) )-->
+	<!--AND a.LVL1_BR != '9940' AND a.LVL1_BR != '9900'   GROUP BY a.LVL1_BR   ) v1-->
+	 <!--ON v1.bankCode1 = v2.bankCode2-->
+	<!--INNER JOIN-->
+	 <!--(SELECT sum( c.dep_bal ) AS sum3,	c.LVL1_BR AS bankCode3 FROM	DLA_RPT_R_DEP_LOAN_SCL c WHERE	c.data_dt = to_date ( to_char ( ( SELECT max( data_dt ) FROM DLA_RPT_R_DEP_LOAN_SCL ), 'yyyy' ) - 1 || '1231', 'yyyy-mm-dd' )-->
+	  <!--AND c.LVL1_BR != '9940' 	AND c.LVL1_BR != '9900' GROUP BY	c.LVL1_BR ) v3-->
+	  <!--ON v2.bankCode2 = v3.bankCode3)-->
+    <!--</select>-->
+    <!---->
+    <select id="getdepThanYear" resultType="java.lang.Long">
+select sum(s_1 ) from (
+
+SELECT  v1.bankCode1 ,sum(coalesce(v1.sum1,0)) as s1 ,sum(coalesce(v2.sum2,0)) as s2,sum(coalesce(v2.sum2,0)) -sum(coalesce(v1.sum1,0)) as s_1 from
+        (select sum(a.dep_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where a.data_dt = to_date ( to_char ( ( SELECT max( data_dt ) FROM DLA_RPT_R_DEP_LOAN_SCL ), 'yyyy' ) - 1 || '1231', 'yyyy-mm-dd' )
+ AND a.LVL1_BR != '9900'   GROUP BY a.LVL1_BR) v1
+
+left join             (select sum(b.dep_bal) as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where b.dt=to_char(sysdate,'yyyymmdd') and org in ('3200','3300','3400','3500','3600','3700','4300','4500','4800','5800','5900','6000','6100','6300','6400','6500','6600','6800','6900','7000','7100','7200','7300'
+
+,'7400','7500','7600','7700','7800','7900','8200','8300','8900','9100','9300','9400','9500','9800') group by org
+
+
+) v2 on v1.bankCode1 = v2.bankCode2
+
+group by v1.bankCode1
+
+)t1
+
+
     </select>
 
-    <select id=""  resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO"></select>
+    <select id="getdepThanMonth" resultType="java.lang.Long">
+select sum(s_1 ) from (
+
+SELECT  v1.bankCode1 ,sum(coalesce(v1.sum1,0)) as s1 ,sum(coalesce(v2.sum2,0)) as s2,sum(coalesce(v2.sum2,0)) -sum(coalesce(v1.sum1,0)) as s_1 from
+        (select sum(a.dep_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where a.data_dt = LAST_DAY( ADD_MONTHS ( ( SELECT max( data_dt ) FROM DLA_RPT_R_DEP_LOAN_SCL ),- 1 ) )
+ AND a.LVL1_BR != '9900'   GROUP BY a.LVL1_BR) v1
+
+left join   (select sum(b.dep_bal) as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where b.dt=to_char(sysdate,'yyyymmdd') and org in ('3200','3300','3400','3500','3600','3700','4300','4500','4800','5800','5900','6000','6100','6300','6400','6500','6600','6800','6900','7000','7100','7200','7300'
+
+,'7400','7500','7600','7700','7800','7900','8200','8300','8900','9100','9300','9400','9500','9800') group by org
+
+
+
+) v2 on v1.bankCode1 = v2.bankCode2
+
+group by v1.bankCode1
+
+)t1
+    </select>
 
     <!--===================贷款===========================================================================-->
     <!--贷款增量前五-->
@@ -191,12 +250,71 @@ select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
     </select>
     <!--贷款比月初&比年初-->
 
-    <select id="getLoanThan" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
-         select sum(a.Loan_Bal_Cbm) as thanMonthBegin,sum(a.Loan_Bal_Cby) as thanYearBegin
-      from DLA_RPT_R_DEP_LOAN_SCL a where a.data_dt=(select max(data_dt) from DLA_RPT_R_DEP_LOAN_SCL where LVL1_BR = a.LVL1_BR) and a.LVL1_BR!='9940' and a.LVL1_BR!='9900'
+    <!--<select id="getLoanThan" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">-->
+         <!--select sum(a.Loan_Bal_Cbm) as thanMonthBegin,sum(a.Loan_Bal_Cby) as thanYearBegin-->
+      <!--from DLA_RPT_R_DEP_LOAN_SCL a where a.data_dt=(select max(data_dt) from DLA_RPT_R_DEP_LOAN_SCL where LVL1_BR = a.LVL1_BR) and a.LVL1_BR!='9940' and a.LVL1_BR!='9900'-->
+    <!--</select>-->
+    <!--<select id="getLoanThan" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">-->
+    <!--select sum(thanMonthBegin) as thanMonthBegin,sum(thanYearBegin) as thanYearBegin FROM(-->
+    <!--SELECT-->
+	<!--v2.sum2 - v1.sum1 AS thanMonthBegin,-->
+	<!--v2.sum2 - v3.sum3 AS thanYearBegin,-->
+	<!--v1.bankCode1 AS bankCode-->
+<!--FROM-->
+	<!--(SELECT b.loan_bal AS sum2,b.org AS bankCode2 FROM  DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b   WHERE-->
+	  <!--b.dt = ( SELECT max( dt ) FROM DLA_RPT_R_DEP_LOAN_SCL_RT_ANL WHERE org = b.org ) AND b.org != '9940'-->
+	<!--) v2-->
+	<!--INNER JOIN-->
+	<!--( SELECT  sum( a.loan_bal ) AS sum1,  a.LVL1_BR AS bankCode1   FROM DLA_RPT_R_DEP_LOAN_SCL a  WHERE  a.data_dt = LAST_DAY( ADD_MONTHS ( ( SELECT max( data_dt ) FROM DLA_RPT_R_DEP_LOAN_SCL ),- 1 ) )-->
+	<!--AND a.LVL1_BR != '9940' AND a.LVL1_BR != '9900'   GROUP BY a.LVL1_BR   ) v1-->
+	 <!--ON v1.bankCode1 = v2.bankCode2-->
+	<!--INNER JOIN-->
+	 <!--(SELECT sum( c.loan_bal ) AS sum3,	c.LVL1_BR AS bankCode3 FROM	DLA_RPT_R_DEP_LOAN_SCL c WHERE	c.data_dt = to_date ( to_char ( ( SELECT max( data_dt ) FROM DLA_RPT_R_DEP_LOAN_SCL ), 'yyyy' ) - 1 || '1231', 'yyyy-mm-dd' )-->
+	  <!--AND c.LVL1_BR != '9940' 	AND c.LVL1_BR != '9900' GROUP BY	c.LVL1_BR ) v3-->
+	  <!--ON v2.bankCode2 = v3.bankCode3)-->
+    <!--</select>-->
+    <select id="getLoanThanYear" resultType="java.lang.Long">
+
+select sum(s_1 ) from (
+
+SELECT  v1.bankCode1 ,sum(coalesce(v1.sum1,0)) as s1 ,sum(coalesce(v2.sum2,0)) as s2,sum(coalesce(v2.sum2,0)) -sum(coalesce(v1.sum1,0)) as s_1 from
+        (select sum(a.loan_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where a.data_dt = to_date ( to_char ( ( SELECT max( data_dt ) FROM DLA_RPT_R_DEP_LOAN_SCL ), 'yyyy' ) - 1 || '1231', 'yyyy-mm-dd' )
+ AND a.LVL1_BR != '9900'   GROUP BY a.LVL1_BR) v1
+
+left join             (select sum(b.loan_bal) as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where b.dt=to_char(sysdate,'yyyymmdd') and org in ('3200','3300','3400','3500','3600','3700','4300','4500','4800','5800','5900','6000','6100','6300','6400','6500','6600','6800','6900','7000','7100','7200','7300'
+
+,'7400','7500','7600','7700','7800','7900','8200','8300','8900','9100','9300','9400','9500','9800') group by org
+
+
+) v2 on v1.bankCode1 = v2.bankCode2
+
+group by v1.bankCode1
+
+)t1
+
     </select>
 
 
+    <select id="getLoanThanMonth" resultType="java.lang.Long">
+select sum(s_1 ) from (
+
+SELECT  v1.bankCode1 ,sum(coalesce(v1.sum1,0)) as s1 ,sum(coalesce(v2.sum2,0)) as s2,sum(coalesce(v2.sum2,0)) -sum(coalesce(v1.sum1,0)) as s_1 from
+        (select sum(a.loan_bal) as sum1,a.LVL1_BR as bankCode1 from DLA_RPT_R_DEP_LOAN_SCL a where a.data_dt = LAST_DAY( ADD_MONTHS ( ( SELECT max( data_dt ) FROM DLA_RPT_R_DEP_LOAN_SCL ),- 1 ) )
+ AND a.LVL1_BR != '9900'   GROUP BY a.LVL1_BR) v1
+
+left join             (select sum(b.loan_bal) as sum2,b.org as bankCode2 from DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b where b.dt=to_char(sysdate,'yyyymmdd') and org in ('3200','3300','3400','3500','3600','3700','4300','4500','4800','5800','5900','6000','6100','6300','6400','6500','6600','6800','6900','7000','7100','7200','7300'
+
+,'7400','7500','7600','7700','7800','7900','8200','8300','8900','9100','9300','9400','9500','9800') group by org
+
+
+
+) v2 on v1.bankCode1 = v2.bankCode2
+
+group by v1.bankCode1
+
+)t1
+
+    </select>
     <!--=================金融资产=================-->
 
     <!--金融资产增量排名前五-->
@@ -294,12 +412,14 @@ select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
         ) where rownum &lt;=5
     </select>
 
+    <!--<select id="getNonDepThreeMonKline" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">-->
+    <!--&#45;&#45; 	    select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from-->
+    <!--&#45;&#45;         (select data_dt,sum(Non_Dep_Ast_Bal) count from DLA_RPT_R_AST_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -3) and  sysdate GROUP BY data_dt ) t2-->
+    <!--&#45;&#45;          inner join-->
+    <!--&#45;&#45;         (select data_dt,sum(Non_Dep_Ast_Bal) count from DLA_RPT_R_AST_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -3) and  sysdate GROUP BY data_dt ) t1 &#45;&#45;jintian-->
+    <!--&#45;&#45;         on t1.data_dt = t2.data_dt+1  order BY t1.data_dt asc-->
     <select id="getNonDepThreeMonKline" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
--- 	    select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
---         (select data_dt,sum(Non_Dep_Ast_Bal) count from DLA_RPT_R_AST_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -3) and  sysdate GROUP BY data_dt ) t2
---          inner join
---         (select data_dt,sum(Non_Dep_Ast_Bal) count from DLA_RPT_R_AST_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -3) and  sysdate GROUP BY data_dt ) t1 --jintian
---         on t1.data_dt = t2.data_dt+1  order BY t1.data_dt asc
+
 
  select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
         (select data_dt,sum(Non_Dep_Ast_Bal) count from DLA_RPT_R_AST_SCL where data_dt BETWEEN ADD_MONTHS(sysdate, -3) and  sysdate and LVL1_BR!='9900' and LVL1_BR!='9940' GROUP BY data_dt ) t2
@@ -376,19 +496,20 @@ select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
     </select>
 
 
-
+<!--个人金融资产地图数据-->
     <select id="getFinAssBal" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
-        select SUM(a.Fnc_Ast_Bal) as dataValue,a.LVL1_BR as bankCode
+        select SUM(a.Fnc_Ast_Bal) as balance,a.LVL1_BR as bankCode,sum(a.Fnc_Ast_Bal_Cbm) as thanMonthBegin,sum(a.Fnc_Ast_Bal_Cby) as thanYearBegin
         from DLA_RPT_R_AST_SCL a
         where  a.data_dt=(select max(data_dt) from DLA_RPT_R_AST_SCL where LVL1_BR = a.LVL1_BR) and a.LVL1_BR!='9940'  and a.LVL1_BR!='9900'
-         GROUP BY a.LVL1_BR ORDER BY dataValue desc
+         GROUP BY a.LVL1_BR
     </select>
-
+<!--非存资产地图数据-->
     <select id="getNonDepBal" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
-        select SUM(a.NON_DEP_AST_BAL) as dataValue,a.LVL1_BR as bankCode
+        select SUM(a.NON_DEP_AST_BAL) as balance,a.LVL1_BR as bankCode,sum(a.Non_Dep_Ast_Bal_Cbm) as thanMonthBegin,
+      sum(a.Non_Dep_Ast_Bal_Cby) as thanYearBegin
         from DLA_RPT_R_AST_SCL a
         where  a.data_dt=(select max(data_dt) from DLA_RPT_R_AST_SCL where LVL1_BR = a.LVL1_BR) and a.LVL1_BR!='9940' and a.LVL1_BR!='9900'
-         GROUP BY a.LVL1_BR ORDER BY dataValue desc
+         GROUP BY a.LVL1_BR
 
     </select>
 
@@ -399,7 +520,54 @@ select t1.data_dt as dataDate,t1.count as todaydata,t2.count as  yestdata from
     </select>
 
     <!--获取个人贷款较年初较月初地图数据-->
-    <select id="getdepthan" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+    <!--<select id="getdepthanmap" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">-->
 
+<!--select sum(a.Dep_Bal_Cbm) as thanMonthBegin,sum(a.Dep_Bal_Cby) as thanYearBegin,a.LVL1_BR as bankCode-->
+      <!--from DLA_RPT_R_DEP_LOAN_SCL a where a.data_dt=(select max(data_dt) from DLA_RPT_R_DEP_LOAN_SCL where LVL1_BR = a.LVL1_BR) and a.LVL1_BR!='9940' and a.LVL1_BR!='9900' GROUP BY a.LVL1_BR-->
+    <!--</select>-->
+    <!--<select id="getloanthanmap" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">-->
+<!--select sum(a.Loan_Bal_Cbm) as thanMonthBegin,sum(a.Loan_Bal_Cby) as thanYearBegin,a.LVL1_BR as bankCode-->
+      <!--from DLA_RPT_R_DEP_LOAN_SCL a where a.data_dt=(select max(data_dt) from DLA_RPT_R_DEP_LOAN_SCL where LVL1_BR = a.LVL1_BR) and a.LVL1_BR!='9940' and a.LVL1_BR!='9900' GROUP BY a.LVL1_BR-->
+
+    <!--</select>-->
+
+    <select id="getdepthanmap" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+
+SELECT
+	v2.sum2 - v1.sum1 AS thanMonthBegin,
+	v2.sum2 - v3.sum3 AS thanYearBegin,
+	v1.bankCode1 AS bankCode
+FROM
+	(SELECT b.dep_bal AS sum2,b.org AS bankCode2 FROM  DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b   WHERE
+	  b.dt = ( SELECT max( dt ) FROM DLA_RPT_R_DEP_LOAN_SCL_RT_ANL WHERE org = b.org ) AND b.org != '9940'
+	) v2
+	INNER JOIN
+	( SELECT  sum( a.dep_bal ) AS sum1,  a.LVL1_BR AS bankCode1   FROM DLA_RPT_R_DEP_LOAN_SCL a  WHERE  a.data_dt = LAST_DAY( ADD_MONTHS ( ( SELECT max( data_dt ) FROM DLA_RPT_R_DEP_LOAN_SCL ),- 1 ) )
+	AND a.LVL1_BR != '9940' AND a.LVL1_BR != '9900'   GROUP BY a.LVL1_BR   ) v1
+	 ON v1.bankCode1 = v2.bankCode2
+	INNER JOIN
+	 (SELECT sum( c.dep_bal ) AS sum3,	c.LVL1_BR AS bankCode3 FROM	DLA_RPT_R_DEP_LOAN_SCL c WHERE	c.data_dt = to_date ( to_char ( ( SELECT max( data_dt ) FROM DLA_RPT_R_DEP_LOAN_SCL ), 'yyyy' ) - 1 || '1231', 'yyyy-mm-dd' )
+	  AND c.LVL1_BR != '9940' 	AND c.LVL1_BR != '9900' GROUP BY	c.LVL1_BR ) v3
+	  ON v2.bankCode2 = v3.bankCode3
+  </select>
+    <select id="getloanthanmap" resultType="com.spdb.nrpt.entity.report.Retail.RetailReport2PO">
+SELECT
+	v2.sum2 - v1.sum1 AS thanMonthBegin,
+	v2.sum2 - v3.sum3 AS thanYearBegin,
+	v1.bankCode1 AS bankCode
+FROM
+	(SELECT b.loan_bal AS sum2,b.org AS bankCode2 FROM  DLA_RPT_R_DEP_LOAN_SCL_RT_ANL b   WHERE
+	  b.dt = ( SELECT max( dt ) FROM DLA_RPT_R_DEP_LOAN_SCL_RT_ANL WHERE org = b.org ) AND b.org != '9940'
+	) v2
+	INNER JOIN
+	( SELECT  sum( a.loan_bal ) AS sum1,  a.LVL1_BR AS bankCode1   FROM DLA_RPT_R_DEP_LOAN_SCL a  WHERE  a.data_dt = LAST_DAY( ADD_MONTHS ( ( SELECT max( data_dt ) FROM DLA_RPT_R_DEP_LOAN_SCL ),- 1 ) )
+	AND a.LVL1_BR != '9940' AND a.LVL1_BR != '9900'   GROUP BY a.LVL1_BR   ) v1
+	 ON v1.bankCode1 = v2.bankCode2
+	INNER JOIN
+	 (SELECT sum( c.loan_bal ) AS sum3,	c.LVL1_BR AS bankCode3 FROM	DLA_RPT_R_DEP_LOAN_SCL c WHERE	c.data_dt = to_date ( to_char ( ( SELECT max( data_dt ) FROM DLA_RPT_R_DEP_LOAN_SCL ), 'yyyy' ) - 1 || '1231', 'yyyy-mm-dd' )
+	  AND c.LVL1_BR != '9940' 	AND c.LVL1_BR != '9900' GROUP BY	c.LVL1_BR ) v3
+	  ON v2.bankCode2 = v3.bankCode3
     </select>
+
+
 </mapper>
