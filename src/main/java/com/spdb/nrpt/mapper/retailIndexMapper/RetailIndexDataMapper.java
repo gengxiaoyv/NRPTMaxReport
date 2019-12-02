@@ -38,8 +38,9 @@ public interface RetailIndexDataMapper {
     Long getdepIncSum();
 
     //个人存款比月初比年初
-    List<RetailReport2PO> getdepThan();
-
+//    List<RetailReport2PO> getdepThan();
+Long getdepThanMonth();
+Long getdepThanYear();
     //个人存款余额和
     Long getdepBalSum();
 
@@ -69,8 +70,9 @@ public interface RetailIndexDataMapper {
     Long getLoanIncSum();
 
     //个人贷款比月初比年初
-    List<RetailReport2PO> getLoanThan();
-
+//    List<RetailReport2PO> getLoanThan();
+Long getLoanThanYear();
+Long getLoanThanMonth();
     //个人贷款余额和
     Long getLoanBalSum();
 
@@ -138,5 +140,7 @@ public interface RetailIndexDataMapper {
 
 
     Date getMaxDate();
+    List<RetailReport2PO> getdepthanmap();
+    List<RetailReport2PO> getloanthanmap();
 
 }

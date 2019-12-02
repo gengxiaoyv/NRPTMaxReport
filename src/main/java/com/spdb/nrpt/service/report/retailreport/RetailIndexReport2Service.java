@@ -109,15 +109,17 @@ report2POList= retailIndexDataMapper.getdepInAndOut();
 
 
             //比月初比年初
-            List<RetailReport2PO> retailReport2POS = retailIndexDataMapper.getdepThan();
-            if (retailReport2POS.size()!=0&&retailReport2POS!=null){
-                RetailReport2PO report2POthan = retailReport2POS.get(0);
-                if (report2POthan!=null){
-                    divDataEntity.setThanMonthBegin(tobill(report2POthan.getThanMonthBegin()));
-                    divDataEntity.setThanYearBegin(tobill(report2POthan.getThanYearBegin()));
-                }
-
-            }
+//            List<RetailReport2PO> retailReport2POS = retailIndexDataMapper.getdepThan();
+//            if (retailReport2POS.size()!=0&&retailReport2POS!=null){
+//                RetailReport2PO report2POthan = retailReport2POS.get(0);
+//                if (report2POthan!=null){
+//                    divDataEntity.setThanMonthBegin(tobill(report2POthan.getThanMonthBegin()));
+//                    divDataEntity.setThanYearBegin(tobill(report2POthan.getThanYearBegin()));
+//                }
+//
+//            }
+            divDataEntity.setThanMonthBegin(tobill(retailIndexDataMapper.getdepThanMonth()));
+            divDataEntity.setThanYearBegin(tobill(retailIndexDataMapper.getdepThanYear()));
             divDataEntity.setDepOrLoanIncr(tobill(retailIndexDataMapper.getdepIncSum()));
             divDataEntity.setBalance(tobill(retailIndexDataMapper.getdepBalSum()));
 
@@ -172,16 +174,18 @@ report2POList= retailIndexDataMapper.getdepInAndOut();
             divDataEntity.setBalMapData(addProvinceName(retailIndexDataMapper.getDepBal()));
             divDataEntity.setIncMapData(addProvinceName(retailIndexDataMapper.getdepInc()));
             //比月初比年初
-            List<RetailReport2PO> retailReport2POS = retailIndexDataMapper.getdepThan();
-
-            if (retailReport2POS.size()!=0&&retailReport2POS!=null){
-                RetailReport2PO report2POthan = retailReport2POS.get(0);
-                if (report2POthan!=null){
-                    divDataEntity.setThanMonthBegin(tobill(report2POthan.getThanMonthBegin()));
-                    divDataEntity.setThanYearBegin(tobill(report2POthan.getThanYearBegin()));
-                }
-
-            }
+//            List<RetailReport2PO> retailReport2POS = retailIndexDataMapper.getdepThan();
+//
+//            if (retailReport2POS.size()!=0&&retailReport2POS!=null){
+//                RetailReport2PO report2POthan = retailReport2POS.get(0);
+//                if (report2POthan!=null){
+//                    divDataEntity.setThanMonthBegin(tobill(report2POthan.getThanMonthBegin()));
+//                    divDataEntity.setThanYearBegin(tobill(report2POthan.getThanYearBegin()));
+//                }
+//
+//            }
+            divDataEntity.setThanMonthBegin(tobill(retailIndexDataMapper.getdepThanMonth()));
+            divDataEntity.setThanYearBegin(tobill(retailIndexDataMapper.getdepThanYear()));
             divDataEntity.setDepOrLoanIncr(tobill(retailIndexDataMapper.getdepIncSum()));
             divDataEntity.setBalance(tobill(retailIndexDataMapper.getdepBalSum()));
 
@@ -222,16 +226,18 @@ report2POList= retailIndexDataMapper.getdepInAndOut();
             divDataEntity.setIncMapData(addProvinceName(retailIndexDataMapper.getLoanInc()));
 
             //比月初比年初
-            List<RetailReport2PO> retailReport2POS = retailIndexDataMapper.getLoanThan();
-
-            if (retailReport2POS.size()!=0&&retailReport2POS!=null){
-                RetailReport2PO report2POthan = retailReport2POS.get(0);
-                if (report2POthan!=null){
-                    divDataEntity.setThanMonthBegin(tobill(report2POthan.getThanMonthBegin()));
-                    divDataEntity.setThanYearBegin(tobill(report2POthan.getThanYearBegin()));
-                }
-
-            }
+//            List<RetailReport2PO> retailReport2POS = retailIndexDataMapper.getLoanThan();
+//
+//            if (retailReport2POS.size()!=0&&retailReport2POS!=null){
+//                RetailReport2PO report2POthan = retailReport2POS.get(0);
+//                if (report2POthan!=null){
+//                    divDataEntity.setThanMonthBegin(tobill(report2POthan.getThanMonthBegin()));
+//                    divDataEntity.setThanYearBegin(tobill(report2POthan.getThanYearBegin()));
+//                }
+//
+//            }
+            divDataEntity.setThanYearBegin(tobill(retailIndexDataMapper.getLoanThanYear()));
+            divDataEntity.setThanMonthBegin(tobill(retailIndexDataMapper.getLoanThanMonth()));
             divDataEntity.setDepOrLoanIncr(tobill(retailIndexDataMapper.getLoanIncSum()));
             divDataEntity.setBalance(tobill(retailIndexDataMapper.getLoanBalSum()));
 

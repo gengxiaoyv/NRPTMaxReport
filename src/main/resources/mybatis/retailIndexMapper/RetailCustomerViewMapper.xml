@@ -443,7 +443,7 @@
     <!--一年趋势图中的每月的流失率-->
 
     <select id="selectCustLossPercent" parameterType="com.spdb.nrpt.entity.report.RetailCustomerView.RetailCustomerRequestVO" resultType="java.lang.Double">
-        select sum(amt/amt1) from S_ORG_OS_RBB_CST_MG_ST_MODEL
+        select sum(sum(amt)/sum(amt1)) from S_ORG_OS_RBB_CST_MG_ST_MODEL
         <where>
             <if test="index_name != null and index_name != ''">
                 and index_name = #{index_name}
