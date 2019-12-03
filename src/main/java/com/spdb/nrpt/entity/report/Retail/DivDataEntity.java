@@ -33,6 +33,7 @@ public class DivDataEntity {
     private List<RetailReport2PO> balMapData;//余额地图数据
 
     private List<RetailReport2PO> incMapData;//增量地图数据   只有个人存款跟个人贷款有
+    private List<RetailReport2PO> mapData;//余额地图数据
 
 
 
