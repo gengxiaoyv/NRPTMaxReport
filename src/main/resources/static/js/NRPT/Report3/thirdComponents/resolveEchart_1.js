@@ -38,7 +38,7 @@ function rseolveData(data) {
 
 
 function nextPage() {
-   window.location.href = 'getReport1Page?reportID=Report001'
+   window.location.href = 'getReport1Page_1?reportID=Report001'
 }
 
 function reloadPage1() {
@@ -101,7 +101,7 @@ interVal()
 function request(data) {
     var xmlHttp = new XMLHttpRequest();
     console.log(data)
-    xmlHttp.open("GET", "changeCloud?keyID="+data.keyID, true);
+    xmlHttp.open("GET", "changeCloud_1?keyID="+data.keyID, true);
     xmlHttp.send(null);
 
     xmlHttp.onreadystatechange = function () {
@@ -118,4 +118,4 @@ function request(data) {
 
 //ws('大屏三全部数据',nextPage)
 var data = {}
-publick.funAjax('GET','getReportAllData?key=大屏三全部数据',true,data,rseolveData)
+publick.funAjax('GET','getReportAllData_1?key=大屏三全部数据',true,data,rseolveData)

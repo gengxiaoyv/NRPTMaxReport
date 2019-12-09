@@ -273,7 +273,7 @@
 	<script src="js/NRPT/Report3/thirdComponents/piceChartTwo.js"></script>
 	<script src="js/NRPT/Report3/thirdComponents/picechart.js"></script>
     <script src="js/NRPT/Report3/thirdComponents/resolveData.js"></script>
-	<script src="js/NRPT/Report3/thirdComponents/resolveEchart.js"></script>
+	<script src="js/NRPT/Report3/thirdComponents/resolveEchart_1.js"></script>
 	<script src="js/publickMethods/wesocket.js"></script>
 	
 	<script>
@@ -311,7 +311,7 @@
         var oLeftNumber1 = document.getElementsByClassName("x-bottom-number-1")[0]
         var oLeftNumber2 = document.getElementsByClassName("x-bottom-number-2")[0]
         var oLeftNumber3 = document.getElementsByClassName("x-bottom-number-3")[0]
-        $.get("/nrpt/getThreeindex", function (result) {
+        $.get("/nrpt/getThreeindex_1", function (result) {
             console.log(result)
 			if (result) {
                 oLeftNumber1.innerHTML = toThousands(result[0])

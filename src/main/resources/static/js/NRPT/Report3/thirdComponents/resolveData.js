@@ -113,10 +113,10 @@ var resolveDataMethods = {
         // lastMonth.innerHTML = item.data[1].value
         // lastYear.innerHTML = item.data[2].value
 
-        lastDay.innerHTML = publick.formatNum(item.data[0].value)
-        lastMonth.innerHTML = publick.formatNum(item.data[1].value)
-        lastYear.innerHTML = publick.formatNum(item.data[2].value)
-        console.log(item.data[0].name)
+        lastDay.innerHTML = publick.formatNum( item.data[0] ? item.data[0].value : "0" )
+        lastMonth.innerHTML = publick.formatNum( item.data[1] ? item.data[1].value  : "0")
+        lastYear.innerHTML = publick.formatNum( item.data[2] ? item.data[2].value : "0" )
+        // console.log(item.data[0].name)
 
         //排名的title
         this.first = `${item.data[0].name}排名前十`
