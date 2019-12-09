@@ -54,6 +54,8 @@ report2POList= retailIndexDataMapper.getdepInAndOut();
         return addbranName(report2POList);
     }
 
+
+
     //个人存款 个人贷款   个人金融资产   非存资产等
     public List<PageDataEntity> getScreen2Data(){
 
@@ -93,7 +95,71 @@ report2POList= retailIndexDataMapper.getdepInAndOut();
         return pageDataEntityList;
 
     }
+    public List<PageDataEntity> getFinAss(){
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM.dd");
+        String date = simpleDateFormat.format(retailIndexDataMapper.getMaxDate());
+        System.out.println(new Date());
+        List<PageDataEntity> pageDataEntityList = new ArrayList<>();
+
+        PageDataEntity pageDataEntityFin = new PageDataEntity();
+        pageDataEntityFin.setDivdata(getFinancialAssetsPage());
+        pageDataEntityFin.setPageName("个人金融资产");
+        pageDataEntityFin.setPageDescription(date);
+        pageDataEntityList.add(pageDataEntityFin);
+
+        return pageDataEntityList;
+
+    }
+
+    public List<PageDataEntity> getdep(){
+
+        List<PageDataEntity> pageDataEntityList = new ArrayList<>();
+
+
+        PageDataEntity pageDataEntityDep = new PageDataEntity();
+        pageDataEntityDep.setDivdata(getDepositPage());
+        pageDataEntityDep.setPageName("个人存款");
+        pageDataEntityDep.setPageDescription("财务口径");
+        pageDataEntityList.add(pageDataEntityDep);
+
+
+        return pageDataEntityList;
+
+    }
+
+
+    public List<PageDataEntity> getloan(){
+
+        List<PageDataEntity> pageDataEntityList = new ArrayList<>();
+
+        PageDataEntity pageDataEntityLoan = new PageDataEntity();
+        pageDataEntityLoan.setDivdata(getLoanPage());
+        pageDataEntityLoan.setPageName("个人贷款");
+        pageDataEntityLoan.setPageDescription("财务口径");
+        pageDataEntityList.add(pageDataEntityLoan);
+
+
+        return pageDataEntityList;
+
+    }
+
+    public List<PageDataEntity> getnodep(){
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM.dd");
+        String date = simpleDateFormat.format(retailIndexDataMapper.getMaxDate());
+        System.out.println(new Date());
+        List<PageDataEntity> pageDataEntityList = new ArrayList<>();
+
+        PageDataEntity pageDataEntityNon = new PageDataEntity();
+        pageDataEntityNon.setDivdata(getNoRetainedAssetsPage());
+        pageDataEntityNon.setPageName("非存资产");
+        pageDataEntityNon.setPageDescription("（不含汇理财）"+date);
+        pageDataEntityList.add(pageDataEntityNon);
+
+        return pageDataEntityList;
+
+    }
 
     //获取个人存款下所有div内容
     public DivDataEntity getDepositPage1(){
@@ -157,14 +223,6 @@ report2POList= retailIndexDataMapper.getdepInAndOut();
         DivDataEntity divDataEntity = new DivDataEntity();
 
         try{
-//
-//            List<RetailReport2PO> balMapData = retailIndexDataMapper.getDepBal();
-//            List<RetailReport2PO> incMapData = retailIndexDataMapper.getdepInc();
-//
-//            List<RetailReport2PO> incTopFive = incMapData.subList(0,5);
-//            List<RetailReport2PO> incLastFive = incMapData.subList(incMapData.size()-5,incMapData.size());
-//            List<RetailReport2PO> balTopFive = balMapData.subList(0,5);
-//            List<RetailReport2PO> balLastFive = balMapData.subList(balMapData.size());
             divDataEntity.setIncrTopFive(addbranName(retailIndexDataMapper.getdepIncTopFive()));
             divDataEntity.setIncrLastFive(addbranName(retailIndexDataMapper.getdepIncLastFive()));
             divDataEntity.setBalanceTopFive(addbranName(retailIndexDataMapper.getDepBalTopFive()));
@@ -173,17 +231,8 @@ report2POList= retailIndexDataMapper.getdepInAndOut();
 
             divDataEntity.setBalMapData(addProvinceName(retailIndexDataMapper.getDepBal()));
             divDataEntity.setIncMapData(addProvinceName(retailIndexDataMapper.getdepInc()));
-            //比月初比年初
-//            List<RetailReport2PO> retailReport2POS = retailIndexDataMapper.getdepThan();
-//
-//            if (retailReport2POS.size()!=0&&retailReport2POS!=null){
-//                RetailReport2PO report2POthan = retailReport2POS.get(0);
-//                if (report2POthan!=null){
-//                    divDataEntity.setThanMonthBegin(tobill(report2POthan.getThanMonthBegin()));
-//                    divDataEntity.setThanYearBegin(tobill(report2POthan.getThanYearBegin()));
-//                }
-//
-//            }
+            //比月初、比年初、增量 、余额、
+
             divDataEntity.setThanMonthBegin(tobill(retailIndexDataMapper.getdepThanMonth()));
             divDataEntity.setThanYearBegin(tobill(retailIndexDataMapper.getdepThanYear()));
             divDataEntity.setDepOrLoanIncr(tobill(retailIndexDataMapper.getdepIncSum()));
