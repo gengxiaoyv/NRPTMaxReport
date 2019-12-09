@@ -132,4 +132,10 @@ public interface NRPTReportDataMapper {
     //根据orgName在Report_OrgDataTable中查询orgID
     String selectReportOrgDataTableByOrgName(String orgName);
 
+
+    //查询第三屏下方新增前两个指标
+    List<String> selectThirdThreeIndex(OutData outData);
+    //查询第三屏最后一个指标
+    List<String> selectFinBal(OutData outData);
+
 }

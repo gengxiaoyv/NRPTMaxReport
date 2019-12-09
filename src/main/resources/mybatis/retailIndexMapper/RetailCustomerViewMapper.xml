@@ -203,7 +203,7 @@
             <if test="dims3 != null and dims3 != ''">
                 and dims3 = #{dims3}
             </if>
-            <if test="dims4 != null and dims3 != ''">
+            <if test="dims4 != null and dims4 != ''">
                 and dims4 = #{dims4}
             </if>
             <if test="org_id != null and org_id != ''">
@@ -451,8 +451,8 @@
             <if test="data_date != null">
                 and data_date = #{data_date}
             </if>
-            <if test="org_id != null and org_id != ''">
-                and org_id = #{org_id}
+            <if test="org_id != null and org_id != '' and org_id!='9900'">
+                and org_id in (select org_id from d_org where branch_id= #{org_id})
             </if>
             <if test="dims2 != null and dims2 != ''">
                 and data_pd  = #{dims2}

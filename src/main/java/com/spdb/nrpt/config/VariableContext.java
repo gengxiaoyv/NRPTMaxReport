@@ -36,7 +36,7 @@ public class VariableContext {
     public static final List<String> Level2KeyListIDs = Arrays.asList("GM030201","GM030202","GM030203","GM030204","GM030205","GM010201","GM010202","GM010203","GM010204","GM010205","GM0101","GM010101","GM01010101","GM01010102","GM0101010201","GM0301","GM030101","GM030102");
     
     //
-    public static final String Level2KeyIDs = "GM030201,GM030202,GM030203,GM030204,GM030205,GM010201,GM010202,GM010203,GM010204,GM010205,GM0101,GM010101,GM01010101,GM01010102,GM0101010201,GM0301,GM030101,GM030102";
+    public static final String Level2KeyIDs = "GM030201,GM030202,GM030203,GM030204,GM030205,GM010201,GM010202,GM010203,GM010204,GM010205,GM0101,GM010101,GM01010101,GM01010102,GM0101010201,GM0301,GM030101,GM030102,GM0302,GM0304,GM0104";
     
     
     //总行和一级分行ID
@@ -110,6 +110,11 @@ public class VariableContext {
         Keys.put("NRPT01","主动负债+单位保本理财");
         Keys.put("02","公司客户数");
         Keys.put("01","个人客户数");
+
+
+        Keys.put("GM0302","个人贷款");
+        Keys.put("GM0304","信用卡及花呗贷款");
+        Keys.put("GM0104","个人基础存款");
     }
 
     public static Map<String,String> Orgs = new HashMap<>();

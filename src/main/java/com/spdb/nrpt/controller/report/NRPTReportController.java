@@ -8,6 +8,7 @@ import com.spdb.nrpt.service.report.NRPTDealDataService;
 import com.spdb.nrpt.service.report.NRPTReport2Service;
 import com.spdb.nrpt.service.report.NRPTReport3Service;
 import com.spdb.nrpt.service.report.NRPTReportService;
+import com.spdb.nrpt.service.webservice.NRPTWebService;
 import com.spdb.nrpt.util.TimeUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -194,5 +195,16 @@ public class NRPTReportController {
     @RequestMapping("/toRepDemo")
     public String toRepDemo() {
     	return "/build/index";
+    }
+
+    //大屏三更新 将趋势图换为三个指标
+    @RequestMapping("/getThreeindex")
+    @ResponseBody
+    public List<String> getThreeindex(HttpServletRequest request){
+        HttpSession httpSession = request.getSession();
+        String orgID = httpSession.getAttribute("orgID").toString();
+        //获取零售贷款和个人存款
+
+        return nrptReport3Service.getThreeindex(orgID);
     }
 }

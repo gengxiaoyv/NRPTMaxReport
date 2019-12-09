@@ -62,7 +62,7 @@ public class NRPTWebService {
             //log.info("发送的报文为："+SoapXml);
             //回传结果
             String res = esbSoap.getData(SoapXml);
-            
+
             //打印效果
             log.info(" 报文回传回来的结果数据字符串：{}  ",res);
             
@@ -81,8 +81,9 @@ public class NRPTWebService {
             for (OutData outData : dataList){
                 //百万，两位小数
                 String KeyID = outData.getKPI_ID();
-                if ("YS01".equals(KeyID)||"GM01".equals(KeyID)||"GM03".equals(KeyID)||"YS01010101".equals(KeyID)||"YS01010102".equals(KeyID)){
+                if ("YS01".equals(KeyID)||"GM01".equals(KeyID)||"GM03".equals(KeyID)||"YS01010101".equals(KeyID)||"YS01010102".equals(KeyID)||"GM030204".equals(KeyID)||"GM030202".equals(KeyID)||"GM030201".equals(KeyID)||"GM010202".equals(KeyID)||"GM010205".equals(KeyID)||"GM0302".equals(KeyID)||"GM0304".equals(KeyID)||"GM0104".equals(KeyID)||"GM0303".equals(KeyID)||"GM0103".equals(KeyID)){
                     outData.setKPI_VALUE(NumUtil.dealNum(outData.getKPI_VALUE(),1000000,2));
+                    outData.setKPI_VALUE_ALLOT(NumUtil.dealNum(outData.getKPI_VALUE(),1000000,2));
                     if ("YS01010101".equals(KeyID)||"YS01010102".equals(KeyID)){
                             outData.setSTATIS_DT(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date())+":00");
                             nrptReportDataMapper.insertReportPastData(outData);
@@ -90,6 +91,8 @@ public class NRPTWebService {
                     continue;
                 }
                 outData.setKPI_VALUE(NumUtil.dealNum(outData.getKPI_VALUE(),100000000,2));
+                outData.setKPI_VALUE_ALLOT(NumUtil.dealNum(outData.getKPI_VALUE(),100000000,2));
+
             }
             //获得第一份报文后将表全部清空
             if (0==flag){
@@ -127,6 +130,7 @@ public class NRPTWebService {
             nrpt01.setKPI_NAME("主动负债+单位保本理财");
             nrpt01.setORG_NAME("境内机构合计");
             nrpt01.setKPI_ID("NRPT01");
+            nrpt01.setKPI_VALUE_ALLOT("0");//todo
             List<OutData> outDataList = Arrays.asList(nrpt01);
             nrptReportDataMapper.insertBatchReportAllData(outDataList);
         }
@@ -198,7 +202,7 @@ public class NRPTWebService {
         String nowTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         log.info("今天时间为："+nowTime);
         //查出今天的数据
-        List<String> keyList = Arrays.asList("GM0102","GM010101","GM030101","GM0101","GM0101010201","GM01010102","GM0301","GM030102","GM01010101","GM010202","GM010203","GM030205","GM010201","GM030203","GM030204","GM030201","GM010204","GM010205","GM030202");
+        List<String> keyList = Arrays.asList("GM0102","GM010101","GM030101","GM0101","GM0101010201","GM01010102","GM0301","GM030102","GM01010101","GM010202","GM010203","GM030205","GM010201","GM030203","GM030204","GM030201","GM010204","GM010205","GM030202","GM0302","GM0304","GM0104");
         List<OutData> dataList = nrptReportDataMapper.selectBatchDataReportAllDataByDivIDAndOrgID(keyList);
         for (OutData data : dataList){
             data.setSTATIS_DT(nowTime+" 23:59:59");

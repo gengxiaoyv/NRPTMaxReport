@@ -79,7 +79,7 @@
     </select>
 
     <select id="selectBatchDataReportAllDataByDivIDAndOrgID" resultType="com.spdb.nrpt.entity.procedure.OutData">
-        select STATIS_DT,ORG_ID,ORG_NAME,KPI_ID,CURRENCY_CD,KPI_NAME,KPI_VALUE from Report_DataTable
+        select STATIS_DT,ORG_ID,ORG_NAME,KPI_ID,CURRENCY_CD,KPI_NAME,KPI_VALUE,KPI_VALUE_ALLOT from Report_DataTable
         <where>
             KPI_ID in
             <foreach collection="list" separator="," item="id" index="i" open="(" close=")">
@@ -201,7 +201,7 @@
 
     <insert id ="insertBatchReportBranchDataTable" parameterType="java.util.List" useGeneratedKeys="false">
         insert  into Report_BranchDataTable
-        (KPI_ID, KPI_NAME, STATIS_DT,ORG_ID,ORG_NAME,CURRENCY_CD,KPI_VALUE,ParentID)
+        (KPI_ID, KPI_NAME, STATIS_DT,ORG_ID,ORG_NAME,CURRENCY_CD,KPI_VALUE,KPI_VALUE_ALLOT,ParentID)
         <foreach collection ="list" item="item" index= "index" separator="union all">
             (
             SELECT
@@ -212,6 +212,7 @@
             #{item.ORG_NAME},
             #{item.CURRENCY_CD},
             #{item.KPI_VALUE},
+            #{item.KPI_VALUE_ALLOT},
             #{item.ParentID}
             FROM DUAL
             )
@@ -220,7 +221,7 @@
 
     <insert id ="insertBatchReportAllData" parameterType="java.util.List" useGeneratedKeys="false">
         insert  into Report_DataTable
-        (KPI_ID, KPI_NAME, STATIS_DT,ORG_ID,ORG_NAME,CURRENCY_CD,KPI_VALUE)
+        (KPI_ID, KPI_NAME, STATIS_DT,ORG_ID,ORG_NAME,CURRENCY_CD,KPI_VALUE,KPI_VALUE_ALLOT)
         <foreach collection ="list" item="item" index= "index" separator="union all">
             (
             SELECT
@@ -230,7 +231,8 @@
             #{item.ORG_ID},
             #{item.ORG_NAME},
             #{item.CURRENCY_CD},
-            #{item.KPI_VALUE}
+            #{item.KPI_VALUE},
+            #{item.KPI_VALUE_ALLOT}
             FROM DUAL
             )
         </foreach >
@@ -238,7 +240,7 @@
 
     <insert id ="insertBatchReportPastData" parameterType="java.util.List" useGeneratedKeys="false">
         insert  into Report_PastDataTable
-        (KPI_ID, KPI_NAME, STATIS_DT,ORG_ID,ORG_NAME,CURRENCY_CD,KPI_VALUE)
+        (KPI_ID, KPI_NAME, STATIS_DT,ORG_ID,ORG_NAME,CURRENCY_CD,KPI_VALUE,KPI_VALUE_ALLOT)
         <foreach collection ="list" item="item" index= "index" separator="union all">
             (
             SELECT
@@ -248,7 +250,8 @@
             #{item.ORG_ID},
             #{item.ORG_NAME},
             #{item.CURRENCY_CD},
-            #{item.KPI_VALUE}
+            #{item.KPI_VALUE},
+            #{item.KPI_VALUE_ALLOT}
             FROM DUAL
             )
         </foreach >
@@ -256,8 +259,8 @@
 
     <insert id ="insertReportPastData" parameterType="com.spdb.nrpt.entity.procedure.OutData">
         insert  into Report_PastDataTable
-        (KPI_ID, KPI_NAME, STATIS_DT,ORG_ID,ORG_NAME,CURRENCY_CD,KPI_VALUE)
-        values ( #{KPI_ID},#{KPI_NAME},to_date ( #{STATIS_DT},'YYYY-MM-DD HH24:MI:SS' ),#{ORG_ID},#{ORG_NAME},#{CURRENCY_CD},#{KPI_VALUE})
+        (KPI_ID, KPI_NAME, STATIS_DT,ORG_ID,ORG_NAME,CURRENCY_CD,KPI_VALUE,KPI_VALUE_ALLOT)
+        values ( #{KPI_ID},#{KPI_NAME},to_date ( #{STATIS_DT},'YYYY-MM-DD HH24:MI:SS' ),#{ORG_ID},#{ORG_NAME},#{CURRENCY_CD},#{KPI_VALUE},#{KPI_VALUE_ALLOT})
     </insert>
 
 
@@ -344,4 +347,27 @@
         delete from Report_BranchDataTable
         where ParentID = #{ParentID}
     </delete>
+
+    <select id="selectThirdThreeIndex" parameterType="com.spdb.nrpt.entity.procedure.OutData" resultType="java.lang.String">
+      select KPI_VALUE from REPORT_DATATABLE
+      <where>
+        <if test="ORG_ID !=null and ORG_ID!=''">
+            and ORG_ID=#{ORG_ID}
+        </if>
+          <if test="KPI_ID !=null and KPI_ID!=''">
+              and KPI_ID=#{KPI_ID}
+          </if>
+      </where>
+    </select>
+    <select id="selectFinBal" parameterType="com.spdb.nrpt.entity.procedure.OutData" resultType="java.lang.String">
+        select KPI_VALUE from REPORT_DATATABLE_TBL
+        <where>
+            <if test="ORG_ID !=null and ORG_ID!=''">
+                and ORG_ID=#{ORG_ID}
+            </if>
+            <if test="KPI_ID !=null and KPI_ID!=''">
+                and KPI_ID=#{KPI_ID}
+            </if>
+        </where>
+    </select>
 </mapper>

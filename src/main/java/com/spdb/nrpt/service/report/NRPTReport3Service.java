@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.spdb.nrpt.config.VariableContext;
 import com.spdb.nrpt.entity.Unit.ReportUnit;
 import com.spdb.nrpt.entity.echarts.line.LineDataEntity;
+import com.spdb.nrpt.entity.procedure.OutData;
 import com.spdb.nrpt.entity.report.ReturnData;
 import com.spdb.nrpt.mapper.reportDataMapper.NRPTReportDataMapper;
 import com.spdb.nrpt.util.NumUtil;
@@ -219,5 +220,24 @@ public class NRPTReport3Service {
         }
         List<List<String>> lists = Arrays.asList(dataList1,dataList2,dataList3);
         return lists;
+    }
+
+    //获取大屏三新增的三个指标
+    public List<String> getThreeindex(String org_id){
+        OutData outData = new OutData();
+        List<String> returnList = new ArrayList<>();
+        outData.setORG_ID(org_id);
+        outData.setKPI_ID("GM0303");
+        List<String> data1 = nrptReportDataMapper.selectThirdThreeIndex(outData);
+       returnList.add( (data1.size()==0||data1==null)?"0":data1.get(0));
+        outData.setKPI_ID("GM0103");
+        List<String> data2 = nrptReportDataMapper.selectThirdThreeIndex(outData);
+        returnList.add((data2.size()==0||data2==null)?"0":data2.get(0));
+
+        outData.setKPI_ID("PSL_FIN001");
+        List<String> data3 = nrptReportDataMapper.selectFinBal(outData);
+        returnList.add((data3.size()==0||data3==null)?"0":data3.get(0));
+        return returnList;
+
     }
 }

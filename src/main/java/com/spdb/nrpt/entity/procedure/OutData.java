@@ -19,4 +19,5 @@ public class OutData implements Serializable {
     private String KPI_NAME;
     private String CURRENCY_CD;
     private String KPI_VALUE;
+    private String KPI_VALUE_ALLOT;
 }
