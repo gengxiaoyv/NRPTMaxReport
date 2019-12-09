@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.spdb.nrpt.mapper.reportDataMapper.NRPTReportData_1Mapper" >
+
+    <resultMap id="ReturnData" type="com.spdb.nrpt.entity.report.ReturnData" >
+        <result column="KPI_NAME" property="name"/>
+        <result column="KPI_VALUE_ALLOT" property="value"/>
+        <!--<result column="ORG_NAME" property="org"/>
+        <result column="STATIS_DT" property="time" jdbcType="TIMESTAMP"/>-->
+    </resultMap>
+    
+    <select id="selectOneReportDataByDivIDAndOrgID" resultMap="ReturnData">
+        select KPI_NAME,KPI_VALUE_ALLOT from Report_DataTable
+        <where>
+            and KPI_ID = #{param1}
+            <if test="param2 != null and param2 != ''">
+                and ORG_ID = #{param2}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectReportDataByDivIDAndOrgID" resultMap="ReturnData">
+        select KPI_NAME,KPI_VALUE_ALLOT from Report_DataTable
+        <where>
+            and KPI_ID = #{param1}
+            <if test="param2 != null and param2 != ''">
+                and ORG_ID = #{param2}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectReportDataByDivIDAndNotInOrgID" resultMap="ReturnData">
+        select KPI_NAME,KPI_VALUE_ALLOT from Report_DataTable
+        <where>
+            KPI_ID = #{keyID}
+            and ORG_ID not in ('9900','9940')
+        </where>
+        order by to_number(KPI_VALUE)
+    </select>
+
+    <select id="selectReportDataByDivIDAndOrgIDDesc" resultType="com.spdb.nrpt.entity.report.ReturnData">
+        select distinct ORG_ID, ORG_NAME as name , KPI_VALUE_ALLOT as value from Report_DataTable
+        <where>
+            and KPI_ID = #{keyID}
+            and ORG_ID not in ('9900','9940')
+        </where>
+        order by to_number(KPI_VALUE_ALLOT) desc
+    </select>
+
+    <select id="selectReportDataByDivIDAndOrgIDAsc" resultType="com.spdb.nrpt.entity.report.ReturnData">
+        select ORG_NAME as name , KPI_VALUE_ALLOT as value from Report_DataTable
+        <where>
+            and KPI_ID = #{keyID}
+            and ORG_ID not in ('9900','9940')
+        </where>
+        order by to_number(KPI_VALUE_ALLOT) asc
+    </select>
+
+    <select id="selectBatchReportDataByMoreKeyID" resultMap="ReturnData">
+        select KPI_NAME,KPI_VALUE_ALLOT from Report_DataTable
+        <where>
+            ORG_ID = '9900' and
+            KPI_ID in
+            <foreach collection="list" separator="," item="id" index="i" open="(" close=")">
+                #{id}
+            </foreach>
+        </where>
+    </select>
+
+    <select id="selectBatchReportDataByMoreOrgIDAndKeyID" resultMap="ReturnData">
+        select KPI_NAME,KPI_VALUE_ALLOT from Report_DataTable
+        <where>
+            KPI_ID = {#keyID} and
+            ORG_ID in
+            <foreach collection="list" separator="," item="id" index="i" open="(" close=")">
+                #{orgID}
+            </foreach>
+        </where>
+    </select>
+
+    <select id="selectBatchDataReportAllDataByDivIDAndOrgID" resultType="com.spdb.nrpt.entity.procedure.OutData">
+        select STATIS_DT,ORG_ID,ORG_NAME,KPI_ID,CURRENCY_CD,KPI_NAME,KPI_VALUE,KPI_VALUE_ALLOT from Report_DataTable
+        <where>
+            KPI_ID in
+            <foreach collection="list" separator="," item="id" index="i" open="(" close=")">
+                #{id}
+            </foreach>
+        </where>
+    </select>
+
+    <select id="selectReportPastDataByDivIDAndOrgID" resultMap="ReturnData">
+        select KPI_NAME,KPI_VALUE_ALLOT from Report_PastDataTable
+        <where>
+            and KPI_ID = #{param1}
+            and ORG_ID = #{param2}
+        </where>
+        order by STATIS_DT desc
+    </select>
+
+    <select id="selectReportPastDateDataByDivIDAndOrgID" resultType="com.spdb.nrpt.entity.report.ReturnData">
+        select to_char( STATIS_DT,'YYYY-MM-DD HH24:MI:SS' ) as name,KPI_VALUE_ALLOT as value from Report_PastDataTable
+        <where>
+            and KPI_ID = #{keyID}
+        </where>
+        order by STATIS_DT desc
+    </select>
+
+    <select id="selectReportPastDateDataByDivIDAndOrgIDAsc" resultType="com.spdb.nrpt.entity.report.ReturnData">
+        select to_char( STATIS_DT,'YYYY-MM-DD HH24:MI:SS' ) as name,KPI_VALUE_ALLOT as value from Report_PastDataTable
+        <where>
+            and KPI_ID = #{param1}
+            and ORG_ID = #{param2}
+        </where>
+        order by STATIS_DT
+    </select>
+
+    <select id="selectReportMinPastDateDataByDivIDAndOrgID" resultType="com.spdb.nrpt.entity.report.ReturnData">
+        select to_char( STATIS_DT,'YYYY-MM-DD HH24:MI:SS' ) as name,KPI_VALUE_ALLOT as value from Report_PastDataTable
+        <where>
+            and KPI_ID = #{param1}
+            and ORG_ID = #{param2}
+        </where>
+        order by to_number(KPI_VALUE_ALLOT)
+    </select>
+
+    <select id="selectOptionByID" resultType="com.spdb.nrpt.entity.report.ReportEchartsEntity">
+        select divID,divName,divEchartsJson,divEchartsType
+        from Report_EchartsTable
+        where divID = #{divID}
+    </select>
+
+    <select id="selectKeyIDByDivID" resultType="string">
+        select KEYID from REPORT_DIV_KEYTABLE where DIVID = #{divID} order by id
+    </select>
+
+    <select id="selectReportOrgDataTableByParentID" resultType="string">
+        select orgID from Report_OrgDataTable where parentOrgID = #{parentOrgID}
+    </select>
+    
+     <select id="selectReportOrgDataTableByOrgName" resultType="string">
+        select orgID from Report_OrgDataTable where orgName = #{orgName}
+    </select>
+    
+    <select id="selectReportOrgDataTableByName" resultType="string">
+        select orgID from Report_OrgDataTable where parentOrgID = #{parentOrgID}
+    </select>
+
+    <select id="selectCustomerNumberByCust_Type_Cd" resultType="com.spdb.nrpt.entity.report.ReturnData">
+        select to_char( Statis_Dt,'YYYYMMDD' ) as name , Cust_Cnt as value from BD_All_Cust_Statis_M
+        where Cust_Type_Cd = #{param1} and Org_id_1_lev = #{param2}
+        order by Statis_Dt
+    </select>
+
+    <select id="selectReportUnitByOrgID" resultType="com.spdb.nrpt.entity.Unit.ReportUnit">
+        select divID,orgID,unitValue from Report_UnitTable
+        <where>
+            and divID = #{param1}
+            and orgID = #{param2}
+        </where>
+    </select>
+
+    <select id="selectDescReportBranchByParentIDAndKPIID" resultType="com.spdb.nrpt.entity.report.ReturnData">
+        <!-- select ORG_ID as name , KPI_VALUE as value from Report_BranchDataTable -->
+        select ORG_ID as orgid,ORG_NAME as name , KPI_VALUE_ALLOT as value from Report_BranchDataTable
+        <where>
+            and KPI_ID = #{param1}
+            and ParentID = #{param2}
+        </where>
+        order by to_number(KPI_VALUE_ALLOT) desc
+    </select>
+    
+     <select id="selectDescReportBranchByOrgIDAndKPIID" resultType="com.spdb.nrpt.entity.report.ReturnData">
+        <!-- select ORG_ID as name , KPI_VALUE as value from Report_BranchDataTable -->
+        select ORG_NAME as name , KPI_VALUE_ALLOT as value from Report_BranchDataTable
+        <where>
+            and KPI_ID = #{param1}
+            and ORG_ID = #{param2}
+        </where>
+        order by to_number(KPI_VALUE_ALLOT) desc
+    </select>
+
+    <select id="selectAscReportBranchByParentIDAndKPIIDNotNull" resultType="com.spdb.nrpt.entity.report.ReturnData">
+        <!-- select ORG_ID as name , KPI_VALUE as value from Report_BranchDataTable -->
+        select ORG_NAME as name , KPI_VALUE_ALLOT as value from Report_BranchDataTable
+        <where>
+            and KPI_ID = #{param1}
+            and ParentID = #{param2}
+            and KPI_VALUE != 0
+        </where>
+        order by to_number(KPI_VALUE_ALLOT) asc
+    </select>
+    
+    <select id="selectAscReportBranchByParentIDAndKPIID" resultType="com.spdb.nrpt.entity.report.ReturnData">
+        select ORG_ID as name , KPI_VALUE_ALLOT as value from Report_BranchDataTable
+        <where>
+            and KPI_ID = #{param1}
+            and ParentID = #{param2}
+        </where>
+        order by to_number(KPI_VALUE_ALLOT) asc
+    </select>
+
+    <insert id ="insertBatchReportBranchDataTable" parameterType="java.util.List" useGeneratedKeys="false">
+        insert  into Report_BranchDataTable
+        (KPI_ID, KPI_NAME, STATIS_DT,ORG_ID,ORG_NAME,CURRENCY_CD,KPI_VALUE,KPI_VALUE_ALLOT,ParentID)
+        <foreach collection ="list" item="item" index= "index" separator="union all">
+            (
+            SELECT
+            #{item.KPI_ID},
+            #{item.KPI_NAME},
+            to_date ( #{item.STATIS_DT},'YYYY-MM-DD HH24:MI:SS' ),
+            #{item.ORG_ID},
+            #{item.ORG_NAME},
+            #{item.CURRENCY_CD},
+            #{item.KPI_VALUE},
+            #{item.KPI_VALUE_ALLOT},
+            #{item.ParentID}
+            FROM DUAL
+            )
+        </foreach >
+    </insert>
+
+    <insert id ="insertBatchReportAllData" parameterType="java.util.List" useGeneratedKeys="false">
+        insert  into Report_DataTable
+        (KPI_ID, KPI_NAME, STATIS_DT,ORG_ID,ORG_NAME,CURRENCY_CD,KPI_VALUE,KPI_VALUE_ALLOT)
+        <foreach collection ="list" item="item" index= "index" separator="union all">
+            (
+            SELECT
+            #{item.KPI_ID},
+            #{item.KPI_NAME},
+            to_date ( #{item.STATIS_DT},'YYYY-MM-DD HH24:MI:SS' ),
+            #{item.ORG_ID},
+            #{item.ORG_NAME},
+            #{item.CURRENCY_CD},
+            #{item.KPI_VALUE},
+            #{item.KPI_VALUE_ALLOT}
+            FROM DUAL
+            )
+        </foreach >
+    </insert>
+
+    <insert id ="insertBatchReportPastData" parameterType="java.util.List" useGeneratedKeys="false">
+        insert  into Report_PastDataTable
+        (KPI_ID, KPI_NAME, STATIS_DT,ORG_ID,ORG_NAME,CURRENCY_CD,KPI_VALUE,KPI_VALUE_ALLOT)
+        <foreach collection ="list" item="item" index= "index" separator="union all">
+            (
+            SELECT
+            #{item.KPI_ID},
+            #{item.KPI_NAME},
+            to_date ( #{item.STATIS_DT},'YYYY-MM-DD HH24:MI:SS' ),
+            #{item.ORG_ID},
+            #{item.ORG_NAME},
+            #{item.CURRENCY_CD},
+            #{item.KPI_VALUE},
+            #{item.KPI_VALUE_ALLOT}
+            FROM DUAL
+            )
+        </foreach >
+    </insert>
+
+    <insert id ="insertReportPastData" parameterType="com.spdb.nrpt.entity.procedure.OutData">
+        insert  into Report_PastDataTable
+        (KPI_ID, KPI_NAME, STATIS_DT,ORG_ID,ORG_NAME,CURRENCY_CD,KPI_VALUE,KPI_VALUE_ALLOT)
+        values ( #{KPI_ID},#{KPI_NAME},to_date ( #{STATIS_DT},'YYYY-MM-DD HH24:MI:SS' ),#{ORG_ID},#{ORG_NAME},#{CURRENCY_CD},#{KPI_VALUE},#{KPI_VALUE_ALLOT})
+    </insert>
+
+
+    <insert id ="insertBatchReportBridge" parameterType="java.util.List" useGeneratedKeys="false">
+        insert  into REPORT_DIV_KEYTABLE
+        (ID, DIVID, KEYID)
+        <foreach collection ="list" item="item" index= "index" separator="union all">
+            (
+            SELECT
+            #{item.id},
+            #{item.divID},
+            #{item.keyID}
+            FROM DUAL
+            )
+        </foreach >
+    </insert>
+
+    <insert id="insertEcharts" parameterType="com.spdb.nrpt.entity.report.ReportEchartsEntity">
+        insert into Report_EchartsTable(DIVID, DIVNAME, DIVECHARTSJSON, DIVECHARTSTYPE) values (#{divID},#{divName},#{divEchartsJson},#{divEchartsType})
+    </insert>
+
+    <insert id="insetBatchCustomData" parameterType="java.util.List" useGeneratedKeys="false">
+        insert  into BD_All_Cust_Statis_M
+        (Statis_Dt, Cust_Type_Cd, Org_id_1_lev,Org_name_1_lev,Cust_Cnt)
+        <foreach collection ="list" item="item" index= "index" separator="union all">
+            (
+            SELECT
+            to_date ( #{item.Statis_Dt},'YYYY-MM-DD HH24:MI:SS' ),
+            #{item.Cust_Type_Cd},
+            #{item.Org_id_1_lev},
+            #{item.Org_name_1_lev},
+            to_number(#{item.Cust_Cnt})
+            FROM DUAL
+            )
+        </foreach >
+    </insert>
+
+    <update id="truncateReportDataTable">
+        truncate table Report_DataTable
+    </update>
+    
+    <update id="dropRepeatReportDataTable1">
+        CREATE TABLE temporaryReport_DataTable AS (select distinct * from Report_DataTable)
+    </update>
+
+    <update id="dropRepeatReportDataTable2">
+        truncate table Report_DataTable
+    </update>
+
+    <update id="dropRepeatReportDataTable3">
+        insert into Report_DataTable (select * from temporaryReport_DataTable)
+    </update>
+
+    <update id="dropRepeatReportDataTable4">
+        drop table temporaryReport_DataTable
+    </update>
+
+    <delete id="deleteReportPastDataTableByKeyIDAndDate">
+        delete from Report_PastDataTable
+        where KPI_ID = #{param1}
+        and STATIS_DT &lt;= to_date ( #{param2},'YYYY-MM-DD HH24:MI:SS' )
+    </delete>
+
+    <delete id="deleteReportPastDataTableByKeyDate">
+        delete from Report_PastDataTable
+        where STATIS_DT = to_date ( #{Date},'YYYY-MM-DD HH24:MI:SS' )
+    </delete>
+
+    <delete id="deleteReportPastDataTableByDateInSomeKey">
+        delete from Report_PastDataTable
+        where KPI_ID in ('YS01','YS01010101','YS01010102')
+        and STATIS_DT &lt; to_date ( #{Date},'YYYY-MM-DD HH24:MI:SS' )
+    </delete>
+
+    <delete id="deleteEchartsTableByID">
+        delete from REPORT_ECHARTSTABLE where DIVID like #{divID}
+    </delete>
+
+    <delete id="deleteDivKeyTable">
+        delete from Report_Div_KeyTable
+    </delete>
+
+    <delete id="deleteReportBranchDataTableByParentID">
+        delete from Report_BranchDataTable
+        where ParentID = #{ParentID}
+    </delete>
+
+    <select id="selectThirdThreeIndex" parameterType="com.spdb.nrpt.entity.procedure.OutData" resultType="java.lang.String">
+      select KPI_VALUE from REPORT_DATATABLE
+      <where>
+        <if test="ORG_ID !=null and ORG_ID!=''">
+            and ORG_ID=#{ORG_ID}
+        </if>
+          <if test="KPI_ID !=null and KPI_ID!=''">
+              and KPI_ID=#{KPI_ID}
+          </if>
+      </where>
+    </select>
+    <select id="selectFinBal" parameterType="com.spdb.nrpt.entity.procedure.OutData" resultType="java.lang.String">
+        select KPI_VALUE_ALLOT from REPORT_DATATABLE_TBL
+        <where>
+            <if test="ORG_ID !=null and ORG_ID!=''">
+                and ORG_ID=#{ORG_ID}
+            </if>
+            <if test="KPI_ID !=null and KPI_ID!=''">
+                and KPI_ID=#{KPI_ID}
+            </if>
+        </where>
+    </select>
+</mapper>
