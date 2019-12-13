@@ -710,6 +710,9 @@ public class RetailCustomerViewService {
         if (headDataList.size() != 0 && headDataList != null) {
             headData = headDataList.get(0);
         }
+        //获取总行的AUM规模
+        //Double aum9900 = retailCustomerViewMapper.selectAum(requestVO);
+
 
         //获取分行的所有悬浮框
         List<RetailCustomerBaseData> dataList;
@@ -765,9 +768,13 @@ public class RetailCustomerViewService {
                     data.setOrg_name((data.getOrg_name()==null?"":data.getOrg_name()) + "," + (data2.getOrg_name()==null?"":data2.getOrg_name()));
                     data.setBranAUMAsset((data.getBranAUMAsset()==null?0:data.getBranAUMAsset()) + (data2.getBranAUMAsset()==null?0:data2.getBranAUMAsset()));
                     data.setBranAUMAssetsPercent((data.getBranAUMAssetsPercent()==null?0:data.getBranAUMAssetsPercent()) + (data2.getBranAUMAssetsPercent()==null?0:data2.getBranAUMAssetsPercent()));
+                    //分行aum/总行aum
+                    //data.setBranAUMAssetsPercent((aum9900==null||aum9900==0)?0:data.getBranAUMAsset()/aum9900);
+
                     data.setBranCustomerCount((data.getBranCustomerCount()==null?0:data.getBranCustomerCount()) + (data2.getBranCustomerCount()==null?0:data2.getBranCustomerCount()));
                     data.setBranNoZeroCustomer((data.getBranNoZeroCustomer()==null?0:data.getBranNoZeroCustomer()) + (data2.getBranNoZeroCustomer()==null?0:data2.getBranNoZeroCustomer()));
-                    data.setBranNoZeroCustomerPercent((data.getBranNoZeroCustomerPercent()==null?0:data.getBranNoZeroCustomerPercent() )+ (data2.getBranNoZeroCustomerPercent()==null?0:data2.getBranNoZeroCustomerPercent()));
+                    //data.setBranNoZeroCustomerPercent((data.getBranNoZeroCustomerPercent()==null?0:data.getBranNoZeroCustomerPercent() )+ (data2.getBranNoZeroCustomerPercent()==null?0:data2.getBranNoZeroCustomerPercent()));
+                    data.setBranNoZeroCustomerPercent(data.getBranCustomerCount()==0?0:(double)data.getBranNoZeroCustomer()/(double)data.getBranCustomerCount());
                 }
 
             }

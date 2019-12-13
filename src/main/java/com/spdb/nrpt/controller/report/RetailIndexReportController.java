@@ -28,14 +28,44 @@ public class RetailIndexReportController {
         return retailIndexReport2Service.getDepositInAndFlow();
     }
 
+//    //大屏二左侧根据页签（个人存款、个人贷款等）切换展示数据
+//    @ResponseBody
+//    @RequestMapping("/getScreen2Data")
+//    public List<PageDataEntity> getScreen2Data(){
+//        List<PageDataEntity> screen2Data = retailIndexReport2Service.getScreen2Data();
+//        return screen2Data;
+//    }
+
+
     //大屏二左侧根据页签（个人存款、个人贷款等）切换展示数据
     @ResponseBody
-    @RequestMapping("/getScreen2Data")
-    public List<PageDataEntity> getScreen2Data(){
-        List<PageDataEntity> screen2Data = retailIndexReport2Service.getScreen2Data();
+    @RequestMapping("/getFinAss")
+    public List<PageDataEntity> getFinAss(){
+        List<PageDataEntity> screen2Data = retailIndexReport2Service.getFinAss();
         return screen2Data;
     }
 
+    //大屏二左侧根据页签（个人存款、个人贷款等）切换展示数据
+    @ResponseBody
+    @RequestMapping("/getDep")
+    public List<PageDataEntity> getDep(){
+        List<PageDataEntity> screen2Data = retailIndexReport2Service.getdep();
+        return screen2Data;
+    }
 
+    //大屏二左侧根据页签（个人存款、个人贷款等）切换展示数据
+    @ResponseBody
+    @RequestMapping("/getLoan")
+    public List<PageDataEntity> getLoan(){
+        List<PageDataEntity> screen2Data = retailIndexReport2Service.getloan();
+        return screen2Data;
+    }
 
+    //大屏二左侧根据页签（个人存款、个人贷款等）切换展示数据
+    @ResponseBody
+    @RequestMapping("/getNonDep")
+    public List<PageDataEntity> getNonDep(){
+        List<PageDataEntity> screen2Data = retailIndexReport2Service.getnodep();
+        return screen2Data;
+    }
 }
