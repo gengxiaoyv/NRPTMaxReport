@@ -443,7 +443,7 @@ report2POList= retailIndexDataMapper.getdepInAndOut();
                 Date dateTrend = trendData.getDataDate();
 
                 if (dateKline==dateTrend||dateKline.equals(dateTrend)){
-                    KlineData.setDataValue(tobill(trendData.getDataValue()));
+                    KlineData.setDataValue(trendData.getDataValue());
                 }
             }
         }

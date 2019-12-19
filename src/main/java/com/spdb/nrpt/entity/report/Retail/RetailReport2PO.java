@@ -14,7 +14,7 @@ import java.util.Date;
 //@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class RetailReport2PO {
 
-    private Long dataValue;
+    private Double dataValue;
 
     private String bankName;
 
