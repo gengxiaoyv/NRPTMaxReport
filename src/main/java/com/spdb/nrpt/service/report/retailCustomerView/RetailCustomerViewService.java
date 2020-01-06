@@ -465,10 +465,19 @@ public class RetailCustomerViewService {
 
 
         //月初私行基准线   直接获取到上个月最后一天
-        requestVO.setData_date(getLastMonthLastDay(getLastMonthLastDay(new Date())));
-        requestVO.setIndex_name("客户情况及趋势_客户数");
-        Long monthLine = retailCustomerViewMapper.getMonthBeginLine(requestVO);
-        retailCustomResponseData.setMonthDatLine(monthLine);
+
+
+        //判断当前如果是2月   则新开客户的月初基准线设为0
+        if (requestVO.getDims3().equals("1")&&getMonth(new Date())==2){
+            retailCustomResponseData.setMonthDatLine(0L);
+
+        }else{
+            requestVO.setData_date(getLastMonthLastDay(getLastMonthLastDay(new Date())));
+            requestVO.setIndex_name("客户情况及趋势_客户数");
+            Long monthLine = retailCustomerViewMapper.getMonthBeginLine(requestVO);
+            retailCustomResponseData.setMonthDatLine(monthLine);
+        }
+
 
         return retailCustomResponseData;
 
